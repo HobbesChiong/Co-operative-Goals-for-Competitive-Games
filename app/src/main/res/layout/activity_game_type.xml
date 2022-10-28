@@ -6,22 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".activities.GameTypeActivity">
 
-    <TextView
-        android:id="@+id/tvGameName"
+    <EditText
+        android:id="@+id/etGameName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="100dp"
-        android:text="Game Name:"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="84dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toEndOf="@+id/tvGameName"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvGameName2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="40dp"
         android:text="Good score:"
         android:textSize="16sp"
@@ -32,7 +32,7 @@
         android:id="@+id/tvGameName3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="40dp"
         android:text="Bad score:"
         android:textSize="16sp"
@@ -40,36 +40,36 @@
         app:layout_constraintTop_toBottomOf="@+id/tvGameName2" />
 
     <EditText
-        android:id="@+id/etGameName"
+        android:id="@+id/etBadScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toEndOf="@+id/tvGameName"
+        android:inputType="number"
+        app:layout_constraintStart_toEndOf="@+id/tvGameName3"
+        app:layout_constraintTop_toBottomOf="@+id/etGoodScore" />
+
+    <TextView
+        android:id="@+id/tvGameName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="100dp"
+        android:text="Game Name:"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/etGoodScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="number"
         app:layout_constraintStart_toEndOf="@+id/tvGameName2"
         app:layout_constraintTop_toBottomOf="@+id/etGameName" />
-
-    <EditText
-        android:id="@+id/etBadScore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:inputType="number"
-        app:layout_constraintStart_toEndOf="@+id/tvGameName3"
-        app:layout_constraintTop_toBottomOf="@+id/etGoodScore" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
