@@ -11,7 +11,14 @@ public class GameType {
 
     // Names for different achievement levels, sorted from worst to best
     private static final String[] achievementLevels = {
-
+            "Cowardly Cows", // Below a bad score
+            "Lowly Lamas",
+            "Dead Dodos",
+            "Average Alligators",
+            "Fragrant Fish",
+            "Excellent Eggs",
+            "Beautiful Bears",
+            "Godly Goats" // Above a good score
     };
 
     public GameType(String type, int goodScore, int badScore) {
