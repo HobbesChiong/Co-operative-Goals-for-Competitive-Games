@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.security.InvalidParameterException;
+
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameType;
 
@@ -52,9 +54,11 @@ public class GameTypeActivity extends AppCompatActivity {
                     int goodScore = getIntFromEditText(R.id.etGoodScore);
                     int badScore = getIntFromEditText(R.id.etBadScore);
 
-                    GameType gameType = new GameType(gameName, goodScore, badScore);
+                    if (gameName.isEmpty()) {
+                        throw new IllegalArgumentException("Game name cannot be empty!");
+                    }
 
-                    // Add new gametype to gamemanager singleton
+                    GameType gameType = new GameType(gameName, goodScore, badScore);
                 } catch (Exception e) {
                     Toast.makeText(this,"Game configuration is invalid!",Toast.LENGTH_SHORT).show();
                 }
