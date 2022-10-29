@@ -37,7 +37,7 @@ public class GameList extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GameList.this, NewGame.class);
+                Intent intent = new Intent(GameList.this, NewGameCreationScreen.class);
                 startActivity(intent);
             }
         });
