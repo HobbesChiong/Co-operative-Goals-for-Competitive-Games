@@ -2,6 +2,7 @@ package ca.cmpt276.iteration1;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertThrows;
 
 import org.junit.Test;
 
@@ -40,4 +41,13 @@ public class GameTypeTest {
         String achievementLevelEightPlayers = g.getAchievementLevel(80,8);
         assertEquals(achievementLevelEightPlayers,achievementLevelOnePlayer);
     }
+
+    @Test
+    public void checkIncorrectScoreBounds() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            GameType g = new GameType("My type", 0,100);
+        });
+
+    }
+
 }
