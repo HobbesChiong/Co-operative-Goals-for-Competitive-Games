@@ -16,15 +16,27 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import ca.cmpt276.iteration1.R;
+import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 import ca.cmpt276.iteration1.model.PlayedGame;
 
 public class NewGameCreationScreen extends AppCompatActivity {
 
+    // temp data
+    // need gameType passed as a string via an Intent
+    private final String gameType = "Uno";
+    private GameType uno;
+    private final GameManager gameManager = GameManager.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game_creation_screen);
+
+        // temp gameType
+        GameType uno = new GameType("Uno", 10,100);
+
+
 
         // action bar setup
         ActionBar ab = getSupportActionBar();
@@ -61,6 +73,9 @@ public class NewGameCreationScreen extends AppCompatActivity {
                 if (gameScore <= 0 || numberOfPlayers <= 0) {
                     throw new IllegalArgumentException("Edit Text fields need to have positive values");
                 }
+
+                PlayedGame currGame = new PlayedGame(gameType, numberOfPlayers, gameScore, uno.getAchievementLevel(gameScore, numberOfPlayers));
+                gameManager.addPlayedGame(currGame);
 
             } catch (Exception e) {
                 Toast.makeText(this, "Game configuration is invalid!", Toast.LENGTH_SHORT).show();

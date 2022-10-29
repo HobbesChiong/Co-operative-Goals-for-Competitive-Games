@@ -28,6 +28,10 @@ public class GameManager {
         gameTypes.add(gameType);
     }
 
+    public void addPlayedGame(PlayedGame game){
+        playedGames.add(game);
+    }
+
     public ArrayList<PlayedGame> getSpecificPlayedGames(String type){
         // Will return an arraylist of all the played games for a certain game type
         ArrayList<PlayedGame> specificPlayedGames = new ArrayList<>();
@@ -46,4 +50,6 @@ public class GameManager {
     public ArrayList<PlayedGame> getPlayedGames() {
         return playedGames;
     }
+
+
 }
