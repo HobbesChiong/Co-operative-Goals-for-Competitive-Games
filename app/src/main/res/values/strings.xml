@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">iteration1</string>
+    <string name="game_score">Game Score:</string>
+    <string name="number_of_players">Number of Players</string>
+    <string name="_1">1</string>
+    <string name="_0">0</string>
 </resources>
