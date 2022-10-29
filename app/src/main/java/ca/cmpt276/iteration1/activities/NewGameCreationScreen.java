@@ -34,7 +34,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
         setContentView(R.layout.activity_new_game_creation_screen);
 
         // temp gameType
-        GameType uno = new GameType("Uno", 10,100);
+        uno = new GameType("Uno", 100,10);
 
 
 
@@ -74,6 +74,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
                     throw new IllegalArgumentException("Edit Text fields need to have positive values");
                 }
 
+                // failing here
                 PlayedGame currGame = new PlayedGame(gameType, numberOfPlayers, gameScore, uno.getAchievementLevel(gameScore, numberOfPlayers));
                 gameManager.addPlayedGame(currGame);
 
