@@ -7,6 +7,10 @@ package ca.cmpt276.iteration1.model;
 * achievement for the achievement that the team got according to their score.
 * */
 
+import androidx.annotation.NonNull;
+
+import ca.cmpt276.iteration1.R;
+
 public class PlayedGame {
     private final String type;
     private final int numberOfPlayers;
@@ -34,5 +38,13 @@ public class PlayedGame {
 
     public String getAchievement(){
         return achievement;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        String output;
+        output = "Score: " + score + ", " + numberOfPlayers + "Players, " + achievement;
+        return output;
     }
 }
