@@ -25,6 +25,10 @@ public class GameType {
         this.type = type;
         this.goodScore = goodScore;
         this.badScore = badScore;
+
+        if (goodScore < badScore) {
+            throw new IllegalArgumentException("Bad score should be less than the good score.");
+        }
     }
 
     public String getType() {
@@ -44,7 +48,7 @@ public class GameType {
      *
      * Ex: x = 10, [0,100] -> [0,10] = 1
      */
-    public int map(int val, int oldMinimum, int oldMaximum, int newMinimum, int newMaximum) {
+    private int map(int val, int oldMinimum, int oldMaximum, int newMinimum, int newMaximum) {
         // Math from https://math.stackexchange.com/questions/914823/shift-numbers-into-a-different-range
         float valueScale = (newMaximum - newMinimum)/(float)(oldMaximum - oldMinimum);
         float endpointShift = val - oldMinimum;
