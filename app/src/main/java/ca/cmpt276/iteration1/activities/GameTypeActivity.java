@@ -27,6 +27,10 @@ public class GameTypeActivity extends AppCompatActivity {
     private String gameTypeString;
     private GameType gameType;
 
+    EditText gameName;
+    EditText goodScore;
+    EditText badScore;
+
     private GameManager gameManager;
 
     // If parameter argument only has a context, we are creating a new game type
@@ -59,6 +63,10 @@ public class GameTypeActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         menuInflater = getMenuInflater();
 
+        gameName = findViewById(R.id.etGameName);
+        goodScore = findViewById(R.id.etGoodScore);
+        badScore = findViewById(R.id.etBadScore);
+
         String appBarTitle;
         gameManager = GameManager.getInstance();
 
@@ -67,6 +75,7 @@ public class GameTypeActivity extends AppCompatActivity {
             extractIntentExtras();
             gameType = gameManager.getGameType(gameTypeString);
             appBarTitle = "Edit Game Type Configuration";
+            setGameTypeInfo();
         }
         else {
             appBarTitle = "New Game Type Configuration";
@@ -110,8 +119,22 @@ public class GameTypeActivity extends AppCompatActivity {
         return true;
     }
 
+    // When the user would like to save changes to an existing game type
+    private void editGameType(){
+
+        String newGameName = gameName.getText().toString();
+        int newGoodScore = Integer.parseInt(goodScore.getText().toString());
+        int newBadScore = Integer.parseInt(badScore.getText().toString());
+
+        gameType.editGameType(newGameName, newGoodScore, newBadScore);
+    }
+
     private void setGameTypeInfo(){
         // When the user is editing an existing game type, set the text fields accordingly
+
+        gameName.setText(gameType.getType());
+        goodScore.setText(String.valueOf(gameType.getGoodScore()));
+        badScore.setText(String.valueOf(gameType.getBadScore()));
 
     }
 
