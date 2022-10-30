@@ -10,25 +10,45 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.security.InvalidParameterException;
-
 import ca.cmpt276.iteration1.R;
+import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 
 public class GameTypeActivity extends AppCompatActivity {
+    public static final String GAME_TYPE = "GameType";
+    public static final String EDIT_GAME_TYPE = "EditGameType";
     private static final int INT_INVALID = -1;
     private MenuInflater menuInflater;
 
+    private boolean editGameActivity;
+    private String gameTypeString;
+    private GameType gameType;
 
-    // When an intent is created with only a context, it is used for creating a new game type
-/*    public static Intent makeIntent(Context context){
+    private GameManager gameManager;
+
+    // If parameter argument only has a context, we are creating a new game type
+    public static Intent makeIntent(Context context){
         return new Intent(context, GameTypeActivity.class);
-    }*/
+    }
 
+    // If parameter argument includes a string for gameType, we are editing an existing game type
+    public static Intent makeIntent(Context context, String gameType){
+        Intent intent = new Intent(context, GameTypeActivity.class);
+
+        intent.putExtra(EDIT_GAME_TYPE, true);
+        intent.putExtra(GAME_TYPE, gameType);
+
+        return intent;
+    }
+
+    private void extractIntentExtras(){
+        Intent intent = getIntent();
+        editGameActivity = intent.getBooleanExtra(EDIT_GAME_TYPE, false);
+        gameTypeString = intent.getStringExtra(GAME_TYPE);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +59,18 @@ public class GameTypeActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         menuInflater = getMenuInflater();
 
-        String appBarTitle = "New Game Configuration";
+        String appBarTitle;
+        gameManager = GameManager.getInstance();
 
+        // If we are editing an existing game type
+        if (editGameActivity == true){
+            extractIntentExtras();
+            gameType = gameManager.getGameType(gameTypeString);
+            appBarTitle = "Edit Game Type Configuration";
+        }
+        else {
+            appBarTitle = "New Game Type Configuration";
+        }
 
         ab.setTitle(appBarTitle);
     }
@@ -78,6 +108,11 @@ public class GameTypeActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    private void setGameTypeInfo(){
+        // When the user is editing an existing game type, set the text fields accordingly
+
     }
 
     private String getStringFromEditText(int editTextID) {
