@@ -1,4 +1,4 @@
-package ca.cmpt276.iteration1;
+package ca.cmpt276.iteration1.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 
@@ -26,8 +27,8 @@ public class GameList extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = GamePlayed.makeIntent(GameList.this, position);
-                startActivity(intent);
+                // Intent intent = GamePlayed.makeIntent(GameList.this, position);
+                //startActivity(intent);
             }
         });
     }
@@ -37,8 +38,8 @@ public class GameList extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GameList.this, NewGameCreationScreen.class);
-                startActivity(intent);
+                //Intent intent = new Intent(GameList.this, NewGameCreationScreen.class);
+                //startActivity(intent);
             }
         });
     }

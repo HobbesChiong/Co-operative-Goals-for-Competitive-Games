@@ -28,6 +28,16 @@ public class GameManager {
         gameTypes.add(gameType);
     }
 
+    public GameType getGameType(String type){
+        for (GameType gameType : gameTypes){
+            if (gameType.getType().equals(type)){
+                return gameType;
+            }
+        }
+        // If gametype does not exist, return null value
+        return null;
+    }
+
     public ArrayList<PlayedGame> getSpecificPlayedGames(String type){
         // Will return an arraylist of all the played games for a certain game type
         ArrayList<PlayedGame> specificPlayedGames = new ArrayList<>();
