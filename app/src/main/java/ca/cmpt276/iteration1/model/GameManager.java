@@ -3,8 +3,8 @@ package ca.cmpt276.iteration1.model;
 import java.util.ArrayList;
 
 public class GameManager {
-    private final ArrayList<GameType> gameTypes = new ArrayList<>();
-    private final ArrayList<PlayedGame> playedGames = new ArrayList<>();
+    private ArrayList<GameType> gameTypes;
+    private ArrayList<PlayedGame> playedGames;
 
     // Singleton support
     private static GameManager instance;
@@ -28,8 +28,14 @@ public class GameManager {
         gameTypes.add(gameType);
     }
 
-    public void addPlayedGame(PlayedGame game){
-        playedGames.add(game);
+    public GameType getGameType(String type){
+        for (GameType gameType : gameTypes){
+            if (gameType.getType().equals(type)){
+                return gameType;
+            }
+        }
+        // If gametype does not exist, return null value
+        return null;
     }
 
     public ArrayList<PlayedGame> getSpecificPlayedGames(String type){
@@ -50,6 +56,4 @@ public class GameManager {
     public ArrayList<PlayedGame> getPlayedGames() {
         return playedGames;
     }
-
-
 }

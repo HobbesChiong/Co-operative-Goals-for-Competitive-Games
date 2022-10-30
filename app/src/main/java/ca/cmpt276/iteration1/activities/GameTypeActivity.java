@@ -4,22 +4,56 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.security.InvalidParameterException;
-
 import ca.cmpt276.iteration1.R;
+import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 
 public class GameTypeActivity extends AppCompatActivity {
+    public static final String GAME_TYPE = "GameType";
+    public static final String EDIT_GAME_TYPE = "EditGameType";
     private static final int INT_INVALID = -1;
     private MenuInflater menuInflater;
+
+    private boolean editGameActivity;
+    private String gameTypeString;
+    private GameType gameType;
+
+    EditText gameName;
+    EditText goodScore;
+    EditText badScore;
+
+    private GameManager gameManager;
+
+    // If parameter argument only has a context, we are creating a new game type
+    public static Intent makeIntent(Context context){
+        return new Intent(context, GameTypeActivity.class);
+    }
+
+    // If parameter argument includes a string for gameType, we are editing an existing game type
+    public static Intent makeIntent(Context context, String gameType){
+        Intent intent = new Intent(context, GameTypeActivity.class);
+
+        intent.putExtra(EDIT_GAME_TYPE, true);
+        intent.putExtra(GAME_TYPE, gameType);
+
+        return intent;
+    }
+
+    private void extractIntentExtras(){
+        Intent intent = getIntent();
+        editGameActivity = intent.getBooleanExtra(EDIT_GAME_TYPE, false);
+        gameTypeString = intent.getStringExtra(GAME_TYPE);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,8 +63,23 @@ public class GameTypeActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         menuInflater = getMenuInflater();
 
-        String appBarTitle = "New Game Configuration";
+        gameName = findViewById(R.id.etGameName);
+        goodScore = findViewById(R.id.etGoodScore);
+        badScore = findViewById(R.id.etBadScore);
 
+        String appBarTitle;
+        gameManager = GameManager.getInstance();
+
+        // If we are editing an existing game type
+        if (editGameActivity == true){
+            extractIntentExtras();
+            gameType = gameManager.getGameType(gameTypeString);
+            appBarTitle = "Edit Game Type Configuration";
+            setGameTypeInfo();
+        }
+        else {
+            appBarTitle = "New Game Type Configuration";
+        }
 
         ab.setTitle(appBarTitle);
     }
@@ -68,6 +117,25 @@ public class GameTypeActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    // When the user would like to save changes to an existing game type
+    private void editGameType(){
+
+        String newGameName = gameName.getText().toString();
+        int newGoodScore = Integer.parseInt(goodScore.getText().toString());
+        int newBadScore = Integer.parseInt(badScore.getText().toString());
+
+        gameType.editGameType(newGameName, newGoodScore, newBadScore);
+    }
+
+    private void setGameTypeInfo(){
+        // When the user is editing an existing game type, set the text fields accordingly
+
+        gameName.setText(gameType.getType());
+        goodScore.setText(String.valueOf(gameType.getGoodScore()));
+        badScore.setText(String.valueOf(gameType.getBadScore()));
+
     }
 
     private String getStringFromEditText(int editTextID) {
