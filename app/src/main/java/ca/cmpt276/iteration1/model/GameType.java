@@ -1,5 +1,8 @@
 package ca.cmpt276.iteration1.model;
 
+import java.sql.Array;
+import java.util.ArrayList;
+
 /**
  * Represents a type of game. Stores the name (type) of the game, what a good score (per player)
  * would look like and what a bad score (per player) would look like
@@ -81,5 +84,19 @@ public class GameType {
         // Scale the score to range from 1 to the number of achievements - 1
         int achievementIndex = map(score,goodScore, badScore, 1, achievementCount - 2);
         return achievementLevels[achievementIndex];
+    }
+
+    public ArrayList<String> getAchievementLevelScoreRequirements(int playerNumber){
+        ArrayList<String> res = new ArrayList<>();
+        int middleScore = Math.round(((float)((goodScore-badScore)/5))*playerNumber);
+
+        res.add(achievementLevels[0] + " <" + badScore*playerNumber);
+        res.add(achievementLevels[1] + " " + badScore*playerNumber);
+        for(int i = 2; i<=5; i++){
+            res.add(achievementLevels[i] + " " + (middleScore*(i-1))*playerNumber);
+        }
+        res.add(achievementLevels[6] + " " + goodScore*playerNumber);
+        res.add(achievementLevels[7] + " >" + goodScore*playerNumber);
+        return res;
     }
 }
