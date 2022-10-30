@@ -26,8 +26,8 @@ public class GameList extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = GamePlayed.makeIntent(GameList.this, position);
-                startActivity(intent);
+                // Intent intent = GamePlayed.makeIntent(GameList.this, position);
+                //startActivity(intent);
             }
         });
     }
@@ -37,8 +37,8 @@ public class GameList extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GameList.this, NewGameCreationScreen.class);
-                startActivity(intent);
+                //Intent intent = new Intent(GameList.this, NewGameCreationScreen.class);
+                //startActivity(intent);
             }
         });
     }

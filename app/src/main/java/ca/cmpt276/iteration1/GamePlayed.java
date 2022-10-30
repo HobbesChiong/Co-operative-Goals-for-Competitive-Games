@@ -24,13 +24,13 @@ import ca.cmpt276.iteration1.model.PlayedGame;
 
 public class GamePlayed extends AppCompatActivity {
 
-    private final String POSITION = "Position";
+    private static final String POSITION = "Position";
     private int position;
     GameManager gm = GameManager.getInstance();
     private final List<PlayedGame> gameHistory= new ArrayList<>();
     NewListAdapter adapter;
 
-    public Intent makeIntent(Context context, int pos){
+    public static Intent makeIntent(Context context, int pos){
         Intent intent = new Intent(context, GamePlayed.class);
         intent.putExtra(POSITION, pos);
         return intent;
@@ -56,8 +56,8 @@ public class GamePlayed extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GamePlayed.this, NewGameCreationScreen.class);
-                startActivity(intent);
+                //Intent intent = new Intent(GamePlayed.this, NewGameCreationScreen.class);
+                //startActivity(intent);
             }
         });
     }

@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +22,14 @@ import ca.cmpt276.iteration1.model.GameType;
 public class GameTypeActivity extends AppCompatActivity {
     private static final int INT_INVALID = -1;
     private MenuInflater menuInflater;
+
+
+    // When an intent is created with only a context, it is used for creating a new game type
+/*    public static Intent makeIntent(Context context){
+        return new Intent(context, GameTypeActivity.class);
+    }*/
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
