@@ -1,4 +1,4 @@
-package ca.cmpt276.iteration1;
+package ca.cmpt276.iteration1.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 
