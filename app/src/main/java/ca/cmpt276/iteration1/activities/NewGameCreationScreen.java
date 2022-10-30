@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,29 +25,53 @@ import ca.cmpt276.iteration1.model.PlayedGame;
 
 public class NewGameCreationScreen extends AppCompatActivity {
 
-    // temp data
-    // need gameType passed as a string via an Intent
-    private final String gameType = "Uno";
-    private GameType uno;
-    private final GameManager gameManager = GameManager.getInstance();
+
+    private String gameTypeString;
+    private GameType gameType;
+    private final GameManager gm = GameManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game_creation_screen);
 
-        // temp gameType
-        uno = new GameType("Uno", 100,10);
-
-
+        Intent intent = getIntent();
+        gameTypeString = intent.getStringExtra("GameType");
+        gameType = gm.getGameType(gameTypeString);
 
         // action bar setup
         ActionBar ab = getSupportActionBar();
         MenuInflater menuInflater = getMenuInflater();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        populateAchievementList();
+        numberOfPLayerCheck();
 
+
+    }
+
+    private void numberOfPLayerCheck() {
+        EditText numberOfPlayers = findViewById(R.id.etNumberOfPlayers);
+
+        numberOfPlayers.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable e) {
+                if(e.toString().equals("")){
+                    return;
+                }
+                int numberOfPlayers = Integer.parseInt(e.toString());
+                populateAchievementList(numberOfPlayers);
+            }
+        });
     }
 
     @Override
@@ -74,9 +101,9 @@ public class NewGameCreationScreen extends AppCompatActivity {
                     throw new IllegalArgumentException("Edit Text fields need to have positive values");
                 }
 
-                // failing here
-                PlayedGame currGame = new PlayedGame(gameType, numberOfPlayers, gameScore, uno.getAchievementLevel(gameScore, numberOfPlayers));
-                gameManager.addPlayedGame(currGame);
+
+                PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore,gameType.getAchievementLevel(gameScore, numberOfPlayers));
+                gm.addPlayedGame(currGame);
 
             } catch (Exception e) {
                 Toast.makeText(this, "Game configuration is invalid!", Toast.LENGTH_SHORT).show();
@@ -88,9 +115,12 @@ public class NewGameCreationScreen extends AppCompatActivity {
 
 
 
-    private void populateAchievementList() {
+    private void populateAchievementList(int numberOfPlayers) {
         // for now I'm assuming my list is taking in an array of Strings
-        ArrayList<String> listOfAchievementScores = new ArrayList<>();
+
+        GameType currGameType = gm.getGameType("Uno");
+        ArrayList<String> listOfAchievementScores = currGameType.getAchievementLevelScoreRequirements(numberOfPlayers);
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
                 R.layout.achievement_score,
@@ -99,5 +129,6 @@ public class NewGameCreationScreen extends AppCompatActivity {
         ListView list = findViewById(R.id.lvAchievementList);
         list.setAdapter(adapter);
     }
+
 
 }
