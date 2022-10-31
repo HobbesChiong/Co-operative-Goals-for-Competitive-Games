@@ -62,6 +62,7 @@ public class GameTypeActivity extends AppCompatActivity {
         // Get components
         ActionBar ab = getSupportActionBar();
         menuInflater = getMenuInflater();
+        ab.setDisplayHomeAsUpEnabled(true);
 
         gameName = findViewById(R.id.etGameName);
         goodScore = findViewById(R.id.etGoodScore);
@@ -145,6 +146,9 @@ public class GameTypeActivity extends AppCompatActivity {
                 }
 
             }
+            case android.R.id.home:
+                this.finish();
+                return true;
         }
 
         return true;

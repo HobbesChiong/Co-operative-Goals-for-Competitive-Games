@@ -22,8 +22,8 @@
         </activity>
         <activity
             android:name=".activities.GamePlayed"
-            android:exported="false"
-            android:parentActivityName=".activities.GameList">
+            android:parentActivityName=".activities.GameList"
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -37,8 +37,8 @@
         </activity>
         <activity
             android:name=".activities.GameTypeActivity"
-            android:exported="false"
-            android:parentActivityName=".activities.GameList">
+            android:parentActivityName=".activities.GameList"
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
