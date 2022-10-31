@@ -12,8 +12,8 @@ public class GameManager {
     private GameManager(){
         // private to prevent anything else from instantiating
     }
-    public static GameManager getInstance(){
-        if (instance == null){
+    public static GameManager getInstance() {
+        if (instance == null) {
             instance = new GameManager();
         }
         return instance;
@@ -21,7 +21,7 @@ public class GameManager {
 
     public void deleteGameType(String type){
         // Use its own object to find itself and remove itself from the arraylist
-        gameTypes.removeIf(gameType -> gameType.getType().equals(type));
+        gameTypes.removeIf(gameType -> gameType.getGameType().equals(type));
     }
 
     public void addGameType(GameType gameType){
@@ -34,7 +34,7 @@ public class GameManager {
 
     public GameType getGameType(String type){
         for (GameType gameType : gameTypes){
-            if (gameType.getType().equals(type)){
+            if (gameType.getGameType().equals(type)){
                 return gameType;
             }
         }
@@ -60,6 +60,7 @@ public class GameManager {
     public void loadGameTypeList(ArrayList<GameType> gameTypes){
         this.gameTypes = gameTypes;
     }
+
     public void loadGamePlayedList(ArrayList<PlayedGame> playedGames){
         this.playedGames = playedGames;
     }
