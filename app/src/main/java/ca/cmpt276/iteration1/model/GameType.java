@@ -45,6 +45,8 @@ public class GameType {
         return badScore;
     }
 
+    public String[] getAchievementLevels() { return achievementLevels; }
+
     public void editGameType(String type, int goodScore, int badScore){
         this.type = type;
         this.goodScore = goodScore;
