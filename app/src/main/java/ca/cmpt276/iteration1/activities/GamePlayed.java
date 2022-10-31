@@ -126,6 +126,9 @@ public class GamePlayed extends AppCompatActivity {
         gm.loadGamePlayedList(gson.fromJson(json, type));
     }
 
+/*
+* Code inspired by blog post on 29 Oct, 2022 from https://thumbb13555.pixnet.net/blog/post/311803031-%E7%A2%BC%E8%BE%B2%E6%97%A5%E5%B8%B8-%E3%80%8Eandroid-studio%E3%80%8F%E5%9F%BA%E6%9C%ACrecyclerview%E7%94%A8%E6%B3%95
+* */
     private void populateRecyclerView() {
         RecyclerView rv = findViewById(R.id.rv_gameHistory);
         rv.setLayoutManager(new LinearLayoutManager(this));
