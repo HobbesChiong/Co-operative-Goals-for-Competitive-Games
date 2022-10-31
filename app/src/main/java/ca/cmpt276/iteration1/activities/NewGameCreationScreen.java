@@ -45,8 +45,6 @@ public class NewGameCreationScreen extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
 
         numberOfPLayerCheck();
-
-
     }
 
     private void numberOfPLayerCheck() {

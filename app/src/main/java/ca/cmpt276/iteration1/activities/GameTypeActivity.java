@@ -116,6 +116,9 @@ public class GameTypeActivity extends AppCompatActivity {
                     GameType gameType = new GameType(gameName, goodScore, badScore);
                     String res = gameName + " configuration saved";
                     Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
+
+                    gameManager.addGameType(gameType);
+
                     finish();
                 } catch (Exception e) {
                     Toast.makeText(this,"Game configuration is invalid!",Toast.LENGTH_SHORT).show();

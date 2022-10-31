@@ -24,9 +24,12 @@ public class GameManager {
         gameTypes.removeIf(gameType -> gameType.getType().equals(type));
     }
 
-    public void addGameType(String type, int goodScore, int badScore){
-        GameType gameType = new GameType(type, goodScore, badScore);
+    public void addGameType(GameType gameType){
         gameTypes.add(gameType);
+    }
+
+    public GameType getGameTypeAtIndex(int index) {
+        return gameTypes.get(index);
     }
 
     public GameType getGameType(String type){
