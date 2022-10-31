@@ -2,6 +2,7 @@ package ca.cmpt276.iteration1.model;
 
 import java.util.ArrayList;
 
+
 public class GameManager {
     private ArrayList<GameType> gameTypes = new ArrayList<>();
     private ArrayList<PlayedGame> playedGames = new ArrayList<>();
@@ -55,6 +56,9 @@ public class GameManager {
 
     public void loadGameTypeList(ArrayList<GameType> gameTypes){
         this.gameTypes = gameTypes;
+    }
+    public void loadGamePlayedList(ArrayList<PlayedGame> playedGames){
+        this.playedGames = playedGames;
     }
 
     public ArrayList<GameType> getGameTypes() {

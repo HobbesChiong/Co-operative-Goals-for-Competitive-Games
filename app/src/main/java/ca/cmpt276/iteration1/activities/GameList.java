@@ -55,6 +55,13 @@ public class GameList extends AppCompatActivity {
         finishAffinity();
     }
 
+    // When the activity is resumed, save any changes to the game types list
+    @Override
+    public void onResume() {
+        saveGameTypeList();
+        super.onResume();
+    }
+
     private void setUpFab() {
         FloatingActionButton fab = findViewById(R.id.fab_addGame);
         fab.setOnClickListener(new View.OnClickListener() {

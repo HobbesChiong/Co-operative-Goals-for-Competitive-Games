@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,19 +16,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
+import ca.cmpt276.iteration1.model.GameType;
 import ca.cmpt276.iteration1.model.PlayedGame;
 
 public class GamePlayed extends AppCompatActivity {
 
     private static final String POSITION = "Position";
     private int position;
-    GameManager gm = GameManager.getInstance();
+    GameManager gm;
     private final List<PlayedGame> gameHistory= new ArrayList<>();
     NewListAdapter adapter;
 
@@ -41,10 +46,27 @@ public class GamePlayed extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_played);
+
+        gm = GameManager.getInstance();
+
+        loadGamesPlayedList();
+
         extractDataFromIntent();
         setUpFab();
         createList();
         populateRecyclerView();
+    }
+
+    @Override
+    public void onBackPressed(){
+        saveGamesPlayedList();
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onResume() {
+        saveGamesPlayedList();
+        super.onResume();
     }
 
     private void extractDataFromIntent() {
@@ -74,6 +96,34 @@ public class GamePlayed extends AppCompatActivity {
                 gameHistory.add(gm.getPlayedGames().get(i));
             }
         }
+    }
+
+    private void saveGamesPlayedList(){
+        SharedPreferences sharedPreferences = getSharedPreferences("Game Played Preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+
+        String json = gson.toJson(gm.getGameTypes());
+
+        editor.putString("Game Played List", json);
+        editor.apply();
+    }
+
+    private void loadGamesPlayedList(){
+        gm = GameManager.getInstance();
+
+        SharedPreferences sharedPreferences = getSharedPreferences("Game Played Preferences", MODE_PRIVATE);
+        Gson gson = new Gson();
+
+        String json = sharedPreferences.getString("Game Played List", null);
+        Type type = new TypeToken<ArrayList<PlayedGame>>() {}.getType();
+
+        if (json == null){
+            return; // keep the old instance of game manager if no save exists
+        }
+
+        // Set retreived data if not null to game manager's game type list
+        gm.loadGameTypeList(gson.fromJson(json, type));
     }
 
     private void populateRecyclerView() {
