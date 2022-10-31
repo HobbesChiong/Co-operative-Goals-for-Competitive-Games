@@ -14,14 +14,15 @@
         tools:targetApi="31">
         <activity
             android:name=".activities.NewGameCreationScreen"
-            android:exported="true">
+            android:exported="false">
         <meta-data
             android:name="android.app.lib_name"
             android:value="" />
         </activity>
         <activity
             android:name=".activities.GamePlayed"
-            android:exported="false">
+            android:exported="false"
+            android:parentActivityName=".activities.GameList">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -35,7 +36,8 @@
         </activity>
         <activity
             android:name=".activities.GameTypeActivity"
-            android:exported="true">
+            android:exported="false"
+            android:parentActivityName=".activities.GameList">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
