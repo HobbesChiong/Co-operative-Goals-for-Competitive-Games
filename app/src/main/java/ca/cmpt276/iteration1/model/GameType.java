@@ -88,14 +88,15 @@ public class GameType {
     public ArrayList<String> getAchievementLevelScoreRequirements(int playerNumber){
         ArrayList<String> res = new ArrayList<>();
         int middleScore = Math.round(((float)((goodScore-badScore)/5))*playerNumber);
+        int max = achievementLevels.length;
 
         res.add(achievementLevels[0] + " <" + badScore*playerNumber);
         res.add(achievementLevels[1] + " " + badScore*playerNumber);
         for(int i = 2; i<=5; i++){
-            res.add(achievementLevels[i] + " " + (middleScore*(i-1))*playerNumber);
+            res.add(achievementLevels[i] + " " + ((badScore*playerNumber)+(middleScore*(i-1))));
         }
-        res.add(achievementLevels[6] + " " + goodScore*playerNumber);
-        res.add(achievementLevels[7] + " >" + goodScore*playerNumber);
+        res.add(achievementLevels[max-2] + " " + goodScore*playerNumber);
+        res.add(achievementLevels[max-1] + " >" + goodScore*playerNumber);
         return res;
     }
 }

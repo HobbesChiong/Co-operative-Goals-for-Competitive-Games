@@ -88,7 +88,7 @@ public class GamePlayed extends AppCompatActivity {
                 Intent intent = new Intent(GamePlayed.this, NewGameCreationScreen.class);
                 GameType t = gm.getGameTypeAtIndex(gameTypeIndex);
                 String gameType = t.getGameType();
-                //intent.putExtra("GameType", gameType);
+                intent.putExtra("GameType", gameType);
                 startActivity(intent);
             }
         });
