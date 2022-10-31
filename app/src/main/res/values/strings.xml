@@ -4,4 +4,6 @@
     <string name="number_of_players">Number of Players</string>
     <string name="_1">1</string>
     <string name="_0">0</string>
+    <string name="delete_config">Delete Config</string>
+    <string name="save">Save</string>
 </resources>

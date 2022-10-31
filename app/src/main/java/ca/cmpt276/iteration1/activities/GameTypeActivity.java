@@ -88,7 +88,13 @@ public class GameTypeActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu
-        menuInflater.inflate(R.menu.menu_add_type_appbar, menu);
+        if(editGameActivity == true) {
+            menuInflater.inflate(R.menu.menu_appbar_delete, menu);
+        }
+        else{
+            menuInflater.inflate(R.menu.menu_add_type_appbar, menu);
+        }
+
         return true;
     }
 
@@ -108,11 +114,27 @@ public class GameTypeActivity extends AppCompatActivity {
                     }
 
                     GameType gameType = new GameType(gameName, goodScore, badScore);
+                    String res = gameName + " configuration saved";
+                    Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
+                    finish();
                 } catch (Exception e) {
                     Toast.makeText(this,"Game configuration is invalid!",Toast.LENGTH_SHORT).show();
                 }
 
                 break;
+            }
+
+            case R.id.btnDelete: {
+                try{
+                    gameManager.deleteGameType(gameTypeString);
+                    String res = "Deleting " + gameTypeString;
+                    Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                catch(Exception e){
+                    Toast.makeText(this, "Can't delete this Game Configuration", Toast.LENGTH_SHORT).show();
+                }
+
             }
         }
 
