@@ -40,11 +40,24 @@ public class GameList extends AppCompatActivity {
 
         setTitle("Game Types");
 
+        // Single tap will open up list of games played for specific game type
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = GamePlayed.makeIntent(GameList.this, position);
                 startActivity(intent);
+            }
+        });
+
+        // Single tap and hold will open up edit game configuration screen
+        // https://stackoverflow.com/questions/8846707/how-to-implement-a-long-click-listener-on-a-listview
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Intent intent = GameTypeActivity.makeIntent(GameList.this, gm.getGameTypes().get(position).getGameType());
+                startActivity(intent);
+
+                return true;
             }
         });
 
