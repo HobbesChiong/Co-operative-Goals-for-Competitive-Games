@@ -3,6 +3,7 @@ package ca.cmpt276.iteration1.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,20 +11,34 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 
 public class GameList extends AppCompatActivity {
-    GameManager gm = GameManager.getInstance();
+
+    GameManager gm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_list);
+
+        gm = GameManager.getInstance();
+
+        loadGameTypeList();
+
         setUpFab();
         populateListView();
+
         ListView lv = findViewById(R.id.lv_gameTypeList);
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -31,6 +46,13 @@ public class GameList extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    // When back button on home bar is pressed
+    @Override
+    public void onBackPressed(){
+        saveGameTypeList();
+        finishAffinity();
     }
 
     private void setUpFab() {
@@ -48,5 +70,35 @@ public class GameList extends AppCompatActivity {
         ArrayAdapter<GameType> adapter = new ArrayAdapter<>(this, R.layout.game_type_list, gm.getGameTypes());
         ListView lv = findViewById(R.id.lv_gameTypeList);
         lv.setAdapter(adapter);
+    }
+
+    // Save Game type list
+    private void saveGameTypeList(){
+        SharedPreferences sharedPreferences = getSharedPreferences("Game Type Preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+
+        String json = gson.toJson(gm.getGameTypes());
+
+        editor.putString("Game Type List", json);
+        editor.apply();
+    }
+
+    // Load Game type list
+    private void loadGameTypeList(){
+        gm = GameManager.getInstance();
+
+        SharedPreferences sharedPreferences = getSharedPreferences("Game Type Preferences", MODE_PRIVATE);
+        Gson gson = new Gson();
+
+        String json = sharedPreferences.getString("Game Type List", null);
+        Type type = new TypeToken<ArrayList<GameType>>() {}.getType();
+
+        if (json == null){
+            return; // keep the old instance of game manager if no save exists
+        }
+
+        // Set retreived data if not null to game manager's game type list
+        gm.loadGameTypeList(gson.fromJson(json, type));
     }
 }

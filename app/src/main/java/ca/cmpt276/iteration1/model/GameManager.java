@@ -3,8 +3,8 @@ package ca.cmpt276.iteration1.model;
 import java.util.ArrayList;
 
 public class GameManager {
-    private final ArrayList<GameType> gameTypes = new ArrayList<>();
-    private final ArrayList<PlayedGame> playedGames = new ArrayList<>();
+    private ArrayList<GameType> gameTypes = new ArrayList<>();
+    private ArrayList<PlayedGame> playedGames = new ArrayList<>();
 
     // Singleton support
     private static GameManager instance;
@@ -51,6 +51,10 @@ public class GameManager {
             }
         }
         return specificPlayedGames;
+    }
+
+    public void loadGameTypeList(ArrayList<GameType> gameTypes){
+        this.gameTypes = gameTypes;
     }
 
     public ArrayList<GameType> getGameTypes() {
