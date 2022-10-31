@@ -157,7 +157,7 @@ public class GameTypeActivity extends AppCompatActivity {
     private void setGameTypeInfo(){
         // When the user is editing an existing game type, set the text fields accordingly
 
-        gameName.setText(gameType.getType());
+        gameName.setText(gameType.getGameType());
         goodScore.setText(String.valueOf(gameType.getGoodScore()));
         badScore.setText(String.valueOf(gameType.getBadScore()));
 

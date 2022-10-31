@@ -25,6 +25,7 @@ import java.util.List;
 
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
+import ca.cmpt276.iteration1.model.GameType;
 import ca.cmpt276.iteration1.model.PlayedGame;
 
 public class GamePlayed extends AppCompatActivity {
@@ -76,7 +77,7 @@ public class GamePlayed extends AppCompatActivity {
         gameTypeIndex = intent.getIntExtra(GAME_TYPE_INDEX, 0);
 
         // Retrieve the type of game we're playing as
-        gameType = gm.getGameTypeAtIndex(gameTypeIndex).getType();
+        gameType = gm.getGameTypeAtIndex(gameTypeIndex).getGameType();
     }
 
     private void setUpFab() {
@@ -84,10 +85,10 @@ public class GamePlayed extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(GamePlayed.this, NewGameCreationScreen.class);
-
-                intent.putExtra("GameType", gm.getGameTypes().get(gameTypeIndex).getType());
+                GameType t = gm.getGameTypeAtIndex(gameTypeIndex);
+                String gameType = t.getGameType();
+                //intent.putExtra("GameType", gameType);
                 startActivity(intent);
             }
         });
@@ -122,7 +123,7 @@ public class GamePlayed extends AppCompatActivity {
         }
 
         // Set retreived data if not null to game manager's game type list
-        gm.loadGameTypeList(gson.fromJson(json, type));
+        gm.loadGamePlayedList(gson.fromJson(json, type));
     }
 
     private void populateRecyclerView() {

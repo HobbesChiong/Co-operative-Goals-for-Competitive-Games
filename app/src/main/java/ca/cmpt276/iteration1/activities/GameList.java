@@ -12,17 +12,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
-
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
@@ -89,7 +83,7 @@ public class GameList extends AppCompatActivity {
 
         // Get the names of every game type
         for (GameType game : gm.getGameTypes()) {
-            gameTypesList.add(game.getType());
+            gameTypesList.add(game.getGameType());
         }
 
         // Pack the game names into the listview

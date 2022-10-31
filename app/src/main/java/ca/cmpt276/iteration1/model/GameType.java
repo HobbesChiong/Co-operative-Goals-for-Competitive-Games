@@ -1,6 +1,5 @@
 package ca.cmpt276.iteration1.model;
 
-import java.sql.Array;
 import java.util.ArrayList;
 
 /**
@@ -34,7 +33,7 @@ public class GameType {
         }
     }
 
-    public String getType() {
+    public String getGameType() {
         return type;
     }
 

@@ -45,6 +45,8 @@ public class NewGameCreationScreen extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
 
         numberOfPLayerCheck();
+
+        setTitle("Add new game");
     }
 
     private void numberOfPLayerCheck() {
