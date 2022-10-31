@@ -85,28 +85,36 @@ public class NewGameCreationScreen extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.btnSave) {
-            try {
-                EditText etGameScore = findViewById(R.id.etGameScore);
-                EditText etNumberOfPlayers = findViewById(R.id.etNumberOfPlayers);
 
-                if (etNumberOfPlayers == null || etGameScore == null) {
-                    throw new IllegalArgumentException("Edit Text fields need to be filled");
+        switch (item.getItemId()){
+            case (R.id.btnSave): {
+                try {
+                    EditText etGameScore = findViewById(R.id.etGameScore);
+                    EditText etNumberOfPlayers = findViewById(R.id.etNumberOfPlayers);
+
+                    if (etNumberOfPlayers == null || etGameScore == null) {
+                        throw new IllegalArgumentException("Edit Text fields need to be filled");
+                    }
+
+                    int gameScore = Integer.parseInt(etGameScore.getText().toString());
+                    int numberOfPlayers = Integer.parseInt(etNumberOfPlayers.getText().toString());
+
+                    if (gameScore <= 0 || numberOfPlayers <= 0) {
+                        throw new IllegalArgumentException("Edit Text fields need to have positive values");
+                    }
+
+
+                    PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore,gameType.getAchievementLevel(gameScore, numberOfPlayers));
+                    gm.addPlayedGame(currGame);
+
+                } catch (Exception e) {
+                    Toast.makeText(this, "Game configuration is invalid!", Toast.LENGTH_SHORT).show();
                 }
+            }
 
-                int gameScore = Integer.parseInt(etGameScore.getText().toString());
-                int numberOfPlayers = Integer.parseInt(etNumberOfPlayers.getText().toString());
-
-                if (gameScore <= 0 || numberOfPlayers <= 0) {
-                    throw new IllegalArgumentException("Edit Text fields need to have positive values");
-                }
-
-
-                PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore,gameType.getAchievementLevel(gameScore, numberOfPlayers));
-                gm.addPlayedGame(currGame);
-
-            } catch (Exception e) {
-                Toast.makeText(this, "Game configuration is invalid!", Toast.LENGTH_SHORT).show();
+            case (android.R.id.home): {
+                finish();
+                break;
             }
         }
 
