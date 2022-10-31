@@ -28,13 +28,14 @@ public class NewGameCreationScreen extends AppCompatActivity {
 
     private String gameTypeString;
     private GameType gameType;
-    private final GameManager gm = GameManager.getInstance();
+    private GameManager gm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game_creation_screen);
 
+        gm = GameManager.getInstance();
         Intent intent = getIntent();
         gameTypeString = intent.getStringExtra("GameType");
         gameType = gm.getGameType(gameTypeString);
@@ -68,8 +69,8 @@ public class NewGameCreationScreen extends AppCompatActivity {
                 if(e.toString().equals("")){
                     return;
                 }
-                int numberOfPlayers = Integer.parseInt(e.toString());
-                populateAchievementList(numberOfPlayers);
+                int playerNumber = Integer.parseInt(e.toString());
+                populateAchievementList(playerNumber);
             }
         });
     }
@@ -85,9 +86,8 @@ public class NewGameCreationScreen extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()){
-            case (R.id.btnSave): {
+        switch (item.getItemId()) {
+            case R.id.btnSave:
                 try {
                     EditText etGameScore = findViewById(R.id.etGameScore);
                     EditText etNumberOfPlayers = findViewById(R.id.etNumberOfPlayers);
@@ -103,19 +103,18 @@ public class NewGameCreationScreen extends AppCompatActivity {
                         throw new IllegalArgumentException("Edit Text fields need to have positive values");
                     }
 
-
-                    PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore,gameType.getAchievementLevel(gameScore, numberOfPlayers));
+                    PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementLevel(gameScore, numberOfPlayers));
                     gm.addPlayedGame(currGame);
-
+                    String res = gameTypeString + " game saved";
+                    Toast.makeText(this, res,Toast.LENGTH_SHORT).show();
+                    finish();
+                    return true;
                 } catch (Exception e) {
                     Toast.makeText(this, "Game configuration is invalid!", Toast.LENGTH_SHORT).show();
                 }
-            }
-
-            case (android.R.id.home): {
-                finish();
-                break;
-            }
+            case android.R.id.home:
+                this.finish();
+                return true;
         }
 
         return true;
@@ -126,7 +125,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
     private void populateAchievementList(int numberOfPlayers) {
         // for now I'm assuming my list is taking in an array of Strings
 
-        GameType currGameType = gm.getGameType("Uno");
+        GameType currGameType = gm.getGameType(gameTypeString);
         ArrayList<String> listOfAchievementScores = currGameType.getAchievementLevelScoreRequirements(numberOfPlayers);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
