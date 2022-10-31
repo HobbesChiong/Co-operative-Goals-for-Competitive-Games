@@ -70,15 +70,15 @@ public class GameTypeActivity extends AppCompatActivity {
         String appBarTitle;
         gameManager = GameManager.getInstance();
 
+        extractIntentExtras();
         // If we are editing an existing game type
         if (editGameActivity == true){
-            extractIntentExtras();
             gameType = gameManager.getGameType(gameTypeString);
-            appBarTitle = "Edit Game Type Configuration";
+            appBarTitle = "Edit Game Type";
             setGameTypeInfo();
         }
         else {
-            appBarTitle = "New Game Type Configuration";
+            appBarTitle = "New Game Type";
         }
 
         ab.setTitle(appBarTitle);
@@ -103,27 +103,33 @@ public class GameTypeActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.btnSave: {
-                // Try to create a new game configuration. If it fails, toast!
-                try {
-                    String gameName = getStringFromEditText(R.id.etGameName);
-                    int goodScore = getIntFromEditText(R.id.etGoodScore);
-                    int badScore = getIntFromEditText(R.id.etBadScore);
+                // Check to see if we are saving a new configuration or editing an existing one
+                if (editGameActivity == false){
+                    // Try to create a new game configuration. If it fails, toast!
+                    try {
+                        String gameName = getStringFromEditText(R.id.etGameName);
+                        int goodScore = getIntFromEditText(R.id.etGoodScore);
+                        int badScore = getIntFromEditText(R.id.etBadScore);
 
-                    if (gameName.isEmpty()) {
-                        throw new IllegalArgumentException("Game name cannot be empty!");
+                        if (gameName.isEmpty()) {
+                            throw new IllegalArgumentException("Game name cannot be empty!");
+                        }
+
+                        GameType gameType = new GameType(gameName, goodScore, badScore);
+                        String res = gameName + " configuration saved";
+                        Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
+
+                        gameManager.addGameType(gameType);
+
+                        finish();
+                    } catch (Exception e) {
+                        Toast.makeText(this,"Game configuration is invalid!",Toast.LENGTH_SHORT).show();
                     }
-
-                    GameType gameType = new GameType(gameName, goodScore, badScore);
-                    String res = gameName + " configuration saved";
-                    Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
-
-                    gameManager.addGameType(gameType);
-
-                    finish();
-                } catch (Exception e) {
-                    Toast.makeText(this,"Game configuration is invalid!",Toast.LENGTH_SHORT).show();
                 }
-
+                else {
+                    editGameType();
+                    finish();
+                }
                 break;
             }
 
