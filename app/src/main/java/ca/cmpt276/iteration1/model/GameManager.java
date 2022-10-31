@@ -28,6 +28,10 @@ public class GameManager {
         gameTypes.add(gameType);
     }
 
+    public GameType getGameTypeAtIndex(int index) {
+        return gameTypes.get(index);
+    }
+
     public GameType getGameType(String type){
         for (GameType gameType : gameTypes){
             if (gameType.getType().equals(type)){

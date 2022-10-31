@@ -44,6 +44,8 @@ public class GameList extends AppCompatActivity {
 
         ListView lv = findViewById(R.id.lv_gameTypeList);
 
+        setTitle("Game Types");
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

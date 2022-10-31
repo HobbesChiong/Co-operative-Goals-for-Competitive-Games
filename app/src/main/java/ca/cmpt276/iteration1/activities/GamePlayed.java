@@ -25,20 +25,21 @@ import java.util.List;
 
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
-import ca.cmpt276.iteration1.model.GameType;
 import ca.cmpt276.iteration1.model.PlayedGame;
 
 public class GamePlayed extends AppCompatActivity {
 
-    private static final String POSITION = "Position";
-    private int position;
-    GameManager gm;
-    private final List<PlayedGame> gameHistory= new ArrayList<>();
-    NewListAdapter adapter;
+    private static final String GAME_TYPE_INDEX = "Position";
+    // Index of which type of game we're dealing with
+    private int gameTypeIndex;
+    private GameManager gm;
+    private List<PlayedGame> gameHistory= new ArrayList<>();
+    private String gameType;
+    private NewListAdapter adapter;
 
     public static Intent makeIntent(Context context, int pos){
         Intent intent = new Intent(context, GamePlayed.class);
-        intent.putExtra(POSITION, pos);
+        intent.putExtra(GAME_TYPE_INDEX, pos);
         return intent;
     }
 
@@ -49,12 +50,13 @@ public class GamePlayed extends AppCompatActivity {
 
         gm = GameManager.getInstance();
 
-        loadGamesPlayedList();
-
         extractDataFromIntent();
+        loadGamesPlayedList();
         setUpFab();
         createList();
         populateRecyclerView();
+
+        setTitle(gameType);
     }
 
     @Override
@@ -71,7 +73,10 @@ public class GamePlayed extends AppCompatActivity {
 
     private void extractDataFromIntent() {
         Intent intent = getIntent();
-        position = intent.getIntExtra(POSITION, 0);
+        gameTypeIndex = intent.getIntExtra(GAME_TYPE_INDEX, 0);
+
+        // Retrieve the type of game we're playing as
+        gameType = gm.getGameTypeAtIndex(gameTypeIndex).getType();
     }
 
     private void setUpFab() {
@@ -82,20 +87,14 @@ public class GamePlayed extends AppCompatActivity {
 
                 Intent intent = new Intent(GamePlayed.this, NewGameCreationScreen.class);
 
-                intent.putExtra("GameType", gm.getGameTypes().get(position).getType());
+                intent.putExtra("GameType", gm.getGameTypes().get(gameTypeIndex).getType());
                 startActivity(intent);
             }
         });
     }
 
     private void createList() {
-        int size = gm.getPlayedGames().size();
-        String type = gm.getPlayedGames().get(position).getType();
-        for(int i = 0; i < size; i++){
-            if(gm.getPlayedGames().get(i).getType().equals(type)){
-                gameHistory.add(gm.getPlayedGames().get(i));
-            }
-        }
+        gameHistory = gm.getSpecificPlayedGames(gameType);
     }
 
     private void saveGamesPlayedList(){
