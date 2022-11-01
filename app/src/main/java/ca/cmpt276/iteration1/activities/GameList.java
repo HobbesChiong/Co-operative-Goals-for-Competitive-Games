@@ -38,11 +38,7 @@ public class GameList extends AppCompatActivity {
         setUpFab();
         populateListView();
         ListView lv = findViewById(R.id.lv_gameTypeList);
-        if(gm.getGameTypes().isEmpty()){
-            // load empty state
-            TextView emptyState = findViewById(R.id.tvEmptyState);
-            emptyState.setText(R.string.emptyState);
-        }
+
         setTitle("Game Types");
 
         // Single tap will open up list of games played for specific game type
@@ -81,10 +77,15 @@ public class GameList extends AppCompatActivity {
     public void onResume() {
         saveGameTypeList();
         populateListView();
+        TextView emptyState = findViewById(R.id.tvEmptyState);
+        // No games types are added in yet
         if(!gm.getGameTypes().isEmpty()){
-            // load empty state
-            TextView emptyState = findViewById(R.id.tvEmptyState);
-            emptyState.setText("");
+            // instructions when game list is not empty
+            emptyState.setText("Single tap the game to open it, Hold to edit the game");
+        }
+        else if(gm.getGameTypes().isEmpty()){
+
+            emptyState.setText(R.string.emptyState);
         }
         super.onResume();
     }
