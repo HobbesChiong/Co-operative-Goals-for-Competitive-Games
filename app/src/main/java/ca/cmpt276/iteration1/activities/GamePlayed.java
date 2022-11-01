@@ -1,6 +1,7 @@
 package ca.cmpt276.iteration1.activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -67,6 +68,9 @@ public class GamePlayed extends AppCompatActivity {
 
         gm = GameManager.getInstance();
 
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
         extractDataFromIntent();
         loadGamesPlayedList();
         setUpFab();
@@ -91,6 +95,11 @@ public class GamePlayed extends AppCompatActivity {
         switch(item.getItemId()){
             case (R.id.btnViewAchievementLevels): {
                 createAchievementLevelDialog();
+                break;
+            }
+            case (android.R.id.home): {
+                finish();
+                break;
             }
         }
 
