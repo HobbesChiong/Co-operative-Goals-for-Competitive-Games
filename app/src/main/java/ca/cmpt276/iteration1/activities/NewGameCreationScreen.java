@@ -105,18 +105,20 @@ public class NewGameCreationScreen extends AppCompatActivity {
                     int gameScore = Integer.parseInt(etGameScore.getText().toString());
                     int numberOfPlayers = Integer.parseInt(etNumberOfPlayers.getText().toString());
 
-                    if (gameScore <= 0 || numberOfPlayers <= 0) {
+                    if (gameScore < 0 || numberOfPlayers <= 0) {
                         throw new IllegalArgumentException("Edit Text fields need to have positive values");
                     }
 
                     PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementLevel(gameScore, numberOfPlayers));
                     gm.addPlayedGame(currGame);
+
                     String res = gameTypeString + " game saved";
                     Toast.makeText(this, res,Toast.LENGTH_SHORT).show();
                     finish();
                     return true;
                 } catch (Exception e) {
                     Toast.makeText(this, "Game configuration is invalid!", Toast.LENGTH_SHORT).show();
+                    break;
                 }
             case android.R.id.home:
                 this.finish();

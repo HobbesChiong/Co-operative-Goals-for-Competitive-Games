@@ -73,6 +73,7 @@ public class GameType {
 
         score /= playerNumber;
 
+
         // If worse than a bad score, return the worst achievement levels
         if (score < badScore) {
             return achievementLevels[0];
@@ -83,13 +84,15 @@ public class GameType {
         }
 
         // Scale the score to range from 1 to the number of achievements - 1
-        int achievementIndex = map(score,goodScore, badScore, 1, achievementCount - 2);
+        int achievementIndex = map(score,badScore, goodScore, 1, achievementCount - 2);
         return achievementLevels[achievementIndex];
     }
 
     public ArrayList<String> getAchievementLevelScoreRequirements(int playerNumber){
         ArrayList<String> res = new ArrayList<>();
-        int middleScore = Math.round(((float)((goodScore-badScore)/5))*playerNumber);
+        float difference = (float)(goodScore-badScore)/5;
+
+        int middleScore = Math.round((difference)*playerNumber);
         int max = achievementLevels.length;
 
         res.add(achievementLevels[0] + " <" + badScore*playerNumber);
