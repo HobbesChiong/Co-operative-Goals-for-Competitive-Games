@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -35,9 +37,12 @@ public class GameList extends AppCompatActivity {
         loadGameTypeList();
         setUpFab();
         populateListView();
-
         ListView lv = findViewById(R.id.lv_gameTypeList);
-
+        if(gm.getGameTypes().isEmpty()){
+            // load empty state
+            TextView emptyState = findViewById(R.id.tvEmptyState);
+            emptyState.setText(R.string.emptyState);
+        }
         setTitle("Game Types");
 
         // Single tap will open up list of games played for specific game type
@@ -76,6 +81,11 @@ public class GameList extends AppCompatActivity {
     public void onResume() {
         saveGameTypeList();
         populateListView();
+        if(!gm.getGameTypes().isEmpty()){
+            // load empty state
+            TextView emptyState = findViewById(R.id.tvEmptyState);
+            emptyState.setText("");
+        }
         super.onResume();
     }
 
