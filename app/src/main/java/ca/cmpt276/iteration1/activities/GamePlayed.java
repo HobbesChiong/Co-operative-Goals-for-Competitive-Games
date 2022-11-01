@@ -95,10 +95,12 @@ public class GamePlayed extends AppCompatActivity {
         switch(item.getItemId()){
             case (R.id.btnViewAchievementLevels): {
                 createAchievementLevelDialog();
+                break;
             }
-            case android.R.id.home:
-                this.finish();
-                return true;
+            case (android.R.id.home): {
+                finish();
+                break;
+            }
         }
 
         return true;
