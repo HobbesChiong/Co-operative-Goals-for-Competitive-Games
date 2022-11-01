@@ -23,6 +23,12 @@ import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 import ca.cmpt276.iteration1.model.PlayedGame;
 
+/*
+ * Takes in an intent from previous activity and creates a new game of the "GameType"
+ * using the inputs "number of players" and "GameScore" then adds it to the "Played Games"
+ * array list in the GameManager
+ *
+ * */
 public class NewGameCreationScreen extends AppCompatActivity {
 
 
@@ -99,18 +105,20 @@ public class NewGameCreationScreen extends AppCompatActivity {
                     int gameScore = Integer.parseInt(etGameScore.getText().toString());
                     int numberOfPlayers = Integer.parseInt(etNumberOfPlayers.getText().toString());
 
-                    if (gameScore <= 0 || numberOfPlayers <= 0) {
+                    if (gameScore < 0 || numberOfPlayers <= 0) {
                         throw new IllegalArgumentException("Edit Text fields need to have positive values");
                     }
 
                     PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementLevel(gameScore, numberOfPlayers));
                     gm.addPlayedGame(currGame);
+
                     String res = gameTypeString + " game saved";
                     Toast.makeText(this, res,Toast.LENGTH_SHORT).show();
                     finish();
                     return true;
                 } catch (Exception e) {
                     Toast.makeText(this, "Game configuration is invalid!", Toast.LENGTH_SHORT).show();
+                    break;
                 }
             case android.R.id.home:
                 this.finish();

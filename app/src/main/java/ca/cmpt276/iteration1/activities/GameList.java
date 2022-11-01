@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -35,7 +37,6 @@ public class GameList extends AppCompatActivity {
         loadGameTypeList();
         setUpFab();
         populateListView();
-
         ListView lv = findViewById(R.id.lv_gameTypeList);
 
         setTitle("Game Types");
@@ -76,6 +77,16 @@ public class GameList extends AppCompatActivity {
     public void onResume() {
         saveGameTypeList();
         populateListView();
+        TextView emptyState = findViewById(R.id.tvEmptyState);
+        // No games types are added in yet
+        if(!gm.getGameTypes().isEmpty()){
+            // instructions when game list is not empty
+            emptyState.setText("Single tap the game to open it, Hold to edit the game");
+        }
+        else if(gm.getGameTypes().isEmpty()){
+
+            emptyState.setText(R.string.emptyState);
+        }
         super.onResume();
     }
 
