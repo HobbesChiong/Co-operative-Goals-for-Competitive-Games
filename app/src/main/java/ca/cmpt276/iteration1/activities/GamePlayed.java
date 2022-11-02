@@ -154,7 +154,7 @@ public class GamePlayed extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
 
-        String json = gson.toJson(gm.getGameTypes());
+        String json = gson.toJson(gm.getPlayedGames());
 
         editor.putString("Game Played List", json);
         editor.apply();
