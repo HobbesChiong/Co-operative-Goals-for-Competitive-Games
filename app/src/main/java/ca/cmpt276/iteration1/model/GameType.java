@@ -90,13 +90,17 @@ public class GameType {
 
     public ArrayList<String> getAchievementLevelScoreRequirements(int playerNumber){
         ArrayList<String> res = new ArrayList<>();
+        // gets the good score - bad score and divides by 5 to get the intervals between achievements
         float difference = (float)(goodScore-badScore)/5;
 
         int max = achievementLevels.length;
 
         res.add(achievementLevels[0] + " <" + badScore*playerNumber);
         res.add(achievementLevels[1] + " " + badScore*playerNumber);
-        for(int i = 2; i<=5; i++){
+        for(int i = 2; i<=max-3; i++){
+            // below algo uses the formula from https://math.stackexchange.com/questions/914823/shift-numbers-into-a-different-range
+            // Isolated t which is the score requirement for i which is the index of the achievement levels
+            // if the game score divided by player number is >= to t then that is the achievement the game gets.
             int minScoreRequirement = (int) Math.ceil((((i-1)*difference) + badScore));
             minScoreRequirement = (minScoreRequirement*playerNumber);
             res.add(achievementLevels[i] + " " + (minScoreRequirement));
