@@ -19,20 +19,20 @@ public class GameManager {
         return instance;
     }
 
-    public void deleteGameType(String type){
+    public void deleteGameType (String type){
         // Use its own object to find itself and remove itself from the arraylist
         gameTypes.removeIf(gameType -> gameType.getGameType().equals(type));
     }
 
-    public void addGameType(GameType gameType){
+    public void addGameType (GameType gameType){
         gameTypes.add(gameType);
     }
 
-    public GameType getGameTypeAtIndex(int index) {
+    public GameType getGameTypeAtIndex (int index) {
         return gameTypes.get(index);
     }
 
-    public GameType getGameType(String type){
+    public GameType getGameTypeFromString (String type){
         for (GameType gameType : gameTypes){
             if (gameType.getGameType().equals(type)){
                 return gameType;

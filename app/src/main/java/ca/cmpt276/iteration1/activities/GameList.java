@@ -23,6 +23,11 @@ import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 
+
+/**
+ * Activity which lists possible game configurations.
+ * Has a FAB which lets the user launch into an activity for creating a new game configuration.
+ */
 public class GameList extends AppCompatActivity {
 
     GameManager gm;

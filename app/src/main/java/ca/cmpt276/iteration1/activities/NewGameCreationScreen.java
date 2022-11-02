@@ -44,7 +44,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
         gm = GameManager.getInstance();
         Intent intent = getIntent();
         gameTypeString = intent.getStringExtra("GameType");
-        gameType = gm.getGameType(gameTypeString);
+        gameType = gm.getGameTypeFromString(gameTypeString);
 
         // action bar setup
         ActionBar ab = getSupportActionBar();
@@ -133,7 +133,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
     private void populateAchievementList(int numberOfPlayers) {
         // for now I'm assuming my list is taking in an array of Strings
 
-        GameType currGameType = gm.getGameType(gameTypeString);
+        GameType currGameType = gm.getGameTypeFromString(gameTypeString);
         ArrayList<String> listOfAchievementScores = currGameType.getAchievementLevelScoreRequirements(numberOfPlayers);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
