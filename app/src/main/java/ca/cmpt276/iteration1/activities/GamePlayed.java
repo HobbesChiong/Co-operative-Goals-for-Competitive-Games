@@ -40,6 +40,10 @@ import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 import ca.cmpt276.iteration1.model.PlayedGame;
 
+
+/**
+ * Activity which lists games played for a specific type of game.
+ */
 public class GamePlayed extends AppCompatActivity {
 
     private static final String GAME_TYPE_INDEX = "Position";
@@ -161,7 +165,7 @@ public class GamePlayed extends AppCompatActivity {
         editor.apply();
     }
 
-    private void loadGamesPlayedList(){
+    private void loadGamesPlayedList() {
         gm = GameManager.getInstance();
 
         SharedPreferences sharedPreferences = getSharedPreferences("Game Played Preferences", MODE_PRIVATE);

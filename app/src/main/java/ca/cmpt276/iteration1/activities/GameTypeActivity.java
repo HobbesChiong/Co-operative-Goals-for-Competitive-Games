@@ -17,10 +17,15 @@ import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 
+/**
+ * Activity for creating a new type of game.
+ *
+ * The user can input the name of the game, what a good score (per player) should look like
+ * and a bad score (per player should look like)
+ */
 public class GameTypeActivity extends AppCompatActivity {
     public static final String GAME_TYPE = "GameType";
     public static final String EDIT_GAME_TYPE = "EditGameType";
-    private static final int INT_INVALID = -1;
     private MenuInflater menuInflater;
 
     private boolean editGameActivity;
