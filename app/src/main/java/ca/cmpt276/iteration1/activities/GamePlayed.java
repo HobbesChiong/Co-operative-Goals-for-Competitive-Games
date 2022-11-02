@@ -3,7 +3,6 @@ package ca.cmpt276.iteration1.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -212,7 +211,7 @@ public class GamePlayed extends AppCompatActivity {
 
                 // If user enters in 0 players
                 if (playerCount == 0){
-                    achievementLevels.setText("Invalid player count...");
+                    achievementLevels.setText(R.string.invalid_num_of_player);
                 }
                 else {
                     String message = "";
@@ -223,7 +222,7 @@ public class GamePlayed extends AppCompatActivity {
                 }
             }
             catch (NumberFormatException numberFormatException){
-                achievementLevels.setText("Awaiting input...");
+                achievementLevels.setText(R.string.waiting_for_input);
             }
         }
 

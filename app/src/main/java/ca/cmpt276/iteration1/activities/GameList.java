@@ -81,7 +81,7 @@ public class GameList extends AppCompatActivity {
         // No games types are added in yet
         if(!gm.getGameTypes().isEmpty()){
             // instructions when game list is not empty
-            emptyState.setText("Single tap the game to open it, Hold to edit the game");
+            emptyState.setText(R.string.open_edit_game_instruction);
         }
         else if(gm.getGameTypes().isEmpty()){
 
@@ -142,7 +142,7 @@ public class GameList extends AppCompatActivity {
             return; // keep the old instance of game manager if no save exists
         }
 
-        // Set retreived data if not null to game manager's game type list
+        // Set retrieved data if not null to game manager's game type list
         gm.loadGameTypeList(gson.fromJson(json, type));
     }
 }
