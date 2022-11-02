@@ -62,7 +62,7 @@ public class GameType {
         // Math from https://math.stackexchange.com/questions/914823/shift-numbers-into-a-different-range
         float valueScale = (newMaximum - newMinimum)/(float)(oldMaximum - oldMinimum);
         float endpointShift = val - oldMinimum;
-        int newValue = Math.round(newMinimum + (valueScale * endpointShift));
+        int newValue = (int) Math.floor(newMinimum + (valueScale * endpointShift));
 
         return newValue;
     }
@@ -92,13 +92,14 @@ public class GameType {
         ArrayList<String> res = new ArrayList<>();
         float difference = (float)(goodScore-badScore)/5;
 
-        int middleScore = Math.round((difference)*playerNumber);
         int max = achievementLevels.length;
 
         res.add(achievementLevels[0] + " <" + badScore*playerNumber);
         res.add(achievementLevels[1] + " " + badScore*playerNumber);
         for(int i = 2; i<=5; i++){
-            res.add(achievementLevels[i] + " " + ((badScore*playerNumber)+(middleScore*(i-1))));
+            int minScoreRequirement = (int) Math.ceil((((i-1)*difference) + badScore));
+            minScoreRequirement = (minScoreRequirement*playerNumber);
+            res.add(achievementLevels[i] + " " + (minScoreRequirement));
         }
         res.add(achievementLevels[max-2] + " " + goodScore*playerNumber);
         res.add(achievementLevels[max-1] + " >" + goodScore*playerNumber);
