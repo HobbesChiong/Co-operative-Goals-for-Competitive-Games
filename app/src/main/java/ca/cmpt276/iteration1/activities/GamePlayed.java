@@ -74,7 +74,6 @@ public class GamePlayed extends AppCompatActivity {
         extractDataFromIntent();
         loadGamesPlayedList();
         setUpFab();
-        createList();
         populateRecyclerView();
 
         setTitle(gameTypeString);
@@ -116,6 +115,13 @@ public class GamePlayed extends AppCompatActivity {
     public void onResume() {
         saveGamesPlayedList();
         super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        gm = GameManager.getInstance();
+        populateRecyclerView();
+        super.onStart();
     }
 
     private void extractDataFromIntent() {
@@ -168,7 +174,7 @@ public class GamePlayed extends AppCompatActivity {
             return; // keep the old instance of game manager if no save exists
         }
 
-        // Set retreived data if not null to game manager's game type list
+        // Set retrieved data if not null to game manager's playedGame list
         gm.loadGamePlayedList(gson.fromJson(json, type));
     }
 
@@ -231,6 +237,7 @@ public class GamePlayed extends AppCompatActivity {
 * Code inspired by blog post on 29 Oct, 2022 from https://thumbb13555.pixnet.net/blog/post/311803031-%E7%A2%BC%E8%BE%B2%E6%97%A5%E5%B8%B8-%E3%80%8Eandroid-studio%E3%80%8F%E5%9F%BA%E6%9C%ACrecyclerview%E7%94%A8%E6%B3%95
 * */
     private void populateRecyclerView() {
+        createList();
         RecyclerView rv = findViewById(R.id.rv_gameHistory);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
