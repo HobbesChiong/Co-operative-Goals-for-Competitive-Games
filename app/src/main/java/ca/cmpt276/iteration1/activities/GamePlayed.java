@@ -3,7 +3,6 @@ package ca.cmpt276.iteration1.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.ActionMenuItemView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,7 +50,7 @@ public class GamePlayed extends AppCompatActivity {
     private int gameTypeIndex;
 
     private GameManager gm;
-    private List<PlayedGame> gameHistory= new ArrayList<>();
+    private List<PlayedGame> gameHistory = new ArrayList<>();
     private String gameTypeString;
     private GameType gameType;
     private NewListAdapter adapter;
@@ -159,7 +158,7 @@ public class GamePlayed extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
 
-        String json = gson.toJson(gm.getGameTypes());
+        String json = gson.toJson(gm.getPlayedGames());
 
         editor.putString("Game Played List", json);
         editor.apply();
@@ -188,7 +187,7 @@ public class GamePlayed extends AppCompatActivity {
         achievementLevelsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         achievementLevelsDialog.show();
 
-        gameType = gm.getGameType(this.gameTypeString);
+        gameType = gm.getGameTypeFromString(this.gameTypeString);
 
         achievementLevels = achievementLevelsDialog.findViewById(R.id.tvAchievementLevels);
 

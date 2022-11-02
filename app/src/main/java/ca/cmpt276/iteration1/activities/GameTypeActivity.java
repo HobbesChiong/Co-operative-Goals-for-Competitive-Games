@@ -79,7 +79,7 @@ public class GameTypeActivity extends AppCompatActivity {
         extractIntentExtras();
         // If we are editing an existing game type
         if (editGameActivity == true){
-            gameType = gameManager.getGameType(gameTypeString);
+            gameType = gameManager.getGameTypeFromString(gameTypeString);
             appBarTitle = "Edit Game Type";
             setGameTypeInfo();
         }
