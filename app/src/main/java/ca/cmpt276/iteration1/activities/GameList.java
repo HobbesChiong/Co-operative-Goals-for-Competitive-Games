@@ -82,15 +82,13 @@ public class GameList extends AppCompatActivity {
     public void onResume() {
         saveGameTypeList();
         populateListView();
-        TextView emptyState = findViewById(R.id.tvEmptyState);
+        TextView emptyState = findViewById(R.id.tvGameListEmptyState);
         // No games types are added in yet
-        if(!gm.getGameTypes().isEmpty()){
+        if (gm.getGameTypes().isEmpty()) {
+            emptyState.setText(R.string.emptyState);
+        } else {
             // instructions when game list is not empty
             emptyState.setText(R.string.open_edit_game_instruction);
-        }
-        else if(gm.getGameTypes().isEmpty()){
-
-            emptyState.setText(R.string.emptyState);
         }
         super.onResume();
     }

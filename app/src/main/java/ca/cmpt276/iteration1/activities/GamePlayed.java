@@ -80,6 +80,7 @@ public class GamePlayed extends AppCompatActivity {
         populateRecyclerView();
 
         setTitle(gameTypeString);
+
     }
 
     @Override
@@ -117,6 +118,16 @@ public class GamePlayed extends AppCompatActivity {
     @Override
     public void onResume() {
         saveGamesPlayedList();
+
+        // if no games are made in the current type yet show empty state otherwise set the text view to blank.
+        TextView gamePlayedEmptyState = findViewById(R.id.tvGamePlayedEmptyState);
+        if(gm.getSpecificPlayedGames(gameTypeString).isEmpty()) {
+            gamePlayedEmptyState.setText(R.string.emptyState);
+
+        }
+        else{
+            gamePlayedEmptyState.setText("");
+        }
         super.onResume();
     }
 
