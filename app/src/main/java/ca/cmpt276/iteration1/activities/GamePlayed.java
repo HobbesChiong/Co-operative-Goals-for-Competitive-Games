@@ -126,7 +126,7 @@ public class GamePlayed extends AppCompatActivity {
 
         }
         else{
-            gamePlayedEmptyState.setText("");
+            gamePlayedEmptyState.setText(R.string.blank);
         }
         super.onResume();
     }

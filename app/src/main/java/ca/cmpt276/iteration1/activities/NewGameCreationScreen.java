@@ -53,7 +53,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
 
         numberOfPLayerCheck();
 
-        setTitle("Add new game");
+        setTitle(getString(R.string.add_new_game));
     }
 
     private void numberOfPLayerCheck() {
@@ -117,7 +117,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
                     finish();
                     return true;
                 } catch (Exception e) {
-                    Toast.makeText(this, "Game configuration is invalid!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.invalidConfig, Toast.LENGTH_SHORT).show();
                     break;
                 }
             case android.R.id.home:
