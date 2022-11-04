@@ -44,7 +44,7 @@ public class GameList extends AppCompatActivity {
         populateListView();
         ListView lv = findViewById(R.id.lv_gameTypeList);
 
-        setTitle("Game Types");
+        setTitle(getString(R.string.Game_Types));
 
         // Single tap will open up list of games played for specific game type
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {

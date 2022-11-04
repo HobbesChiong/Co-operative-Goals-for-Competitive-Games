@@ -80,11 +80,11 @@ public class GameTypeActivity extends AppCompatActivity {
         // If we are editing an existing game type
         if (editGameActivity == true){
             gameType = gameManager.getGameTypeFromString(gameTypeString);
-            appBarTitle = "Edit Game Type";
+            appBarTitle = getString(R.string.Edit_Game_Type);
             setGameTypeInfo();
         }
         else {
-            appBarTitle = "New Game Type";
+            appBarTitle = getString(R.string.New_Game_Type);
         }
 
         ab.setTitle(appBarTitle);
@@ -129,7 +129,7 @@ public class GameTypeActivity extends AppCompatActivity {
 
                         finish();
                     } catch (Exception e) {
-                        Toast.makeText(this,"Game configuration is invalid!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.invalidConfig,Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
@@ -147,7 +147,7 @@ public class GameTypeActivity extends AppCompatActivity {
                     finish();
                 }
                 catch(Exception e){
-                    Toast.makeText(this, "Can't delete this Game Configuration", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.cantDelete, Toast.LENGTH_SHORT).show();
                 }
 
             }

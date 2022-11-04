@@ -9,8 +9,8 @@
     <string name="view_achievement_levels">View Achievement Levels</string>
     <string name="emptyState">Click the + to add a new game</string>
     <string name="open_edit_game_instruction">Single tap the game to open it, Hold to edit the game</string>
-    <string name="invalid_num_of_player">Invalid player count...</string>
-    <string name="waiting_for_input">Awaiting input...</string>
+    <string name="invalid_num_of_player">Invalid player count…</string>
+    <string name="waiting_for_input">Awaiting input…</string>
     <string name="game_name">Game Name:</string>
     <string name="good_score">Good score:</string>
     <string name="close">CLOSE</string>
@@ -19,6 +19,13 @@
     <string name="players"># Players:</string>
     <string name="achievement">Achievement:</string>
     <string name="bad_score">Bad score:</string>
-    <string name="GameAchievementLevelPlaceholder">Awaiting input...</string>
-    <string name="GameAchievementLevelCalculating">Calculating scores...</string>
+    <string name="Game_Types">Game Types</string>
+    <string name="Edit_Game_Type">Edit Game Type</string>
+    <string name="New_Game_Type">New Game Type</string>
+    <string name="invalidConfig">Game configuration is invalid!</string>
+    <string name="cantDelete">Can\'t delete this Game Configuration</string>
+    <string name="add_new_game">Add new game</string>
+    <string name="blank">""</string>
+    <string name="GameAchievementLevelPlaceholder">Awaiting input…</string>
+    <string name="GameAchievementLevelCalculating">Calculating scores…</string>/>
 </resources>

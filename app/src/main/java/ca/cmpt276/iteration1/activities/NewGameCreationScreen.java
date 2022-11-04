@@ -62,7 +62,11 @@ public class NewGameCreationScreen extends AppCompatActivity {
         numberOfPlayers.addTextChangedListener(inputTextWatcher);
 
 
-        setTitle("Add new game");
+        setTitle(getString(R.string.add_new_game));
+    }
+
+    public void displayError(String message){
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 
     private final TextWatcher inputTextWatcher = new TextWatcher() {
@@ -80,6 +84,10 @@ public class NewGameCreationScreen extends AppCompatActivity {
                 int players = Integer.parseInt(numberOfPlayers.getText().toString());
                 int score = Integer.parseInt(gameScore.getText().toString());
 
+                if(players == 0){
+                    displayError("Number of Players needs to be above 0");
+                    throw new NumberFormatException();
+                }
                 GameType gameType = gm.getGameTypeFromString(gameTypeString);
                 String achievementLevel = "Your score: " + gameType.getAchievementLevel(score, players);
 
@@ -132,13 +140,14 @@ public class NewGameCreationScreen extends AppCompatActivity {
                     finish();
                     return true;
                 } catch (Exception e) {
-                    Toast.makeText(this, "Game configuration is invalid!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.invalidConfig, Toast.LENGTH_SHORT).show();
                     break;
                 }
             case android.R.id.home:
                 this.finish();
                 return true;
         }
+
 
         return true;
     }
