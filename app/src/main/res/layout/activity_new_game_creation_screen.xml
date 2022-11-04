@@ -64,6 +64,7 @@
         android:textAlignment="center"
         android:textColor="#000000"
         android:textStyle="bold|italic"
+        android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvNumberOfPlayers" />

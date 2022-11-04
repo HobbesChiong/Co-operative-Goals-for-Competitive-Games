@@ -74,7 +74,20 @@ public class NewGameCreationScreen extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            updateAchievementLevel();
+            TextView displayAchievementLevel = findViewById(R.id.tvGameAchievementLevel);
+
+            try {
+                int players = Integer.parseInt(numberOfPlayers.getText().toString());
+                int score = Integer.parseInt(gameScore.getText().toString());
+
+                GameType gameType = gm.getGameTypeFromString(gameTypeString);
+                String achievementLevel = "Your score: " + gameType.getAchievementLevel(score, players);
+
+                displayAchievementLevel.setText(achievementLevel);
+            }
+            catch (NumberFormatException numberFormatException){
+                displayAchievementLevel.setText(R.string.GameAchievementLevelCalculating);
+            }
         }
 
         @Override
@@ -82,24 +95,6 @@ public class NewGameCreationScreen extends AppCompatActivity {
 
         }
     };
-
-    private void updateAchievementLevel(){
-
-        TextView displayAchievementLevel = findViewById(R.id.tvGameAchievementLevel);
-
-        try {
-            int players = Integer.parseInt(gameScore.getText().toString());
-            int score = Integer.parseInt(numberOfPlayers.getText().toString());
-
-            GameType gameType = gm.getGameTypeFromString(gameTypeString);
-            String achievementLevel = gameType.getAchievementLevel(score, players);
-
-            displayAchievementLevel.setText(achievementLevel);
-        }
-        catch (NumberFormatException numberFormatException){
-            displayAchievementLevel.setText(R.string.GameAchievementLevelCalculating);
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
