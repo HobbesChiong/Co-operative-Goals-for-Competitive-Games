@@ -19,4 +19,6 @@
     <string name="players"># Players:</string>
     <string name="achievement">Achievement:</string>
     <string name="bad_score">Bad score:</string>
+    <string name="GameAchievementLevelPlaceholder">Awaiting input...</string>
+    <string name="GameAchievementLevelCalculating">Calculating scores...</string>
 </resources>

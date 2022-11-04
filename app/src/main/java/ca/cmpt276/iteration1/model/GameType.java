@@ -73,7 +73,6 @@ public class GameType {
 
         score /= playerNumber;
 
-
         // If worse than a bad score, return the worst achievement levels
         if (score < badScore) {
             return achievementLevels[0];
