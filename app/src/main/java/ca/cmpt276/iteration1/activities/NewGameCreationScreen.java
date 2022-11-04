@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -36,6 +37,9 @@ public class NewGameCreationScreen extends AppCompatActivity {
     private GameType gameType;
     private GameManager gm;
 
+    EditText gameScore;
+    EditText numberOfPlayers;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,34 +55,50 @@ public class NewGameCreationScreen extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        numberOfPLayerCheck();
+        // edittext input field setup
+        gameScore = findViewById(R.id.etGameScore);
+        gameScore.addTextChangedListener(inputTextWatcher);
+        numberOfPlayers = findViewById(R.id.etNumberOfPlayers);
+        numberOfPlayers.addTextChangedListener(inputTextWatcher);
+
 
         setTitle("Add new game");
     }
 
-    private void numberOfPLayerCheck() {
-        EditText numberOfPlayers = findViewById(R.id.etNumberOfPlayers);
+    private final TextWatcher inputTextWatcher = new TextWatcher() {
 
-        numberOfPlayers.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }
+        }
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            updateAchievementLevel();
+        }
 
-            }
+        @Override
+        public void afterTextChanged(Editable editable) {
 
-            @Override
-            public void afterTextChanged(Editable e) {
-                if(e.toString().equals("")){
-                    return;
-                }
-                int playerNumber = Integer.parseInt(e.toString());
-                populateAchievementList(playerNumber);
-            }
-        });
+        }
+    };
+
+    private void updateAchievementLevel(){
+
+        TextView displayAchievementLevel = findViewById(R.id.tvGameAchievementLevel);
+
+        try {
+            int players = Integer.parseInt(gameScore.getText().toString());
+            int score = Integer.parseInt(numberOfPlayers.getText().toString());
+
+            GameType gameType = gm.getGameTypeFromString(gameTypeString);
+            String achievementLevel = gameType.getAchievementLevel(score, players);
+
+            displayAchievementLevel.setText(achievementLevel);
+        }
+        catch (NumberFormatException numberFormatException){
+            displayAchievementLevel.setText(R.string.GameAchievementLevelCalculating);
+        }
     }
 
     @Override
@@ -127,23 +147,5 @@ public class NewGameCreationScreen extends AppCompatActivity {
 
         return true;
     }
-
-
-
-    private void populateAchievementList(int numberOfPlayers) {
-        // for now I'm assuming my list is taking in an array of Strings
-
-        GameType currGameType = gm.getGameTypeFromString(gameTypeString);
-        ArrayList<String> listOfAchievementScores = currGameType.getAchievementLevelScoreRequirements(numberOfPlayers);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                R.layout.achievement_score,
-                listOfAchievementScores
-        );
-        ListView list = findViewById(R.id.lvAchievementList);
-        list.setAdapter(adapter);
-    }
-
 
 }
