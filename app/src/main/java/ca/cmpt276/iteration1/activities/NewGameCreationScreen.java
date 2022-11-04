@@ -65,6 +65,10 @@ public class NewGameCreationScreen extends AppCompatActivity {
         setTitle(getString(R.string.add_new_game));
     }
 
+    public void displayError(String message){
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    }
+
     private final TextWatcher inputTextWatcher = new TextWatcher() {
 
         @Override
@@ -80,6 +84,10 @@ public class NewGameCreationScreen extends AppCompatActivity {
                 int players = Integer.parseInt(numberOfPlayers.getText().toString());
                 int score = Integer.parseInt(gameScore.getText().toString());
 
+                if(players == 0){
+                    displayError("Number of Players needs to be above 0");
+                    throw new NumberFormatException();
+                }
                 GameType gameType = gm.getGameTypeFromString(gameTypeString);
                 String achievementLevel = "Your score: " + gameType.getAchievementLevel(score, players);
 
@@ -139,6 +147,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
                 this.finish();
                 return true;
         }
+
 
         return true;
     }

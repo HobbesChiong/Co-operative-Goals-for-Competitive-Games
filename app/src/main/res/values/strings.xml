@@ -25,5 +25,7 @@
     <string name="invalidConfig">Game configuration is invalid!</string>
     <string name="cantDelete">Can\'t delete this Game Configuration</string>
     <string name="add_new_game">Add new game</string>
-    <string name="blank" />
+    <string name="blank">""</string>
+    <string name="GameAchievementLevelPlaceholder">Awaiting input…</string>
+    <string name="GameAchievementLevelCalculating">Calculating scores…</string>/>
 </resources>
