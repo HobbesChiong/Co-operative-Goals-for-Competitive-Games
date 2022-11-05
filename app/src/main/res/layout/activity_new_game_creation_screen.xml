@@ -9,12 +9,16 @@
 
     <TextView
         android:id="@+id/tvGameScore"
-        android:layout_width="126dp"
-        android:layout_height="34dp"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="52dp"
+        android:layout_width="96dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="76dp"
         android:text="@string/game_score"
+        android:textAlignment="textEnd"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#673AB7"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,38 +26,42 @@
         android:id="@+id/etGameScore"
         android:layout_width="100dp"
         android:layout_height="45dp"
-        android:layout_marginStart="212dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="56dp"
         android:ems="10"
-        android:hint="@string/_0"
+        android:hint="@string/add_game_score"
         android:inputType="number"
         android:textAlignment="center"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvGameScore"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/etNumberOfPlayers"
         android:layout_width="100dp"
         android:layout_height="45dp"
-        android:layout_marginStart="212dp"
-        android:layout_marginTop="116dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="@string/_1"
+        android:hint="@string/add_game_players"
         android:inputType="number"
         android:textAlignment="center"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/tvNumberOfPlayers"
+        app:layout_constraintTop_toBottomOf="@+id/etGameScore" />
 
     <TextView
         android:id="@+id/tvNumberOfPlayers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="32dp"
         android:text="@string/number_of_players"
+        android:textAlignment="textEnd"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#673AB7"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tvGameScore" />
 
     <TextView
         android:id="@+id/tvGameAchievementLevel"
@@ -62,9 +70,9 @@
         android:layout_marginTop="128dp"
         android:text="@string/GameAchievementLevelPlaceholder"
         android:textAlignment="center"
-        android:textColor="#000000"
-        android:textStyle="bold|italic"
-        android:textSize="25dp"
+        android:textColor="@color/teal_700"
+        android:textSize="20dp"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvNumberOfPlayers" />
