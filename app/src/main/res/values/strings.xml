@@ -11,13 +11,13 @@
     <string name="invalid_num_of_player">Invalid player count…</string>
     <string name="waiting_for_input">Awaiting input…</string>
     <string name="game_name">Game Name:</string>
-    <string name="good_score">Good score:</string>
+    <string name="good_score">Good Score:</string>
     <string name="close">CLOSE</string>
     <string name="input_player_count_below">Input player count below:</string>
     <string name="score">Score:</string>
-    <string name="players"># Players:</string>
+    <string name="players">Players:</string>
     <string name="achievement">Achievement:</string>
-    <string name="bad_score">Bad score:</string>
+    <string name="bad_score">Bad Score:</string>
     <string name="game_types">Game Types</string>
     <string name="edit_game_type">Edit Game Type</string>
     <string name="new_game_type">New Game Type</string>
@@ -27,22 +27,11 @@
     <string name="blank">""</string>
     <string name="game_achievement_level_placeholder">Awaiting input…</string>
     <string name="game_achievement_level_calculating">Calculating scores…</string>
-    <string name="achievement_level">\"Achievement Level: \"</string>
+    <string name="achievement_level">Achievement Level: </string>
     <string name="player_number_error">Number of Players needs to be above 0</string>
-    <string name="game_saved_toast">\" game saved\"</string>
+    <string name="game_saved_toast"> game saved!</string>
     <string name="add_game_score">Score</string>
     <string name="add_game_players">Players</string>
     <string name="_0">0</string>
     <string name="_1">1</string>/>
-
-    <string name="achievement_levels">
-            Cowardly Cows,
-            Lowly Lamas,
-            Dead Dodos,
-            Average Alligators,
-            Fragrant Fish,
-            Excellent Eggs,
-            Beautiful Bears,
-            Godly Goats
-    </string>
 </resources>
