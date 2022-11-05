@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="128dp"
-        android:text="@string/GameAchievementLevelPlaceholder"
+        android:text="@string/game_achievement_level_placeholder"
         android:textAlignment="center"
         android:textColor="#000000"
         android:textStyle="bold|italic"

@@ -2,13 +2,11 @@
     <string name="app_name">iteration1</string>
     <string name="game_score">Game Score:</string>
     <string name="number_of_players">Number of Players:</string>
-    <string name="_1">1</string>
-    <string name="_0">0</string>
     <string name="delete_config">Delete Config</string>
     <string name="save">Save</string>
     <string name="view_achievement_levels">View Achievement Levels</string>
-    <string name="emptyStateGame">Tap + to add a new game</string>
-    <string name="emptyStateGameType">Tap + to add a new game type</string>
+    <string name="empty_game_state">Tap + to add a new game</string>
+    <string name="empty_game_state_type">Tap + to add a new game type</string>
     <string name="open_edit_game_instruction">Single tap on a game type to open it\nHold tap a game type to edit it</string>
     <string name="invalid_num_of_player">Invalid player count…</string>
     <string name="waiting_for_input">Awaiting input…</string>
@@ -20,18 +18,31 @@
     <string name="players"># Players:</string>
     <string name="achievement">Achievement:</string>
     <string name="bad_score">Bad score:</string>
-    <string name="Game_Types">Game Types</string>
-    <string name="Edit_Game_Type">Edit Game Type</string>
-    <string name="New_Game_Type">New Game Type</string>
-    <string name="invalidConfig">Game configuration is invalid!</string>
-    <string name="cantDelete">Can\'t delete this Game Configuration</string>
+    <string name="game_types">Game Types</string>
+    <string name="edit_game_type">Edit Game Type</string>
+    <string name="new_game_type">New Game Type</string>
+    <string name="invalid_config">Game configuration is invalid!</string>
+    <string name="cant_delete">Can\'t delete this Game Configuration</string>
     <string name="add_new_game">Add new game</string>
     <string name="blank">""</string>
-    <string name="GameAchievementLevelPlaceholder">Awaiting input…</string>
-    <string name="GameAchievementLevelCalculating">Calculating scores…</string>
+    <string name="game_achievement_level_placeholder">Awaiting input…</string>
+    <string name="game_achievement_level_calculating">Calculating scores…</string>
     <string name="achievement_level">\"Achievement Level: \"</string>
     <string name="player_number_error">Number of Players needs to be above 0</string>
     <string name="game_saved_toast">\" game saved\"</string>
     <string name="add_game_score">Score</string>
-    <string name="add_game_players">Players</string>/>
+    <string name="add_game_players">Players</string>
+    <string name="_0">0</string>
+    <string name="_1">1</string>/>
+
+    <string name="achievement_levels">
+            Cowardly Cows,
+            Lowly Lamas,
+            Dead Dodos,
+            Average Alligators,
+            Fragrant Fish,
+            Excellent Eggs,
+            Beautiful Bears,
+            Godly Goats
+    </string>
 </resources>
