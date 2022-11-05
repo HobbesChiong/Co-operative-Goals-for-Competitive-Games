@@ -80,11 +80,11 @@ public class GameTypeActivity extends AppCompatActivity {
         // If we are editing an existing game type
         if (editGameActivity == true){
             gameType = gameManager.getGameTypeFromString(gameTypeString);
-            appBarTitle = getString(R.string.Edit_Game_Type);
+            appBarTitle = getString(R.string.edit_game_type);
             setGameTypeInfo();
         }
         else {
-            appBarTitle = getString(R.string.New_Game_Type);
+            appBarTitle = getString(R.string.new_game_type);
         }
 
         ab.setTitle(appBarTitle);
@@ -122,14 +122,14 @@ public class GameTypeActivity extends AppCompatActivity {
                         }
 
                         GameType gameType = new GameType(gameName, goodScore, badScore);
-                        String res = gameName + " configuration saved";
+                        String res = gameName + " " + getString(R.string.configuration_saved);
                         Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
 
                         gameManager.addGameType(gameType);
 
                         finish();
                     } catch (Exception e) {
-                        Toast.makeText(this, R.string.invalidConfig,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.invalid_config,Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
@@ -142,12 +142,12 @@ public class GameTypeActivity extends AppCompatActivity {
             case R.id.btnDelete: {
                 try{
                     gameManager.deleteGameType(gameTypeString);
-                    String res = "Deleting " + gameTypeString;
+                    String res = getString(R.string.deleting) + " " + gameTypeString;
                     Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 catch(Exception e){
-                    Toast.makeText(this, R.string.cantDelete, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.cant_delete, Toast.LENGTH_SHORT).show();
                 }
 
             }

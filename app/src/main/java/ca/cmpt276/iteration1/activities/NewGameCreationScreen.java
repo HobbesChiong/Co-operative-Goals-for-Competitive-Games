@@ -11,13 +11,9 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
@@ -84,17 +80,17 @@ public class NewGameCreationScreen extends AppCompatActivity {
                 int players = Integer.parseInt(numberOfPlayers.getText().toString());
                 int score = Integer.parseInt(gameScore.getText().toString());
 
-                if(players == 0){
-                    displayError("Number of Players needs to be above 0");
+                if (players == 0) {
+                    displayError(getString(R.string.player_number_error));
                     throw new NumberFormatException();
                 }
                 GameType gameType = gm.getGameTypeFromString(gameTypeString);
-                String achievementLevel = "Your score: " + gameType.getAchievementLevel(score, players);
+                String achievementLevel = getString(R.string.achievement_level) + " " + gameType.getAchievementLevel(score, players);
 
                 displayAchievementLevel.setText(achievementLevel);
             }
-            catch (NumberFormatException numberFormatException){
-                displayAchievementLevel.setText(R.string.GameAchievementLevelCalculating);
+            catch (NumberFormatException numberFormatException) {
+                displayAchievementLevel.setText(R.string.game_achievement_level_calculating);
             }
         }
 
@@ -135,12 +131,12 @@ public class NewGameCreationScreen extends AppCompatActivity {
                     PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementLevel(gameScore, numberOfPlayers));
                     gm.addPlayedGame(currGame);
 
-                    String res = gameTypeString + " game saved";
+                    String res = gameTypeString + getString(R.string.game_saved_toast);
                     Toast.makeText(this, res,Toast.LENGTH_SHORT).show();
                     finish();
                     return true;
                 } catch (Exception e) {
-                    Toast.makeText(this, R.string.invalidConfig, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.invalid_game, Toast.LENGTH_SHORT).show();
                     break;
                 }
             case android.R.id.home:
