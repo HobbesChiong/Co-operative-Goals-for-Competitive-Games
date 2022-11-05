@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">iteration1</string>
     <string name="game_score">Game Score:</string>
-    <string name="number_of_players">Number of Players</string>
+    <string name="number_of_players">Number of Players:</string>
     <string name="_1">1</string>
     <string name="_0">0</string>
     <string name="delete_config">Delete Config</string>
@@ -27,5 +27,7 @@
     <string name="add_new_game">Add new game</string>
     <string name="blank">""</string>
     <string name="GameAchievementLevelPlaceholder">Awaiting input…</string>
-    <string name="GameAchievementLevelCalculating">Calculating scores…</string>/>
+    <string name="GameAchievementLevelCalculating">Calculating scores…</string>
+    <string name="add_game_score">Score</string>
+    <string name="add_game_players">Players</string>/>
 </resources>
