@@ -80,16 +80,16 @@ public class NewGameCreationScreen extends AppCompatActivity {
                 int players = Integer.parseInt(numberOfPlayers.getText().toString());
                 int score = Integer.parseInt(gameScore.getText().toString());
 
-                if(players == 0){
+                if (players == 0) {
                     displayError(getString(R.string.player_number_error));
                     throw new NumberFormatException();
                 }
                 GameType gameType = gm.getGameTypeFromString(gameTypeString);
-                String achievementLevel = getString(R.string.achievement_level) + gameType.getAchievementLevel(score, players);
+                String achievementLevel = getString(R.string.achievement_level) + " " + gameType.getAchievementLevel(score, players);
 
                 displayAchievementLevel.setText(achievementLevel);
             }
-            catch (NumberFormatException numberFormatException){
+            catch (NumberFormatException numberFormatException) {
                 displayAchievementLevel.setText(R.string.game_achievement_level_calculating);
             }
         }
@@ -136,7 +136,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
                     finish();
                     return true;
                 } catch (Exception e) {
-                    Toast.makeText(this, R.string.invalid_config, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.invalid_game, Toast.LENGTH_SHORT).show();
                     break;
                 }
             case android.R.id.home:

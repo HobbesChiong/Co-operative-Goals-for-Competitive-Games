@@ -16,7 +16,8 @@
     <string name="input_player_count_below">Input player count below:</string>
     <string name="score">Score:</string>
     <string name="players">Players:</string>
-    <string name="achievement">Achievement:</string>
+    <!--\u0020 is the unicode character for a space. Android doesn't otherwise recognize it -->
+    <string name="achievement">Achievement Level:\u0020</string>
     <string name="bad_score">Bad Score:</string>
     <string name="game_types">Game Types</string>
     <string name="edit_game_type">Edit Game Type</string>
@@ -33,5 +34,6 @@
     <string name="add_game_score">Score</string>
     <string name="add_game_players">Players</string>
     <string name="_0">0</string>
-    <string name="_1">1</string>/>
+    <string name="_1">1</string>
+    <string name="invalid_game">Game is invalid!</string>/>
 </resources>
