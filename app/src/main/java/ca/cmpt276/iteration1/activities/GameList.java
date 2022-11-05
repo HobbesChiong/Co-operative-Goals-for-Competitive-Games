@@ -44,7 +44,7 @@ public class GameList extends AppCompatActivity {
         populateListView();
         ListView lv = findViewById(R.id.lv_gameTypeList);
 
-        setTitle(getString(R.string.Game_Types));
+        setTitle(getString(R.string.game_types));
 
         // Single tap will open up list of games played for specific game type
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -85,7 +85,7 @@ public class GameList extends AppCompatActivity {
         TextView emptyState = findViewById(R.id.tvGameListEmptyState);
         // No games types are added in yet
         if (gm.getGameTypes().isEmpty()) {
-            emptyState.setText(R.string.emptyStateGameType);
+            emptyState.setText(R.string.empty_game_state_type);
         } else {
             // instructions when game list is not empty
             emptyState.setText(R.string.open_edit_game_instruction);

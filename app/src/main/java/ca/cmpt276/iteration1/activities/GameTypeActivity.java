@@ -80,11 +80,11 @@ public class GameTypeActivity extends AppCompatActivity {
         // If we are editing an existing game type
         if (editGameActivity == true){
             gameType = gameManager.getGameTypeFromString(gameTypeString);
-            appBarTitle = getString(R.string.Edit_Game_Type);
+            appBarTitle = getString(R.string.edit_game_type);
             setGameTypeInfo();
         }
         else {
-            appBarTitle = getString(R.string.New_Game_Type);
+            appBarTitle = getString(R.string.new_game_type);
         }
 
         ab.setTitle(appBarTitle);
@@ -129,7 +129,7 @@ public class GameTypeActivity extends AppCompatActivity {
 
                         finish();
                     } catch (Exception e) {
-                        Toast.makeText(this, R.string.invalidConfig,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.invalid_config,Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
@@ -147,7 +147,7 @@ public class GameTypeActivity extends AppCompatActivity {
                     finish();
                 }
                 catch(Exception e){
-                    Toast.makeText(this, R.string.cantDelete, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.cant_delete, Toast.LENGTH_SHORT).show();
                 }
 
             }
