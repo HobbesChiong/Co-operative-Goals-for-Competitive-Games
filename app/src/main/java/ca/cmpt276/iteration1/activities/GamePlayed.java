@@ -122,7 +122,7 @@ public class GamePlayed extends AppCompatActivity {
         // if no games are made in the current type yet show empty state otherwise set the text view to blank.
         TextView gamePlayedEmptyState = findViewById(R.id.tvGamePlayedEmptyState);
         if(gm.getSpecificPlayedGames(gameTypeString).isEmpty()) {
-            gamePlayedEmptyState.setText(R.string.emptyState);
+            gamePlayedEmptyState.setText(R.string.emptyStateGame);
 
         }
         else{

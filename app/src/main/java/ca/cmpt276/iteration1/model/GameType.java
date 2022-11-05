@@ -31,6 +31,10 @@ public class GameType {
         if (goodScore < badScore) {
             throw new IllegalArgumentException("Bad score should be less than the good score.");
         }
+
+        if (goodScore == badScore) {
+            throw new IllegalArgumentException("Bad and good scores should not be equal!");
+        }
     }
 
     public String getGameType() {

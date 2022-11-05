@@ -85,7 +85,7 @@ public class GameList extends AppCompatActivity {
         TextView emptyState = findViewById(R.id.tvGameListEmptyState);
         // No games types are added in yet
         if (gm.getGameTypes().isEmpty()) {
-            emptyState.setText(R.string.emptyState);
+            emptyState.setText(R.string.emptyStateGameType);
         } else {
             // instructions when game list is not empty
             emptyState.setText(R.string.open_edit_game_instruction);

@@ -85,11 +85,11 @@ public class NewGameCreationScreen extends AppCompatActivity {
                 int score = Integer.parseInt(gameScore.getText().toString());
 
                 if(players == 0){
-                    displayError("Number of Players needs to be above 0");
+                    displayError(getString(R.string.player_number_error));
                     throw new NumberFormatException();
                 }
                 GameType gameType = gm.getGameTypeFromString(gameTypeString);
-                String achievementLevel = "Your score: " + gameType.getAchievementLevel(score, players);
+                String achievementLevel = getString(R.string.achievement_level) + gameType.getAchievementLevel(score, players);
 
                 displayAchievementLevel.setText(achievementLevel);
             }
@@ -135,7 +135,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
                     PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementLevel(gameScore, numberOfPlayers));
                     gm.addPlayedGame(currGame);
 
-                    String res = gameTypeString + " game saved";
+                    String res = gameTypeString + getString(R.string.game_saved_toast);
                     Toast.makeText(this, res,Toast.LENGTH_SHORT).show();
                     finish();
                     return true;
