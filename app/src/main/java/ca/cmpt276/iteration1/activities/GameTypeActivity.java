@@ -122,7 +122,7 @@ public class GameTypeActivity extends AppCompatActivity {
                         }
 
                         GameType gameType = new GameType(gameName, goodScore, badScore);
-                        String res = gameName + " configuration saved";
+                        String res = gameName + " " + getString(R.string.configuration_saved);
                         Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
 
                         gameManager.addGameType(gameType);
@@ -142,7 +142,7 @@ public class GameTypeActivity extends AppCompatActivity {
             case R.id.btnDelete: {
                 try{
                     gameManager.deleteGameType(gameTypeString);
-                    String res = "Deleting " + gameTypeString;
+                    String res = getString(R.string.deleting) + " " + gameTypeString;
                     Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
                     finish();
                 }

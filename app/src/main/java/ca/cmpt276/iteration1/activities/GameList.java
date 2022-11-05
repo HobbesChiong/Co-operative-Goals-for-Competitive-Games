@@ -66,8 +66,6 @@ public class GameList extends AppCompatActivity {
                 return true;
             }
         });
-
-        Log.println(DEBUG,"","Reached end of onCrete");
     }
 
     // When back button on home bar is pressed
