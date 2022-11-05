@@ -33,8 +33,6 @@
     <string name="game_saved_toast"> game saved!</string>
     <string name="add_game_score">Score</string>
     <string name="add_game_players">Players</string>
-    <string name="_0">0</string>
-    <string name="_1">1</string>
     <string name="invalid_game">Game is invalid!</string>
     <string name="configuration_saved">configuration saved.</string>
     <string name="deleting">\"Deleting \"</string>/>
