@@ -151,10 +151,15 @@ public class GamePlayed extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GamePlayed.this, NewGameCreationScreen.class);
-                GameType t = gm.getGameTypeAtIndex(gameTypeIndex);
-                String gameType = t.getGameType();
-                intent.putExtra("GameType", gameType);
+//                Intent intent = new Intent(GamePlayed.this, NewGameCreationScreen.class);
+//                GameType t = gm.getGameTypeAtIndex(gameTypeIndex);
+//                String gameType = t.getGameType();
+//                intent.putExtra("GameType", gameType);
+
+                Intent intent = new Intent(GamePlayed.this, GameDifficultyScreen.class);
+//                GameType t = gm.getGameTypeAtIndex(gameTypeIndex);
+//                String gameType = t.getGameType();
+//                intent.putExtra("GameType", gameType);
                 startActivity(intent);
             }
         });

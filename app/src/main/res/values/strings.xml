@@ -35,5 +35,11 @@
     <string name="add_game_players">Players</string>
     <string name="invalid_game">Game is invalid!</string>
     <string name="configuration_saved">configuration saved.</string>
-    <string name="deleting">\"Deleting \"</string>/>
+    <string name="deleting">\"Deleting \"</string>
+    <string name="easy">Easy</string>
+    <string name="normal">Normal</string>
+    <string name="hard">Hard</string>
+    <string name="Continue">Continue</string>
+    <string name="choose_your_difficulty">Choose your difficulty</string>
+    <string name="choose_number_of_players">Choose number of players</string>/>
 </resources>
