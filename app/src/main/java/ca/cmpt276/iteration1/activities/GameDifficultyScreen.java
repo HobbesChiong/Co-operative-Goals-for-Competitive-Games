@@ -2,6 +2,7 @@ package ca.cmpt276.iteration1.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +33,14 @@ public class GameDifficultyScreen extends AppCompatActivity {
         btnHard.setOnClickListener(this::btnDifficultyClick);
 
         // setup btnContinue
+        // TODO add the difficulty scaling into the game
+        btnContinue.setOnClickListener(view -> {
+            Intent prevIntent = getIntent();
+            String gameType = prevIntent.getStringExtra("GameType");
+            Intent intent = new Intent(GameDifficultyScreen.this, NewGameCreationScreen.class);
+            intent.putExtra("GameType",gameType);
+            startActivity(intent);
+        });
 
     }
     private void btnDifficultyClick(View v){
