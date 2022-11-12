@@ -12,15 +12,38 @@ public class GameType {
     private String type;
 
     // Names for different achievement levels, sorted from worst to best
-    private static final String[] achievementLevels = {
-            "Cowardly Cows", // Below a bad score
-            "Lowly Lamas",
-            "Dead Dodos",
-            "Average Alligators",
-            "Fragrant Fish",
-            "Excellent Eggs",
-            "Beautiful Bears",
-            "Godly Goats" // Above a good score
+    private static final String[][] achievementLevels = {
+            { //
+                "Cowardly Cows", // Below a bad score
+                "Lowly Lamas",
+                "Dead Dodos",
+                "Average Alligators",
+                "Fragrant Fish",
+                "Excellent Eggs",
+                "Beautiful Bears",
+                "Godly Goats" // Above a good score
+            },
+            {
+
+                "Devious Dragons",
+                "Beautiful Basilisks",
+                "Crafty Chimeras",
+                "Subversive Sirens",
+                "Keen Krakens",
+                "Venomous Vampires",
+                "Menacing Minotaurs",
+                "Wonderful Werewolves"
+            },
+            {
+                "Placid Patricks",
+                "Sluggish Squidwards",
+                "Standard Sandies",
+                "Lethargic Larrys",
+                "Pitiful Plankton",
+                "Menacing Mr. Krabs",
+                "Marvelous Mermaid Man",
+                "Super Spongebob"
+            }
     };
 
     public GameType(String type, int goodScore, int badScore) {
@@ -48,8 +71,6 @@ public class GameType {
     public int getBadScore() {
         return badScore;
     }
-
-    public String[] getAchievementLevels() { return achievementLevels; }
 
     public void editGameType(String type, int goodScore, int badScore){
         this.type = type;
