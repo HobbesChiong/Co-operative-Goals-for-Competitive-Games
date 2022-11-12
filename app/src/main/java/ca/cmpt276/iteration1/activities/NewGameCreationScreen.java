@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,6 +15,8 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
@@ -33,18 +36,34 @@ public class NewGameCreationScreen extends AppCompatActivity {
     private GameType gameType;
     private GameManager gm;
 
+    // For when we are editing an existing played game
+    private final int POSITION_NON_EXISTENT = -1;
+    private int gamePlayedPosition;
+    private PlayedGame playedGame;
+
     EditText gameScore;
     EditText numberOfPlayers;
+
+    // When it takes in a string, we are creating a new game based on the type
+    public static Intent makeIntent(Context context, String gameTypeString){
+        Intent intent = new Intent(context, NewGameCreationScreen.class);
+        intent.putExtra("GameType", gameTypeString);
+        return intent;
+    }
+
+    // When it receives a string and position, we are editing an existing game
+    public static Intent makeIntent(Context context, String gameTypeString, int position){
+        Intent intent = new Intent(context, NewGameCreationScreen.class);
+        intent.putExtra("GameType", gameTypeString);
+        intent.putExtra("GamePlayedPosition", position);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game_creation_screen);
 
-        gm = GameManager.getInstance();
-        Intent intent = getIntent();
-        gameTypeString = intent.getStringExtra("GameType");
-        gameType = gm.getGameTypeFromString(gameTypeString);
 
         // action bar setup
         ActionBar ab = getSupportActionBar();
@@ -57,11 +76,37 @@ public class NewGameCreationScreen extends AppCompatActivity {
         numberOfPlayers = findViewById(R.id.etNumberOfPlayers);
         numberOfPlayers.addTextChangedListener(inputTextWatcher);
 
-
-        setTitle(getString(R.string.add_new_game));
+        gm = GameManager.getInstance();
+        gameType = gm.getGameTypeFromString(gameTypeString);
+        extractIntentExtras();
     }
 
-    public void displayError(String message){
+    private void extractIntentExtras(){
+        Intent intent = getIntent();
+        this.gameTypeString = intent.getStringExtra("GameType");
+        this.gamePlayedPosition = intent.getIntExtra("GamePlayedPosition", POSITION_NON_EXISTENT);
+        this.gameType = gm.getGameTypeFromString(gameTypeString);
+
+        // Creating a new game
+        if (this.gamePlayedPosition == POSITION_NON_EXISTENT){
+            setTitle(getString(R.string.add_new_game));
+        }
+        // Editing an existing game
+        else {
+            setTitle(getString(R.string.edit_existing_game));
+            setPlayedGameInfo();
+        }
+    }
+
+    private void setPlayedGameInfo(){
+        ArrayList<PlayedGame> playedGames = gm.getSpecificPlayedGames(gameTypeString);
+        this.playedGame = playedGames.get(gamePlayedPosition);
+
+        gameScore.setText(String.valueOf(playedGame.getScore()));
+        numberOfPlayers.setText(String.valueOf(playedGame.getNumberOfPlayers()));
+    }
+
+    private void displayError(String message){
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 
@@ -128,11 +173,20 @@ public class NewGameCreationScreen extends AppCompatActivity {
                         throw new IllegalArgumentException("Edit Text fields need to have positive values");
                     }
 
-                    PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementLevel(gameScore, numberOfPlayers));
-                    gm.addPlayedGame(currGame);
+                    // Creating a new game
+                    if (gamePlayedPosition == POSITION_NON_EXISTENT){
+                        PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementLevel(gameScore, numberOfPlayers));
+                        gm.addPlayedGame(currGame);
 
-                    String res = gameTypeString + getString(R.string.game_saved_toast);
-                    Toast.makeText(this, res,Toast.LENGTH_SHORT).show();
+                        String res = gameTypeString + getString(R.string.game_saved_toast);
+                        Toast.makeText(this, res,Toast.LENGTH_SHORT).show();
+                    }
+                    // Editing an existing game
+                    else {
+                        playedGame.editPlayedGame(numberOfPlayers, gameScore, gameType.getAchievementLevel(gameScore, numberOfPlayers));
+                        Toast.makeText(this, getString(R.string.save_changes_to_existing_game), Toast.LENGTH_SHORT).show();
+                    }
+
                     finish();
                     return true;
                 } catch (Exception e) {
