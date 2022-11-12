@@ -93,6 +93,8 @@ public class GameType {
     }
 
     public String getAchievementLevel(int score, int playerNumber) {
+        int achievementType = GameManager.getInstance().getGameTheme();
+
         // Number of achievements
         int achievementCount = achievementLevels.length;
 
@@ -100,16 +102,16 @@ public class GameType {
 
         // If worse than a bad score, return the worst achievement levels
         if (score < badScore) {
-            return achievementLevels[0];
+            return achievementLevels[0][achievementType];
         }
 
         if (score > goodScore) {
-            return achievementLevels[achievementCount - 1];
+            return achievementLevels[achievementCount - 1][achievementType];
         }
 
         // Scale the score to range from 1 to the number of achievements - 1
         int achievementIndex = map(score,badScore, goodScore, 1, achievementCount - 2);
-        return achievementLevels[achievementIndex];
+        return achievementLevels[achievementIndex][achievementType];
     }
 
     public ArrayList<String> getAchievementLevelScoreRequirements(int playerNumber){
