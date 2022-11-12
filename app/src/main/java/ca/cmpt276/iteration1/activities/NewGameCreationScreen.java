@@ -128,7 +128,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
                         throw new IllegalArgumentException("Edit Text fields need to have positive values");
                     }
 
-                    PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementLevel(gameScore, numberOfPlayers));
+                    PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementIndex(gameScore,numberOfPlayers));
                     gm.addPlayedGame(currGame);
 
                     String res = gameTypeString + getString(R.string.game_saved_toast);

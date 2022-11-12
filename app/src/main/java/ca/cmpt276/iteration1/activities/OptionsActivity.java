@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.MenuInflater;
+import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import ca.cmpt276.iteration1.R;
+import ca.cmpt276.iteration1.model.GameManager;
 
 public class OptionsActivity extends AppCompatActivity {
 
@@ -26,7 +28,7 @@ public class OptionsActivity extends AppCompatActivity {
 
 
     private void createRadioButtons() {
-        String[] achievementNames = {"Animals", "Powerful Fantasy Characters", "Spongebob"};
+        String[] achievementNames = getResources().getStringArray(R.array.theme_names);
 
         RadioGroup group = findViewById(R.id.rgAchievementTheme);
 
@@ -35,8 +37,17 @@ public class OptionsActivity extends AppCompatActivity {
             RadioButton button = new RadioButton(this);
             button.setText(achievementNames[i]);
 
-            // todo: setup on-click callbacks
-            //button.setOnClickListener();
+            // Store the index of the radiobutton (and the theme we're using!) for the on-click listener
+            final int buttonIndex = i;
+
+            // When a radio button is clicked, the theme for achievements will be switched across the app
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    GameManager manager = GameManager.getInstance();
+                    manager.setGameTheme(buttonIndex);
+                }
+            });
 
             // Add to radio group
             group.addView(button);

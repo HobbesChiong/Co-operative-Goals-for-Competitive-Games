@@ -37,4 +37,10 @@
     <string name="configuration_saved">configuration saved.</string>
     <string name="deleting">\"Deleting \"</string>
     <string name="options">Options</string>/>
+
+    <string-array name="theme_names">
+        <item>Animals</item>
+        <item>Powerful Fantasy Characters</item>
+        <item>Spongebob</item>
+    </string-array>
 </resources>

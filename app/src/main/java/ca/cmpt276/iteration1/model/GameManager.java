@@ -37,7 +37,7 @@ public class GameManager {
      * Get the current theme of the app
      * @return The current theme of the app
      */
-    public int getGameTheme() {
+    public int getAchievementTheme() {
         return achievementTheme;
     }
 
