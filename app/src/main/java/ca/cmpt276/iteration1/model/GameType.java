@@ -110,8 +110,10 @@ public class GameType {
      * @return 0 - max number of achievements, whichever one was earned by the player
      */
     public int getAchievementIndex(int score, int playerNumber) {
+        int achievementTheme = GameManager.getInstance().getAchievementTheme();
+
         // Number of achievements
-        int achievementCount = achievementLevels.length;
+        int achievementCount = achievementLevels[achievementTheme].length;
 
         score /= playerNumber;
 
@@ -140,24 +142,26 @@ public class GameType {
     }
 
     public ArrayList<String> getAchievementLevelScoreRequirements(int playerNumber){
+        int achievementTheme = GameManager.getInstance().getAchievementTheme();
+
         ArrayList<String> res = new ArrayList<>();
         // gets the good score - bad score and divides by 5 to get the intervals between achievements
         float difference = (float)(goodScore-badScore)/5;
 
-        int max = achievementLevels.length;
+        int max = achievementLevels[achievementTheme].length;
 
-        res.add(achievementLevels[0] + " <" + badScore*playerNumber);
-        res.add(achievementLevels[1] + " " + badScore*playerNumber);
+        res.add(achievementLevels[achievementTheme][0] + " <" + badScore*playerNumber);
+        res.add(achievementLevels[achievementTheme][1] + " " + badScore*playerNumber);
         for(int i = 2; i<=max-3; i++){
             // below algo uses the formula from https://math.stackexchange.com/questions/914823/shift-numbers-into-a-different-range
             // Isolated t which is the score requirement for i which is the index of the achievement levels
             // if the game score divided by player number is >= to t then that is the achievement the game gets.
             int minScoreRequirement = (int) Math.ceil((((i-1)*difference) + badScore));
             minScoreRequirement = (minScoreRequirement*playerNumber);
-            res.add(achievementLevels[i] + " " + (minScoreRequirement));
+            res.add(achievementLevels[achievementTheme][i] + " " + (minScoreRequirement));
         }
-        res.add(achievementLevels[max-2] + " " + goodScore*playerNumber);
-        res.add(achievementLevels[max-1] + " >" + goodScore*playerNumber);
+        res.add(achievementLevels[achievementTheme][max-2] + " " + goodScore*playerNumber);
+        res.add(achievementLevels[achievementTheme][max-1] + " >" + goodScore*playerNumber);
         return res;
     }
 }

@@ -230,7 +230,7 @@ public class GamePlayed extends AppCompatActivity {
                 }
                 else {
                     String message = "";
-                    for (String line : gameType.getAchievementLevelScoreRequirements(playerCount)){
+                    for (String line : gameType.getAchievementLevelScoreRequirements(playerCount)) {
                         message += line + "\n";
                     }
                     achievementLevels.setText(message);
