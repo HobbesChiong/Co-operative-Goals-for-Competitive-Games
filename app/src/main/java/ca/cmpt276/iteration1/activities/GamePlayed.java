@@ -155,7 +155,8 @@ public class GamePlayed extends AppCompatActivity implements RecyclerViewInterfa
                 GameType t = gm.getGameTypeAtIndex(gameTypeIndex);
                 String gameType = t.getGameType();
 
-                Intent intent = NewGameCreationScreen.makeIntent(GamePlayed.this, gameType);
+//                Intent intent = NewGameCreationScreen.makeIntent(GamePlayed.this, gameType);
+                Intent intent = GameDifficultyScreen.makeIntent(GamePlayed.this, gameType);
                 startActivity(intent);
             }
         });
