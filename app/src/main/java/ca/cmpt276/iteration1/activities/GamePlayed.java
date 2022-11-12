@@ -39,19 +39,19 @@ import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 import ca.cmpt276.iteration1.model.PlayedGame;
 import ca.cmpt276.iteration1.model.RecyclerViewAdapter;
+import ca.cmpt276.iteration1.model.RecyclerViewInterface;
 
 
 /**
  * Activity which lists games played for a specific type of game.
  */
-public class GamePlayed extends AppCompatActivity {
+public class GamePlayed extends AppCompatActivity implements RecyclerViewInterface {
 
     private static final String GAME_TYPE_INDEX = "Position";
     // Index of which type of game we're dealing with
     private int gameTypeIndex;
 
     private GameManager gm;
-    private List<PlayedGame> gameHistory = new ArrayList<>();
     private String gameTypeString;
     private GameType gameType;
     private RecyclerViewAdapter adapter;
@@ -251,8 +251,12 @@ public class GamePlayed extends AppCompatActivity {
         RecyclerView rv = findViewById(R.id.rv_gameHistory);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        adapter = new RecyclerViewAdapter(GamePlayed.this, gameTypeString);
+        adapter = new RecyclerViewAdapter(GamePlayed.this, GamePlayed.this, gameTypeString);
         rv.setAdapter(adapter);
     }
 
+    @Override
+    public void onItemLongClick(int position) {
+
+    }
 }
