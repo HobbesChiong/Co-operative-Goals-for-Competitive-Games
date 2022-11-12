@@ -38,6 +38,7 @@ import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 import ca.cmpt276.iteration1.model.PlayedGame;
+import ca.cmpt276.iteration1.model.RecyclerViewAdapter;
 
 
 /**
@@ -53,7 +54,7 @@ public class GamePlayed extends AppCompatActivity {
     private List<PlayedGame> gameHistory = new ArrayList<>();
     private String gameTypeString;
     private GameType gameType;
-    private NewListAdapter adapter;
+    private RecyclerViewAdapter adapter;
 
     private TextView achievementLevels;
     private EditText achievementLevelPlayerCount;
@@ -160,10 +161,6 @@ public class GamePlayed extends AppCompatActivity {
         });
     }
 
-    private void createList() {
-        gameHistory = gm.getSpecificPlayedGames(gameTypeString);
-    }
-
     private void saveGamesPlayedList(){
         SharedPreferences sharedPreferences = getSharedPreferences("Game Played Preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -251,40 +248,11 @@ public class GamePlayed extends AppCompatActivity {
 * Code inspired by blog post on 29 Oct, 2022 from https://thumbb13555.pixnet.net/blog/post/311803031-%E7%A2%BC%E8%BE%B2%E6%97%A5%E5%B8%B8-%E3%80%8Eandroid-studio%E3%80%8F%E5%9F%BA%E6%9C%ACrecyclerview%E7%94%A8%E6%B3%95
 * */
     private void populateRecyclerView() {
-        createList();
         RecyclerView rv = findViewById(R.id.rv_gameHistory);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        adapter = new NewListAdapter();
+        adapter = new RecyclerViewAdapter(GamePlayed.this, gameTypeString);
         rv.setAdapter(adapter);
     }
-    private class NewListAdapter extends RecyclerView.Adapter<NewListAdapter.ViewHolder>{
-        class ViewHolder extends RecyclerView.ViewHolder{
-            private final TextView dScore, dNoOfPlayer, dAchievement;
-            public ViewHolder(@NonNull View itemView){
-                super(itemView);
-                dScore = itemView.findViewById(R.id.tvDisplayScore);
-                dNoOfPlayer = itemView.findViewById(R.id.tvDisplayNoOfPlayer);
-                dAchievement = itemView.findViewById(R.id.tvDisplayAchievement);
-            }
-        }
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_history_list_layout, parent, false);
-            return new ViewHolder(view);
-        }
 
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.dScore.setText(String.valueOf(gameHistory.get(position).getScore()));
-            holder.dNoOfPlayer.setText(String.valueOf(gameHistory.get(position).getNumberOfPlayers()));
-            holder.dAchievement.setText(gameHistory.get(position).getAchievement());
-        }
-
-        @Override
-        public int getItemCount() {
-            return gameHistory.size();
-        }
-    }
 }
