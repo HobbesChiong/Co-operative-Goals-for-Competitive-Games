@@ -152,10 +152,10 @@ public class GamePlayed extends AppCompatActivity implements RecyclerViewInterfa
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GamePlayed.this, NewGameCreationScreen.class);
                 GameType t = gm.getGameTypeAtIndex(gameTypeIndex);
                 String gameType = t.getGameType();
-                intent.putExtra("GameType", gameType);
+
+                Intent intent = NewGameCreationScreen.makeIntent(GamePlayed.this, gameType);
                 startActivity(intent);
             }
         });
@@ -257,6 +257,7 @@ public class GamePlayed extends AppCompatActivity implements RecyclerViewInterfa
 
     @Override
     public void onItemLongClick(int position) {
-
+        Intent intent = NewGameCreationScreen.makeIntent(GamePlayed.this, gameTypeString, position);
+        startActivity(intent);
     }
 }

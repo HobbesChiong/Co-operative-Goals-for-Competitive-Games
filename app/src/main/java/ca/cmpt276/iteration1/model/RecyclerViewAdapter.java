@@ -1,10 +1,12 @@
 package ca.cmpt276.iteration1.model;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,19 +46,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             dNoOfPlayer = itemView.findViewById(R.id.tvDisplayNoOfPlayer);
             dAchievement = itemView.findViewById(R.id.tvDisplayAchievement);
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    if (recyclerViewInterface != null){
-                        int position = getAbsoluteAdapterPosition();
+            itemView.setOnLongClickListener(view -> {
+                Log.i("Tag", "something has been long clicked");
+                if (recyclerViewInterface != null){
+                    int position = getAbsoluteAdapterPosition();
 
-                        if (position != RecyclerView.NO_POSITION){
-                            recyclerViewInterface.onItemLongClick(position);
-                            return true;
-                        }
+                    if (position != RecyclerView.NO_POSITION){
+                        recyclerViewInterface.onItemLongClick(position);
+                        return true;
                     }
-                    return false;
                 }
+                return true;
             });
         }
     }
