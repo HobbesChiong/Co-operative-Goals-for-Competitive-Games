@@ -14,8 +14,8 @@ import androidx.annotation.NonNull;
  */
 public class PlayedGame {
     private final String type;
-    private final int numberOfPlayers;
-    private final int score;
+    private int numberOfPlayers;
+    private int score;
 
     // The index of the achievement that was achieved
     private int achievementIndex;
@@ -42,6 +42,12 @@ public class PlayedGame {
     public String getAchievement() {
         GameManager gameManager = GameManager.getInstance();
         return GameType.getAchievementName(achievementIndex, gameManager.getAchievementTheme());
+    }
+
+    public void editPlayedGame(int numberOfPlayers, int score, int achievementIndex){
+        this.numberOfPlayers = numberOfPlayers;
+        this.score = score;
+        this.achievementIndex = achievementIndex;
     }
 
     @NonNull
