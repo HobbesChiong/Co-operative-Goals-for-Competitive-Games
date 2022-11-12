@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class GameManager {
     private ArrayList<GameType> gameTypes = new ArrayList<>();
     private ArrayList<PlayedGame> playedGames = new ArrayList<>();
+    private int achievementTheme = 0;
 
     // Singleton support
     private static GameManager instance;
@@ -22,6 +23,22 @@ public class GameManager {
     public void deleteGameType (String type){
         // Use its own object to find itself and remove itself from the arraylist
         gameTypes.removeIf(gameType -> gameType.getGameType().equals(type));
+    }
+
+    /**
+     * Set the app's theme to a given int
+     * @param themeIndex Index of the theme
+     */
+    public void setGameTheme(int themeIndex) {
+        achievementTheme = themeIndex;
+    }
+
+    /**
+     * Get the current theme of the app
+     * @return The current theme of the app
+     */
+    public int getAchievementTheme() {
+        return achievementTheme;
     }
 
     public void addGameType (GameType gameType){

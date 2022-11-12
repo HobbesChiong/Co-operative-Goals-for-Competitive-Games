@@ -227,7 +227,7 @@ public class GamePlayed extends AppCompatActivity implements RecyclerViewInterfa
                 }
                 else {
                     String message = "";
-                    for (String line : gameType.getAchievementLevelScoreRequirements(playerCount)){
+                    for (String line : gameType.getAchievementLevelScoreRequirements(playerCount)) {
                         message += line + "\n";
                     }
                     achievementLevels.setText(message);
