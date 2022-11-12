@@ -37,6 +37,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
     private GameManager gm;
 
     // For when we are editing an existing played game
+    private final int POSITION_NON_EXISTENT = -1;
     private int gamePlayedPosition;
     private PlayedGame playedGame;
 
@@ -83,11 +84,11 @@ public class NewGameCreationScreen extends AppCompatActivity {
     private void extractIntentExtras(){
         Intent intent = getIntent();
         this.gameTypeString = intent.getStringExtra("GameType");
-        this.gamePlayedPosition = intent.getIntExtra("GamePlayedPosition", -1);
+        this.gamePlayedPosition = intent.getIntExtra("GamePlayedPosition", POSITION_NON_EXISTENT);
         this.gameType = gm.getGameTypeFromString(gameTypeString);
 
         // Creating a new game
-        if (this.gamePlayedPosition == -1){
+        if (this.gamePlayedPosition == POSITION_NON_EXISTENT){
             setTitle(getString(R.string.add_new_game));
         }
         // Editing an existing game
@@ -173,7 +174,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
                     }
 
                     // Creating a new game
-                    if (gamePlayedPosition == -1){
+                    if (gamePlayedPosition == POSITION_NON_EXISTENT){
                         PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementLevel(gameScore, numberOfPlayers));
                         gm.addPlayedGame(currGame);
 
