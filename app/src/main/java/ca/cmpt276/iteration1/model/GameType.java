@@ -13,7 +13,7 @@ public class GameType {
 
     // Names for different achievement levels, sorted from worst to best
     private static final String[][] achievementLevels = {
-            { //
+            { // Animals
                 "Cowardly Cows", // Below a bad score
                 "Lowly Lamas",
                 "Dead Dodos",
@@ -24,7 +24,6 @@ public class GameType {
                 "Godly Goats" // Above a good score
             },
             {
-
                 "Devious Dragons",
                 "Beautiful Basilisks",
                 "Crafty Chimeras",
@@ -34,7 +33,7 @@ public class GameType {
                 "Menacing Minotaurs",
                 "Wonderful Werewolves"
             },
-            {
+            { // Spongebob
                 "Placid Patricks",
                 "Sluggish Squidwards",
                 "Standard Sandies",

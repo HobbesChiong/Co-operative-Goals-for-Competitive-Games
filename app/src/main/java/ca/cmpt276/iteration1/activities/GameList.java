@@ -2,6 +2,9 @@ package ca.cmpt276.iteration1.activities;
 
 import static android.util.Log.DEBUG;
 
+import static ca.cmpt276.iteration1.activities.OptionsActivity.ACHIEVEMENT_THEME_INDEX;
+import static ca.cmpt276.iteration1.activities.OptionsActivity.OPTIONS_PREFERENCES;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -70,6 +73,17 @@ public class GameList extends AppCompatActivity {
                 return true;
             }
         });
+
+        loadAppSettings();
+    }
+
+    private void loadAppSettings() {
+        // Load the user's previous theme (if one existed)
+        SharedPreferences sharedPreferences = getSharedPreferences(OPTIONS_PREFERENCES, MODE_PRIVATE);
+        int achievementThemeIndex = sharedPreferences.getInt(ACHIEVEMENT_THEME_INDEX, 0);
+
+        // Apply the theme
+        GameManager.getInstance().setGameTheme(achievementThemeIndex);
     }
 
     // Create the options menu button
@@ -175,4 +189,6 @@ public class GameList extends AppCompatActivity {
         // Set retrieved data if not null to game manager's game type list
         gm.loadGameTypeList(gson.fromJson(json, type));
     }
+
+
 }
