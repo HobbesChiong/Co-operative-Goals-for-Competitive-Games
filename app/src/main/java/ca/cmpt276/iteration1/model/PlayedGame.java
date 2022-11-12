@@ -13,9 +13,9 @@ import ca.cmpt276.iteration1.R;
 
 public class PlayedGame {
     private final String type;
-    private final int numberOfPlayers;
-    private final int score;
-    private final String achievement;
+    private int numberOfPlayers;
+    private int score;
+    private String achievement;
 
     public PlayedGame(String type, int numberOfPlayers, int score, String achievement) {
         this.type = type;
@@ -38,6 +38,12 @@ public class PlayedGame {
 
     public String getAchievement(){
         return achievement;
+    }
+
+    public void editPlayedGame(int numberOfPlayers, int score, String achievement){
+        this.numberOfPlayers = numberOfPlayers;
+        this.score = score;
+        this.achievement = achievement;
     }
 
     @NonNull
