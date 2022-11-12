@@ -35,6 +35,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
     private String gameTypeString;
     private GameType gameType;
     private GameManager gm;
+    private String difficulty;
 
     // For when we are editing an existing played game
     private final int POSITION_NON_EXISTENT = -1;
@@ -86,10 +87,10 @@ public class NewGameCreationScreen extends AppCompatActivity {
         this.gameTypeString = intent.getStringExtra("GameType");
         this.gamePlayedPosition = intent.getIntExtra("GamePlayedPosition", POSITION_NON_EXISTENT);
         this.gameType = gm.getGameTypeFromString(gameTypeString);
-
+        this.difficulty = intent.getStringExtra("difficulty");
         // Creating a new game
         if (this.gamePlayedPosition == POSITION_NON_EXISTENT){
-            setTitle(getString(R.string.add_new_game));
+            setTitle(getString(R.string.add_new_game) + " (" + intent.getStringExtra("difficulty") + ")");
         }
         // Editing an existing game
         else {
@@ -130,7 +131,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
                     throw new NumberFormatException();
                 }
                 GameType gameType = gm.getGameTypeFromString(gameTypeString);
-                String achievementLevel = getString(R.string.achievement_level) + " " + gameType.getAchievementLevel(score, players);
+                String achievementLevel = getString(R.string.achievement_level) + " " + gameType.getAchievementLevel(score, players, difficulty);
 
                 displayAchievementLevel.setText(achievementLevel);
             }
@@ -175,7 +176,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
 
                     // Creating a new game
                     if (gamePlayedPosition == POSITION_NON_EXISTENT){
-                        PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementLevel(gameScore, numberOfPlayers));
+                        PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementLevel(gameScore, numberOfPlayers,difficulty), difficulty);
                         gm.addPlayedGame(currGame);
 
                         String res = gameTypeString + getString(R.string.game_saved_toast);
@@ -183,7 +184,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
                     }
                     // Editing an existing game
                     else {
-                        playedGame.editPlayedGame(numberOfPlayers, gameScore, gameType.getAchievementLevel(gameScore, numberOfPlayers));
+                        playedGame.editPlayedGame(numberOfPlayers, gameScore, gameType.getAchievementLevel(gameScore, numberOfPlayers,difficulty));
                         Toast.makeText(this, getString(R.string.save_changes_to_existing_game), Toast.LENGTH_SHORT).show();
                     }
 

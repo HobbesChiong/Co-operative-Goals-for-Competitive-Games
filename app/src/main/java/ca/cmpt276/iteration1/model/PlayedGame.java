@@ -16,12 +16,14 @@ public class PlayedGame {
     private int numberOfPlayers;
     private int score;
     private String achievement;
+    private final String difficulty;
 
-    public PlayedGame(String type, int numberOfPlayers, int score, String achievement) {
+    public PlayedGame(String type, int numberOfPlayers, int score, String achievement, String difficulty) {
         this.type = type;
         this.numberOfPlayers = numberOfPlayers;
         this.score = score;
         this.achievement = achievement;
+        this.difficulty = difficulty;
     }
 
     public String getType() {

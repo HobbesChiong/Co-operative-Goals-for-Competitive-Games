@@ -49,6 +49,7 @@ public class GameDifficultyScreen extends AppCompatActivity {
                 Intent prevIntent = getIntent();
                 String gameType = prevIntent.getStringExtra("GameType");
                 Intent intent = NewGameCreationScreen.makeIntent(GameDifficultyScreen.this, gameType);
+                intent.putExtra("difficulty",difficulty);
                 startActivity(intent);
             }
             catch(IllegalArgumentException exception){

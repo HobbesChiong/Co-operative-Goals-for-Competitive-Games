@@ -62,7 +62,7 @@ public class GameType {
      *
      * Ex: x = 10, [0,100] -> [0,10] = 1
      */
-    private int map(int val, int oldMinimum, int oldMaximum, int newMinimum, int newMaximum) {
+    private int map(int val, float oldMinimum, float oldMaximum, int newMinimum, int newMaximum) {
         // Math from https://math.stackexchange.com/questions/914823/shift-numbers-into-a-different-range
         float valueScale = (newMaximum - newMinimum)/(float)(oldMaximum - oldMinimum);
         float endpointShift = val - oldMinimum;
@@ -71,23 +71,35 @@ public class GameType {
         return newValue;
     }
 
-    public String getAchievementLevel(int score, int playerNumber) {
+    public String getAchievementLevel(int score, int playerNumber, String difficulty) {
         // Number of achievements
         int achievementCount = achievementLevels.length;
+        float scaling = 1;
+        switch (difficulty) {
+            case "Easy":
+                scaling = 0.75F;
+                break;
+            case "Normal":
+                scaling = 1;
+                break;
+            case "Hard":
+                scaling = 1.25F;
+                break;
+        }
 
         score /= playerNumber;
 
         // If worse than a bad score, return the worst achievement levels
-        if (score < badScore) {
+        if (score < badScore*scaling) {
             return achievementLevels[0];
         }
 
-        if (score > goodScore) {
+        if (score > goodScore*scaling) {
             return achievementLevels[achievementCount - 1];
         }
 
         // Scale the score to range from 1 to the number of achievements - 1
-        int achievementIndex = map(score,badScore, goodScore, 1, achievementCount - 2);
+        int achievementIndex = map(score, badScore*scaling, goodScore*scaling, 1, achievementCount - 2);
         return achievementLevels[achievementIndex];
     }
 
