@@ -15,14 +15,14 @@ public class PlayedGame {
     private final String type;
     private int numberOfPlayers;
     private int score;
-    private String achievement;
+    private int achievementIndex;
     private final String difficulty;
 
-    public PlayedGame(String type, int numberOfPlayers, int score, String achievement, String difficulty) {
+    public PlayedGame(String type, int numberOfPlayers, int score, int achievementIndex, String difficulty) {
         this.type = type;
         this.numberOfPlayers = numberOfPlayers;
         this.score = score;
-        this.achievement = achievement;
+        this.achievementIndex = achievementIndex;
         this.difficulty = difficulty;
     }
 
@@ -38,21 +38,22 @@ public class PlayedGame {
         return score;
     }
 
-    public String getAchievement(){
-        return achievement;
+    public String getAchievement() {
+        GameManager gameManager = GameManager.getInstance();
+        return GameType.getAchievementName(achievementIndex, gameManager.getAchievementTheme());
     }
 
-    public void editPlayedGame(int numberOfPlayers, int score, String achievement){
+    public void editPlayedGame(int numberOfPlayers, int score, int achievementIndex){
         this.numberOfPlayers = numberOfPlayers;
         this.score = score;
-        this.achievement = achievement;
+        this.achievementIndex = achievementIndex;
     }
 
     @NonNull
     @Override
     public String toString() {
         String output;
-        output = "Score: " + score + ", " + numberOfPlayers + "Players, " + achievement;
+        output = "Score: " + score + ", " + numberOfPlayers + "Players, " + getAchievement();
         return output;
     }
 }

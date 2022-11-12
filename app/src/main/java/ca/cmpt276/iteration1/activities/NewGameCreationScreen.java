@@ -176,7 +176,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
 
                     // Creating a new game
                     if (gamePlayedPosition == POSITION_NON_EXISTENT){
-                        PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementLevel(gameScore, numberOfPlayers,difficulty), difficulty);
+                        PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementIndex(gameScore, numberOfPlayers,difficulty), difficulty);
                         gm.addPlayedGame(currGame);
 
                         String res = gameTypeString + getString(R.string.game_saved_toast);
@@ -184,18 +184,23 @@ public class NewGameCreationScreen extends AppCompatActivity {
                     }
                     // Editing an existing game
                     else {
-                        playedGame.editPlayedGame(numberOfPlayers, gameScore, gameType.getAchievementLevel(gameScore, numberOfPlayers,difficulty));
+                        playedGame.editPlayedGame(numberOfPlayers, gameScore, gameType.getAchievementIndex(gameScore, numberOfPlayers, difficulty));
                         Toast.makeText(this, getString(R.string.save_changes_to_existing_game), Toast.LENGTH_SHORT).show();
                     }
 
-                    finish();
+                    //taken from https://stackoverflow.com/questions/37248300/how-to-finish-specific-activities-not-all-activities
+                    Intent intent = new Intent(this, GamePlayed.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
                     return true;
                 } catch (Exception e) {
                     Toast.makeText(this, R.string.invalid_game, Toast.LENGTH_SHORT).show();
                     break;
                 }
             case android.R.id.home:
-                this.finish();
+                Intent intent = new Intent(this, GamePlayed.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
                 return true;
         }
 
