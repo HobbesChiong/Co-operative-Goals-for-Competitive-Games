@@ -2,12 +2,16 @@ package ca.cmpt276.iteration1.activities;
 
 import static android.util.Log.DEBUG;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -68,6 +72,15 @@ public class GameList extends AppCompatActivity {
         });
     }
 
+    // Create the options menu button
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_appbar_options, menu);
+
+        return true;
+    }
+
     // When back button on home bar is pressed
     @Override
     public void onBackPressed(){
@@ -100,6 +113,22 @@ public class GameList extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.btnOptions: {
+                Intent intent = new Intent(GameList.this, OptionsActivity.class);
+                startActivity(intent);
+
+                return true;
+            }
+
+            default: return true;
+        }
+
+
     }
 
     private void populateListView() {
