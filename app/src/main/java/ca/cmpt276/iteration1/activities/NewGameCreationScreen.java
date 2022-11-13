@@ -12,16 +12,18 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 import ca.cmpt276.iteration1.model.PlayedGame;
+import ca.cmpt276.iteration1.model.ListViewAdapter;
 
 /*
  * Takes in an intent from previous activity and creates a new game of the "GameType"
@@ -36,14 +38,14 @@ public class NewGameCreationScreen extends AppCompatActivity {
     private GameType gameType;
     private GameManager gm;
     private String difficulty;
+    private int noOfPlayer;
+    private int score;
+    private List playerScore;
 
     // For when we are editing an existing played game
     private final int POSITION_NON_EXISTENT = -1;
     private int gamePlayedPosition;
     private PlayedGame playedGame;
-
-    EditText gameScore;
-    EditText numberOfPlayers;
 
     // When it takes in a string, we are creating a new game based on the type
     public static Intent makeIntent(Context context, String gameTypeString){
@@ -71,15 +73,20 @@ public class NewGameCreationScreen extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        // edittext input field setup
-        gameScore = findViewById(R.id.etGameScore);
-        gameScore.addTextChangedListener(inputTextWatcher);
-        numberOfPlayers = findViewById(R.id.etNumberOfPlayers);
-        numberOfPlayers.addTextChangedListener(inputTextWatcher);
-
         gm = GameManager.getInstance();
         gameType = gm.getGameTypeFromString(gameTypeString);
         extractIntentExtras();
+        setUpListView();
+    }
+
+    private void setUpListView() {
+        ListView lv = findViewById(R.id.lv_ScoreInput);
+        lv.setItemsCanFocus(true);
+        for(int i = 0; i < noOfPlayer; i++){
+            playerScore.add(0);
+        }
+        ListViewAdapter adapter = new ListViewAdapter(this, playerScore);
+        lv.setAdapter(adapter);
     }
 
     private void extractIntentExtras(){
@@ -87,6 +94,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
         this.gameTypeString = intent.getStringExtra("GameType");
         this.gamePlayedPosition = intent.getIntExtra("GamePlayedPosition", POSITION_NON_EXISTENT);
         this.gameType = gm.getGameTypeFromString(gameTypeString);
+        this.noOfPlayer = intent.getIntExtra("numberOfPlayer", 1);
 
         // Creating a new game
         if (this.gamePlayedPosition == POSITION_NON_EXISTENT){
@@ -105,8 +113,6 @@ public class NewGameCreationScreen extends AppCompatActivity {
 
         this.playedGame = playedGames.get(gamePlayedPosition);
         this.difficulty = playedGame.getDifficulty();
-        gameScore.setText(String.valueOf(playedGame.getScore()));
-        numberOfPlayers.setText(String.valueOf(playedGame.getNumberOfPlayers()));
 
 
     }
@@ -127,15 +133,8 @@ public class NewGameCreationScreen extends AppCompatActivity {
             TextView displayAchievementLevel = findViewById(R.id.tvGameAchievementLevel);
 
             try {
-                int players = Integer.parseInt(numberOfPlayers.getText().toString());
-                int score = Integer.parseInt(gameScore.getText().toString());
-
-                if (players == 0) {
-                    displayError(getString(R.string.player_number_error));
-                    throw new NumberFormatException();
-                }
                 GameType gameType = gm.getGameTypeFromString(gameTypeString);
-                String achievementLevel = getString(R.string.achievement_level) + " " + gameType.getAchievementLevel(score, players, difficulty);
+                String achievementLevel = getString(R.string.achievement_level) + " " + gameType.getAchievementLevel(score, noOfPlayer, difficulty);
 
                 displayAchievementLevel.setText(achievementLevel);
             }
@@ -164,20 +163,6 @@ public class NewGameCreationScreen extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.btnSave:
                 try {
-                    EditText etGameScore = findViewById(R.id.etGameScore);
-                    EditText etNumberOfPlayers = findViewById(R.id.etNumberOfPlayers);
-
-                    if (etNumberOfPlayers == null || etGameScore == null) {
-                        throw new IllegalArgumentException("Edit Text fields need to be filled");
-                    }
-
-                    int gameScore = Integer.parseInt(etGameScore.getText().toString());
-                    int numberOfPlayers = Integer.parseInt(etNumberOfPlayers.getText().toString());
-
-                    if (gameScore < 0 || numberOfPlayers <= 0) {
-                        throw new IllegalArgumentException("Edit Text fields need to have positive values");
-                    }
-
                     // Creating a new game
                     if (gamePlayedPosition == POSITION_NON_EXISTENT){
                         PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementIndex(gameScore, numberOfPlayers,difficulty), difficulty);
