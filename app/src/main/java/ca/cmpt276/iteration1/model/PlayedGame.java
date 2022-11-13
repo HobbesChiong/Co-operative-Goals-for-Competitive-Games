@@ -1,4 +1,5 @@
 package ca.cmpt276.iteration1.model;
+
 /*
 * The PlayedGame class is for storing played game's data.
 * type for game name
@@ -9,22 +10,21 @@ package ca.cmpt276.iteration1.model;
 
 import androidx.annotation.NonNull;
 
-/**
- * Class representing a game that the player has already played.
- */
+import ca.cmpt276.iteration1.R;
+
 public class PlayedGame {
     private final String type;
     private int numberOfPlayers;
     private int score;
-
-    // The index of the achievement that was achieved
     private int achievementIndex;
+    private String difficulty;
 
-    public PlayedGame(String type, int numberOfPlayers, int score, int achievementIndex) {
+    public PlayedGame(String type, int numberOfPlayers, int score, int achievementIndex, String difficulty) {
         this.type = type;
         this.numberOfPlayers = numberOfPlayers;
         this.score = score;
         this.achievementIndex = achievementIndex;
+        this.difficulty = difficulty;
     }
 
     public String getType() {
@@ -56,5 +56,9 @@ public class PlayedGame {
         String output;
         output = "Score: " + score + ", " + numberOfPlayers + "Players, " + getAchievement();
         return output;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
     }
 }

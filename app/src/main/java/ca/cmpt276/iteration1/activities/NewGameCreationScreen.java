@@ -35,6 +35,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
     private String gameTypeString;
     private GameType gameType;
     private GameManager gm;
+    private String difficulty;
 
     // For when we are editing an existing played game
     private final int POSITION_NON_EXISTENT = -1;
@@ -89,7 +90,8 @@ public class NewGameCreationScreen extends AppCompatActivity {
 
         // Creating a new game
         if (this.gamePlayedPosition == POSITION_NON_EXISTENT){
-            setTitle(getString(R.string.add_new_game));
+            setTitle(getString(R.string.add_new_game) + " (" + intent.getStringExtra("difficulty") + ")");
+            this.difficulty = intent.getStringExtra("difficulty");
         }
         // Editing an existing game
         else {
@@ -100,10 +102,13 @@ public class NewGameCreationScreen extends AppCompatActivity {
 
     private void setPlayedGameInfo(){
         ArrayList<PlayedGame> playedGames = gm.getSpecificPlayedGames(gameTypeString);
-        this.playedGame = playedGames.get(gamePlayedPosition);
 
+        this.playedGame = playedGames.get(gamePlayedPosition);
+        this.difficulty = playedGame.getDifficulty();
         gameScore.setText(String.valueOf(playedGame.getScore()));
         numberOfPlayers.setText(String.valueOf(playedGame.getNumberOfPlayers()));
+
+
     }
 
     private void displayError(String message){
@@ -130,7 +135,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
                     throw new NumberFormatException();
                 }
                 GameType gameType = gm.getGameTypeFromString(gameTypeString);
-                String achievementLevel = getString(R.string.achievement_level) + " " + gameType.getAchievementLevel(score, players);
+                String achievementLevel = getString(R.string.achievement_level) + " " + gameType.getAchievementLevel(score, players, difficulty);
 
                 displayAchievementLevel.setText(achievementLevel);
             }
@@ -175,7 +180,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
 
                     // Creating a new game
                     if (gamePlayedPosition == POSITION_NON_EXISTENT){
-                        PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementIndex(gameScore,numberOfPlayers));
+                        PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementIndex(gameScore, numberOfPlayers,difficulty), difficulty);
                         gm.addPlayedGame(currGame);
 
                         String res = gameTypeString + getString(R.string.game_saved_toast);
@@ -183,18 +188,23 @@ public class NewGameCreationScreen extends AppCompatActivity {
                     }
                     // Editing an existing game
                     else {
-                        playedGame.editPlayedGame(numberOfPlayers, gameScore, gameType.getAchievementIndex(gameScore,numberOfPlayers));
+                        playedGame.editPlayedGame(numberOfPlayers, gameScore, gameType.getAchievementIndex(gameScore, numberOfPlayers, difficulty));
                         Toast.makeText(this, getString(R.string.save_changes_to_existing_game), Toast.LENGTH_SHORT).show();
                     }
 
-                    finish();
+                    //taken from https://stackoverflow.com/questions/37248300/how-to-finish-specific-activities-not-all-activities
+                    Intent intent = new Intent(this, GamePlayed.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
                     return true;
                 } catch (Exception e) {
                     Toast.makeText(this, R.string.invalid_game, Toast.LENGTH_SHORT).show();
                     break;
                 }
             case android.R.id.home:
-                this.finish();
+                Intent intent = new Intent(this, GamePlayed.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
                 return true;
         }
 

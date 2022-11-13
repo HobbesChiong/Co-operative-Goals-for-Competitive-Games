@@ -94,9 +94,9 @@ public class GameType {
      *
      * Ex: x = 10, [0,100] -> [0,10] = 1
      */
-    private int map(int val, int oldMinimum, int oldMaximum, int newMinimum, int newMaximum) {
+    private int map(int val, float oldMinimum, float oldMaximum, int newMinimum, int newMaximum) {
         // Math from https://math.stackexchange.com/questions/914823/shift-numbers-into-a-different-range
-        float valueScale = (newMaximum - newMinimum)/(float)(oldMaximum - oldMinimum);
+        float valueScale = (newMaximum - newMinimum)/(oldMaximum - oldMinimum);
         float endpointShift = val - oldMinimum;
         int newValue = (int) Math.floor(newMinimum + (valueScale * endpointShift));
 
@@ -109,34 +109,46 @@ public class GameType {
      * @param playerNumber Number of players in a game
      * @return 0 - max number of achievements, whichever one was earned by the player
      */
-    public int getAchievementIndex(int score, int playerNumber) {
+    public int getAchievementIndex(int score, int playerNumber, String difficulty) {
         int achievementTheme = GameManager.getInstance().getAchievementTheme();
+        float scaling = 1;
 
         // Number of achievements
         int achievementCount = achievementLevels[achievementTheme].length;
 
+        switch (difficulty) {
+            case "Easy":
+                scaling = 0.75F;
+                break;
+            case "Normal":
+                scaling = 1;
+                break;
+            case "Hard":
+                scaling = 1.25F;
+                break;
+        }
         score /= playerNumber;
 
         // If worse than a bad score, return the worst achievement levels
-        if (score < badScore) {
+        if (score < badScore*scaling) {
             return 0;
         }
 
-        if (score > goodScore) {
+        if (score > goodScore*scaling) {
             return achievementCount - 1;
         }
 
         // Scale the score to range from 1 to the number of achievements - 1
-        int achievementIndex = map(score,badScore, goodScore, 1, achievementCount - 2);
+        int achievementIndex = map(score,badScore*scaling, goodScore*scaling, 1, achievementCount - 2);
         return achievementIndex;
     }
 
 
-    public String getAchievementLevel(int score, int playerNumber) {
+    public String getAchievementLevel(int score, int playerNumber, String difficulty) {
         int achievementTheme = GameManager.getInstance().getAchievementTheme();
 
         // Index of the achievement in a list of achievements
-        int achievementIndex = getAchievementIndex(score, playerNumber);
+        int achievementIndex = getAchievementIndex(score, playerNumber, difficulty);
 
         return getAchievementName(achievementIndex,achievementTheme);
     }
