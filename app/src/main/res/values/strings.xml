@@ -51,5 +51,7 @@
     <string name="Continue">Continue</string>
     <string name="choose_your_difficulty">Choose your difficulty</string>
     <string name="choose_number_of_players">Choose number of players</string>
-    <string name="achievement_theme">Achievement Theme</string>/>
+    <string name="achievement_theme">Achievement Theme</string>
+    <string name="difficulty_is_set_to">\"Difficulty is set to \"</string>
+    <string name="difficulty_selection">Difficulty Selection</string>/>
 </resources>

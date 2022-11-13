@@ -20,7 +20,7 @@ public class GameDifficultyScreen extends AppCompatActivity {
         setContentView(R.layout.activity_game_difficulty_screen);
         
         setupButtonListeners();
-
+        setTitle(getString(R.string.difficulty_selection));
     }
 
     public static Intent makeIntent(Context context, String gameTypeString){
@@ -39,8 +39,6 @@ public class GameDifficultyScreen extends AppCompatActivity {
         btnNormal.setOnClickListener(this::btnDifficultyClick);
         btnHard.setOnClickListener(this::btnDifficultyClick);
 
-        // setup btnContinue
-        // TODO add the difficulty scaling into the game
         btnContinue.setOnClickListener(view -> {
             try{
                 if(difficulty.equals("none")){
@@ -62,7 +60,7 @@ public class GameDifficultyScreen extends AppCompatActivity {
     private void btnDifficultyClick(View v){
         Button btn = (Button)v;
         difficulty =  btn.getText().toString();
-        String res = "difficulty is set to " + difficulty;
+        String res = getString(R.string.difficulty_is_set_to) + difficulty;
         Toast.makeText(GameDifficultyScreen.this, res, Toast.LENGTH_SHORT).show();
     }
 }

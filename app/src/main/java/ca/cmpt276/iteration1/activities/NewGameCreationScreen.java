@@ -87,10 +87,11 @@ public class NewGameCreationScreen extends AppCompatActivity {
         this.gameTypeString = intent.getStringExtra("GameType");
         this.gamePlayedPosition = intent.getIntExtra("GamePlayedPosition", POSITION_NON_EXISTENT);
         this.gameType = gm.getGameTypeFromString(gameTypeString);
-        this.difficulty = intent.getStringExtra("difficulty");
+
         // Creating a new game
         if (this.gamePlayedPosition == POSITION_NON_EXISTENT){
             setTitle(getString(R.string.add_new_game) + " (" + intent.getStringExtra("difficulty") + ")");
+            this.difficulty = intent.getStringExtra("difficulty");
         }
         // Editing an existing game
         else {
@@ -101,10 +102,13 @@ public class NewGameCreationScreen extends AppCompatActivity {
 
     private void setPlayedGameInfo(){
         ArrayList<PlayedGame> playedGames = gm.getSpecificPlayedGames(gameTypeString);
-        this.playedGame = playedGames.get(gamePlayedPosition);
 
+        this.playedGame = playedGames.get(gamePlayedPosition);
+        this.difficulty = playedGame.getDifficulty();
         gameScore.setText(String.valueOf(playedGame.getScore()));
         numberOfPlayers.setText(String.valueOf(playedGame.getNumberOfPlayers()));
+
+
     }
 
     private void displayError(String message){

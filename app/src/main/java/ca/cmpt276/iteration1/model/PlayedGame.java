@@ -1,4 +1,5 @@
 package ca.cmpt276.iteration1.model;
+
 /*
 * The PlayedGame class is for storing played game's data.
 * type for game name
@@ -16,7 +17,7 @@ public class PlayedGame {
     private int numberOfPlayers;
     private int score;
     private int achievementIndex;
-    private final String difficulty;
+    private String difficulty;
 
     public PlayedGame(String type, int numberOfPlayers, int score, int achievementIndex, String difficulty) {
         this.type = type;
@@ -55,5 +56,9 @@ public class PlayedGame {
         String output;
         output = "Score: " + score + ", " + numberOfPlayers + "Players, " + getAchievement();
         return output;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
     }
 }
