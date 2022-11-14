@@ -14,7 +14,7 @@ import ca.cmpt276.iteration1.R;
 
 public class GameDifficultyScreen extends AppCompatActivity {
     private String difficulty = "none";
-    private int noOfPlayer;
+    private int numberOfPlayers;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class GameDifficultyScreen extends AppCompatActivity {
         btnHard.setOnClickListener(this::btnDifficultyClick);
 
         if(!etNoOfPlayer.getText().toString().equals(String.valueOf(R.string.blank))){
-            noOfPlayer = Integer.parseInt(etNoOfPlayer.getText().toString());
+            numberOfPlayers = Integer.parseInt(etNoOfPlayer.getText().toString());
         }
         btnContinue.setOnClickListener(view -> {
             try{
@@ -54,7 +54,7 @@ public class GameDifficultyScreen extends AppCompatActivity {
                 String gameType = prevIntent.getStringExtra("GameType");
                 Intent intent = NewGameCreationScreen.makeIntent(GameDifficultyScreen.this, gameType);
                 intent.putExtra("difficulty",difficulty);
-                intent.putExtra("numberOfPlayer", noOfPlayer);
+                intent.putExtra("numberOfPlayer", numberOfPlayers);
                 startActivity(intent);
             }
             catch(IllegalArgumentException exception){

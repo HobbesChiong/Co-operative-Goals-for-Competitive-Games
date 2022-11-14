@@ -10,21 +10,23 @@ package ca.cmpt276.iteration1.model;
 
 import androidx.annotation.NonNull;
 
-import ca.cmpt276.iteration1.R;
+import java.util.List;
 
 public class PlayedGame {
     private final String type;
     private int numberOfPlayers;
-    private int score;
+    private int totalScore;
     private int achievementIndex;
     private String difficulty;
+    private List playerScore;
 
-    public PlayedGame(String type, int numberOfPlayers, int score, int achievementIndex, String difficulty) {
+    public PlayedGame(String type, int numberOfPlayers, int totalScore, int achievementIndex, String difficulty, List playerScore) {
         this.type = type;
         this.numberOfPlayers = numberOfPlayers;
-        this.score = score;
+        this.totalScore = totalScore;
         this.achievementIndex = achievementIndex;
         this.difficulty = difficulty;
+        this.playerScore = playerScore;
     }
 
     public String getType() {
@@ -35,8 +37,8 @@ public class PlayedGame {
         return numberOfPlayers;
     }
 
-    public int getScore() {
-        return score;
+    public int getTotalScore() {
+        return totalScore;
     }
 
     public String getAchievement() {
@@ -46,7 +48,7 @@ public class PlayedGame {
 
     public void editPlayedGame(int numberOfPlayers, int score, int achievementIndex){
         this.numberOfPlayers = numberOfPlayers;
-        this.score = score;
+        this.totalScore = score;
         this.achievementIndex = achievementIndex;
     }
 
@@ -54,7 +56,7 @@ public class PlayedGame {
     @Override
     public String toString() {
         String output;
-        output = "Score: " + score + ", " + numberOfPlayers + "Players, " + getAchievement();
+        output = "Score: " + totalScore + ", " + numberOfPlayers + "Players, " + getAchievement();
         return output;
     }
 

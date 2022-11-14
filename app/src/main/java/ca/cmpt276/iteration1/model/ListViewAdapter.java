@@ -23,6 +23,7 @@ public class ListViewAdapter extends BaseAdapter {
     private final Context context;
     private List playerScore;
     private LayoutInflater layoutInflater;
+    GameManager gm = GameManager.getInstance();
 
     public ListViewAdapter(Context context, List playerScore) {
         this.context = context;
