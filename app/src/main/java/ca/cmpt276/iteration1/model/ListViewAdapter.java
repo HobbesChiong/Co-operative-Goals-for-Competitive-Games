@@ -50,6 +50,7 @@ public class ListViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewContainer container;
+        convertView = null;
         if(convertView == null){
             container = new ViewContainer();
             layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -81,7 +82,7 @@ public class ListViewAdapter extends BaseAdapter {
             public void afterTextChanged(Editable s) {
                 final int playerNo = container.inputScore.getId();
                 final EditText score = container.inputScore;
-                if(!score.getText().toString().equals(context.getString(R.string.blank))){
+                if(!score.getText().toString().equals("")){
                     playerScore.set(playerNo, Integer.parseInt(score.getText().toString()));
                 }
             }
