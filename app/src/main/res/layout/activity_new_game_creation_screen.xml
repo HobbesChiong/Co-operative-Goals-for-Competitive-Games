@@ -11,35 +11,36 @@
         android:id="@+id/tvGameAchievementLevel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="@string/game_achievement_level_placeholder"
         android:textAlignment="center"
         android:textColor="@color/teal_700"
         android:textSize="20sp"
         android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/btnCalculateScore"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvShowTotalScore" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tvShowTotalScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/total_score"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/tvGameAchievementLevel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lv_ScoreInput" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ListView
         android:id="@+id/lv_ScoreInput"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:divider="#f00"
         android:dividerHeight="1dp"
         android:smoothScrollbar="true"
+        app:layout_constraintBottom_toTopOf="@+id/tvShowTotalScore"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -48,9 +49,18 @@
         android:id="@+id/tvTotalScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/tvShowTotalScore"
-        app:layout_constraintTop_toBottomOf="@+id/lv_ScoreInput" />
+        app:layout_constraintTop_toTopOf="@+id/tvShowTotalScore" />
+
+    <Button
+        android:id="@+id/btnCalculateScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/calculate_score"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

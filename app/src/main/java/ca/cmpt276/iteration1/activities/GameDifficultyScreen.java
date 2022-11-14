@@ -41,20 +41,21 @@ public class GameDifficultyScreen extends AppCompatActivity {
         btnEasy.setOnClickListener(this::btnDifficultyClick);
         btnNormal.setOnClickListener(this::btnDifficultyClick);
         btnHard.setOnClickListener(this::btnDifficultyClick);
-
-        if(!etNoOfPlayer.getText().toString().equals(String.valueOf(R.string.blank))){
-            numberOfPlayers = Integer.parseInt(etNoOfPlayer.getText().toString());
-        }
         btnContinue.setOnClickListener(view -> {
             try{
+                if(!etNoOfPlayer.getText().toString().equals("")){
+                    numberOfPlayers = Integer.parseInt(etNoOfPlayer.getText().toString());
+                }
                 if(difficulty.equals("none")){
                     throw new IllegalArgumentException();
                 }
+                //extract data from intent
                 Intent prevIntent = getIntent();
                 String gameType = prevIntent.getStringExtra("GameType");
+
                 Intent intent = NewGameCreationScreen.makeIntent(GameDifficultyScreen.this, gameType);
                 intent.putExtra("difficulty",difficulty);
-                intent.putExtra("numberOfPlayer", numberOfPlayers);
+                intent.putExtra("numberOfPlayers", numberOfPlayers);
                 startActivity(intent);
             }
             catch(IllegalArgumentException exception){

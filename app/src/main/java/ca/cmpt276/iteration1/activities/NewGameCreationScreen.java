@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,15 +77,15 @@ public class NewGameCreationScreen extends AppCompatActivity {
         gameType = gm.getGameTypeFromString(gameTypeString);
         extractIntentExtras();
         setUpListView();
+        setUpCalculateScoreButton();
     }
-
 
     private void extractIntentExtras(){
         Intent intent = getIntent();
         this.gameTypeString = intent.getStringExtra("GameType");
         this.gamePlayedPosition = intent.getIntExtra("GamePlayedPosition", POSITION_NON_EXISTENT);
         this.gameType = gm.getGameTypeFromString(gameTypeString);
-        this.numberOfPlayers = intent.getIntExtra("numberOfPlayer", 1);
+        this.numberOfPlayers = intent.getIntExtra("numberOfPlayers", 1);
 
         // Creating a new game
         if (this.gamePlayedPosition == POSITION_NON_EXISTENT){
@@ -108,6 +110,27 @@ public class NewGameCreationScreen extends AppCompatActivity {
         lv.setAdapter(adapter);
     }
 
+    private void setUpCalculateScoreButton() {
+        Button calScore = findViewById(R.id.btnCalculateScore);
+        calScore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView displayAchievementLevel = findViewById(R.id.tvGameAchievementLevel);
+                TextView displayTotalScore = findViewById(R.id.tvTotalScore);
+                gameScore = calculateTotalScore();
+                displayTotalScore.setText(String.valueOf(gameScore));
+                try {
+                    GameType gameType = gm.getGameTypeFromString(gameTypeString);
+                    String achievementLevel = getString(R.string.achievement_level) + " " + gameType.getAchievementLevel(gameScore, numberOfPlayers, difficulty);
+                    displayAchievementLevel.setText(achievementLevel);
+                }
+                catch (NumberFormatException numberFormatException) {
+                    displayAchievementLevel.setText(R.string.game_achievement_level_calculating);
+                }
+            }
+        });
+    }
+
     private void setPlayedGameInfo(){
         ArrayList<PlayedGame> playedGames = gm.getSpecificPlayedGames(gameTypeString);
         this.playedGame = playedGames.get(gamePlayedPosition);
@@ -117,21 +140,6 @@ public class NewGameCreationScreen extends AppCompatActivity {
 
     private void displayError(String message){
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
-    }
-
-    public void displayAchievementAndScore(){
-        TextView displayAchievementLevel = findViewById(R.id.tvGameAchievementLevel);
-        TextView displayTotalScore = findViewById(R.id.tvTotalScore);
-        try {
-            GameType gameType = gm.getGameTypeFromString(gameTypeString);
-            String achievementLevel = getString(R.string.achievement_level) + " " + gameType.getAchievementLevel(gameScore, numberOfPlayers, difficulty);
-            displayAchievementLevel.setText(achievementLevel);
-        }
-        catch (NumberFormatException numberFormatException) {
-            displayAchievementLevel.setText(R.string.game_achievement_level_calculating);
-        }
-        gameScore = calculateTotalScore();
-        displayTotalScore.setText(String.valueOf(gameScore));
     }
 
     private int calculateTotalScore() {

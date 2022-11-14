@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ca.cmpt276.iteration1.R;
+import ca.cmpt276.iteration1.activities.NewGameCreationScreen;
 
 /*
 * Code inspiration by website on 13 Nov, 2022 from https://velmurugan-murugesan.medium.com/edittext-in-listview-android-example-41064bae2841
@@ -24,6 +25,7 @@ public class ListViewAdapter extends BaseAdapter {
     private List playerScore;
     private LayoutInflater layoutInflater;
     GameManager gm = GameManager.getInstance();
+    NewGameCreationScreen temp;
 
     public ListViewAdapter(Context context, List playerScore) {
         this.context = context;
