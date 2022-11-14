@@ -67,7 +67,7 @@
         android:id="@+id/tvGameAchievementLevel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="160dp"
         android:text="@string/game_achievement_level_placeholder"
         android:textAlignment="center"
         android:textColor="@color/teal_700"
@@ -76,5 +76,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvNumberOfPlayers" />
+
+    <ImageView
+        android:id="@+id/ivWinnerStar"
+        android:layout_width="113dp"
+        android:layout_height="108dp"
+        android:layout_marginBottom="12dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/tvGameAchievementLevel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvNumberOfPlayers"
+        app:srcCompat="@android:drawable/btn_star_big_on" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
