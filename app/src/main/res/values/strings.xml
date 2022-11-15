@@ -53,5 +53,6 @@
     <string name="choose_number_of_players">Choose number of players</string>
     <string name="achievement_theme">Achievement Theme</string>
     <string name="difficulty_is_set_to">\"Difficulty is set to \"</string>
-    <string name="difficulty_selection">Difficulty Selection</string>/>
+    <string name="difficulty_selection">Difficulty Selection</string>
+    <string name="difficulty">Difficulty:</string>/>
 </resources>
