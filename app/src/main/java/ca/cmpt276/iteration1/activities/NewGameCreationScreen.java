@@ -4,15 +4,21 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,7 +71,6 @@ public class NewGameCreationScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_game_creation_screen);
 
-
         // action bar setup
         ActionBar ab = getSupportActionBar();
         MenuInflater menuInflater = getMenuInflater();
@@ -82,7 +87,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
         extractIntentExtras();
     }
 
-    private void extractIntentExtras(){
+    private void extractIntentExtras() {
         Intent intent = getIntent();
         this.gameTypeString = intent.getStringExtra("GameType");
         this.gamePlayedPosition = intent.getIntExtra("GamePlayedPosition", POSITION_NON_EXISTENT);
@@ -98,6 +103,8 @@ public class NewGameCreationScreen extends AppCompatActivity {
             setTitle(getString(R.string.edit_existing_game));
             setPlayedGameInfo();
         }
+
+
     }
 
     private void setPlayedGameInfo(){
@@ -192,11 +199,38 @@ public class NewGameCreationScreen extends AppCompatActivity {
                         Toast.makeText(this, getString(R.string.save_changes_to_existing_game), Toast.LENGTH_SHORT).show();
                     }
 
-                    //taken from https://stackoverflow.com/questions/37248300/how-to-finish-specific-activities-not-all-activities
-                    Intent intent = new Intent(this, GamePlayed.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startActivity(intent);
-                    return true;
+                    // Animate the star to signify the achievement
+                    ImageView starImage = findViewById(R.id.ivWinnerStar);
+                    Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+                    starImage.startAnimation(animation);
+                    starImage.setVisibility(View.VISIBLE);
+
+                    // Store a reference to the activity so we can end the activity after an animation finishes
+                    Activity thisActivity = this;
+
+                    // End the activity after the animation finished https://stackoverflow.com/questions/7606498/end-animation-event-android
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {}
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            //taken from https://stackoverflow.com/questions/37248300/how-to-finish-specific-activities-not-all-activities
+                            Intent intent = new Intent(thisActivity, GamePlayed.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {}
+                    });
+
+                    // Play a sound
+                    MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.achievement_jingle);
+                    mediaPlayer.start(); // no need to call prepare(); create() does that for you
+
+                    return false;
+                    //return true;
                 } catch (Exception e) {
                     Toast.makeText(this, R.string.invalid_game, Toast.LENGTH_SHORT).show();
                     break;
