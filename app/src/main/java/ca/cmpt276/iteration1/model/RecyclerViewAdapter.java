@@ -38,13 +38,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView dScore, dNoOfPlayer, dAchievement;
+        TextView dScore, dNoOfPlayer, dAchievement, dDifficulty;
 
         public ViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             dScore = itemView.findViewById(R.id.tvDisplayScore);
             dNoOfPlayer = itemView.findViewById(R.id.tvDisplayNoOfPlayer);
             dAchievement = itemView.findViewById(R.id.tvDisplayAchievement);
+            dDifficulty = itemView.findViewById(R.id.tvDisplayDifficulty);
 
             itemView.setOnLongClickListener(view -> {
                 Log.i("Tag", "something has been long clicked");
@@ -73,6 +74,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.dScore.setText(String.valueOf(playedGames.get(position).getScore()));
         holder.dNoOfPlayer.setText(String.valueOf(playedGames.get(position).getNumberOfPlayers()));
         holder.dAchievement.setText(playedGames.get(position).getAchievement());
+        holder.dDifficulty.setText(playedGames.get(position).getDifficulty());
     }
 
     @Override
