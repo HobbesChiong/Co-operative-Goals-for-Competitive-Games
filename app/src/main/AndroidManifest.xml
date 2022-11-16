@@ -29,23 +29,23 @@
         <activity
             android:name=".activities.NewGameCreationScreen"
             android:exported="false"
-            android:parentActivityName=".activities.GamePlayed"
+            android:parentActivityName=".activities.GamePlayedListActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".activities.GamePlayed"
+            android:name=".activities.GamePlayedListActivity"
             android:exported="false"
-            android:parentActivityName=".activities.GameList"
+            android:parentActivityName=".activities.GameListActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".activities.GameList"
+            android:name=".activities.GameListActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <meta-data
@@ -55,7 +55,7 @@
         <activity
             android:name=".activities.GameTypeActivity"
             android:exported="false"
-            android:parentActivityName=".activities.GameList"
+            android:parentActivityName=".activities.GameListActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"

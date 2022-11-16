@@ -216,7 +216,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
                         @Override
                         public void onAnimationEnd(Animation animation) {
                             //taken from https://stackoverflow.com/questions/37248300/how-to-finish-specific-activities-not-all-activities
-                            Intent intent = new Intent(thisActivity, GamePlayed.class);
+                            Intent intent = new Intent(thisActivity, GamePlayedListActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                             startActivity(intent);
                         }
@@ -236,7 +236,7 @@ public class NewGameCreationScreen extends AppCompatActivity {
                     break;
                 }
             case android.R.id.home:
-                Intent intent = new Intent(this, GamePlayed.class);
+                Intent intent = new Intent(this, GamePlayedListActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 return true;

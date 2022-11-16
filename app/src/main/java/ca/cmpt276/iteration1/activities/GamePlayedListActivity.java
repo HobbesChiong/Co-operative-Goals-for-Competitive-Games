@@ -16,12 +16,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,7 +30,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
@@ -45,7 +42,7 @@ import ca.cmpt276.iteration1.model.RecyclerViewInterface;
 /**
  * Activity which lists games played for a specific type of game.
  */
-public class GamePlayed extends AppCompatActivity implements RecyclerViewInterface {
+public class GamePlayedListActivity extends AppCompatActivity implements RecyclerViewInterface {
 
     private static final String GAME_TYPE_INDEX = "Position";
     // Index of which type of game we're dealing with
@@ -60,7 +57,7 @@ public class GamePlayed extends AppCompatActivity implements RecyclerViewInterfa
     private EditText achievementLevelPlayerCount;
 
     public static Intent makeIntent(Context context, int pos){
-        Intent intent = new Intent(context, GamePlayed.class);
+        Intent intent = new Intent(context, GamePlayedListActivity.class);
         intent.putExtra(GAME_TYPE_INDEX, pos);
         return intent;
     }
@@ -155,7 +152,7 @@ public class GamePlayed extends AppCompatActivity implements RecyclerViewInterfa
                 GameType t = gm.getGameTypeAtIndex(gameTypeIndex);
                 String gameType = t.getGameType();
 
-                Intent intent = GameDifficultyScreen.makeIntent(GamePlayed.this, gameType);
+                Intent intent = GameDifficultyScreen.makeIntent(GamePlayedListActivity.this, gameType);
                 startActivity(intent);
             }
         });
@@ -190,7 +187,7 @@ public class GamePlayed extends AppCompatActivity implements RecyclerViewInterfa
     }
 
     private void createAchievementLevelDialog() {
-        Dialog achievementLevelsDialog = new Dialog(GamePlayed.this);
+        Dialog achievementLevelsDialog = new Dialog(GamePlayedListActivity.this);
         achievementLevelsDialog.setContentView(R.layout.dialog_view_achievement_levels);
         achievementLevelsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         achievementLevelsDialog.show();
@@ -251,13 +248,13 @@ public class GamePlayed extends AppCompatActivity implements RecyclerViewInterfa
         RecyclerView rv = findViewById(R.id.rv_gameHistory);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        adapter = new RecyclerViewAdapter(GamePlayed.this, GamePlayed.this, gameTypeString);
+        adapter = new RecyclerViewAdapter(GamePlayedListActivity.this, GamePlayedListActivity.this, gameTypeString);
         rv.setAdapter(adapter);
     }
 
     @Override
     public void onItemLongClick(int position) {
-        Intent intent = NewGameCreationScreen.makeIntent(GamePlayed.this, gameTypeString, position);
+        Intent intent = NewGameCreationScreen.makeIntent(GamePlayedListActivity.this, gameTypeString, position);
         startActivity(intent);
     }
 }
