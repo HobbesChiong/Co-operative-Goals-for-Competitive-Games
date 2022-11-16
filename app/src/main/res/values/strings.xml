@@ -30,6 +30,7 @@
     <string name="blank">""</string>
     <string name="game_achievement_level_placeholder">Awaiting input…</string>
     <string name="game_achievement_level_calculating">Calculating scores…</string>
+    <string name="player_i_score">Player %1$d score: </string>
     <string name="achievement_level">Achievement Level: </string>
     <string name="player_number_error">Number of Players needs to be above 0</string>
     <string name="game_saved_toast"> game saved!</string>
@@ -53,6 +54,9 @@
     <string name="choose_number_of_players">Choose number of players</string>
     <string name="achievement_theme">Achievement Theme</string>
     <string name="difficulty_is_set_to">\"Difficulty is set to \"</string>
+    <string name="difficulty_selection">Difficulty Selection</string>
+    <string name="total_score">Total Score:</string>
+    <string name="calculate_score">Calculate Score</string>/>
     <string name="difficulty_selection">Difficulty Selection</string>
     <string name="difficulty">Difficulty:</string>/>
 </resources>
