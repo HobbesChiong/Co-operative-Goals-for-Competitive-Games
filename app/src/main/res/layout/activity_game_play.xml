@@ -6,4 +6,71 @@
     android:layout_height="match_parent"
     tools:context=".activities.GamePlayActivity">
 
+    <TextView
+        android:id="@+id/tvChoosePlayerAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif"
+        android:text="@string/choose_number_of_players"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnDifficultyNormal" />
+
+    <Button
+        android:id="@+id/btnDifficultyEasy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/easy"
+        app:layout_constraintEnd_toStartOf="@+id/btnDifficultyNormal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnDifficultyNormal" />
+
+    <TextView
+        android:id="@+id/tvChooseDifficulty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/choose_your_difficulty"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etPlayerCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="@+id/tvChoosePlayerAmount"
+        app:layout_constraintStart_toStartOf="@+id/tvChoosePlayerAmount"
+        app:layout_constraintTop_toBottomOf="@+id/tvChoosePlayerAmount"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/btnDifficultyHard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnDifficultyNormal"
+        app:layout_constraintTop_toTopOf="@+id/btnDifficultyNormal" />
+
+    <Button
+        android:id="@+id/btnDifficultyNormal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/normal"
+        app:layout_constraintEnd_toEndOf="@+id/tvChooseDifficulty"
+        app:layout_constraintStart_toStartOf="@+id/tvChooseDifficulty"
+        app:layout_constraintTop_toBottomOf="@+id/tvChooseDifficulty" />
 </androidx.constraintlayout.widget.ConstraintLayout>
