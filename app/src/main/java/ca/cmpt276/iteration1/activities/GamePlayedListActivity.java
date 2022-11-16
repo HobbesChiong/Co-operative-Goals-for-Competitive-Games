@@ -35,14 +35,14 @@ import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 import ca.cmpt276.iteration1.model.PlayedGame;
-import ca.cmpt276.iteration1.model.RecyclerViewAdapter;
-import ca.cmpt276.iteration1.model.RecyclerViewInterface;
+import ca.cmpt276.iteration1.adapters.GamePlayedListRecyclerView;
+import ca.cmpt276.iteration1.interfaces.GamePlayedListRecyclerViewInterface;
 
 
 /**
  * Activity which lists games played for a specific type of game.
  */
-public class GamePlayedListActivity extends AppCompatActivity implements RecyclerViewInterface {
+public class GamePlayedListActivity extends AppCompatActivity implements GamePlayedListRecyclerViewInterface {
 
     private static final String GAME_TYPE_INDEX = "Position";
     // Index of which type of game we're dealing with
@@ -51,7 +51,7 @@ public class GamePlayedListActivity extends AppCompatActivity implements Recycle
     private GameManager gm;
     private String gameTypeString;
     private GameType gameType;
-    private RecyclerViewAdapter adapter;
+    private GamePlayedListRecyclerView adapter;
 
     private TextView achievementLevels;
     private EditText achievementLevelPlayerCount;
@@ -248,7 +248,7 @@ public class GamePlayedListActivity extends AppCompatActivity implements Recycle
         RecyclerView rv = findViewById(R.id.rv_gameHistory);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        adapter = new RecyclerViewAdapter(GamePlayedListActivity.this, GamePlayedListActivity.this, gameTypeString);
+        adapter = new GamePlayedListRecyclerView(GamePlayedListActivity.this, GamePlayedListActivity.this, gameTypeString);
         rv.setAdapter(adapter);
     }
 

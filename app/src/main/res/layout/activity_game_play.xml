@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".activities.GamePlayActivity">
 
+    <ImageView
+        android:id="@+id/ivGameSaveAnimation"
+        android:layout_width="113dp"
+        android:layout_height="108dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPlayerCount"
+        app:srcCompat="@android:drawable/btn_star_big_on" />
+
     <TextView
         android:id="@+id/tvChoosePlayerAmount"
         android:layout_width="wrap_content"
@@ -73,4 +83,12 @@
         app:layout_constraintEnd_toEndOf="@+id/tvChooseDifficulty"
         app:layout_constraintStart_toStartOf="@+id/tvChooseDifficulty"
         app:layout_constraintTop_toBottomOf="@+id/tvChooseDifficulty" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivGameSaveAnimation" />
 </androidx.constraintlayout.widget.ConstraintLayout>
