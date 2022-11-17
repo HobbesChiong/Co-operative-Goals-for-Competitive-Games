@@ -160,11 +160,9 @@ public class NewGameCreationScreen extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         // inflate menu
         getMenuInflater().inflate(R.menu.menu_add_type_appbar, menu);
         return true;
-
     }
 
     @Override

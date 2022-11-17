@@ -10,6 +10,7 @@ package ca.cmpt276.iteration1.model;
 
 import androidx.annotation.NonNull;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class PlayedGame {
@@ -18,15 +19,20 @@ public class PlayedGame {
     private int totalScore;
     private int achievementIndex;
     private String difficulty;
-    private List playerScore;
+    private HashMap<Integer, Integer> playerScores;
 
-    public PlayedGame(String type, int numberOfPlayers, int totalScore, int achievementIndex, String difficulty, List playerScore) {
+    public PlayedGame(String type,
+                      int numberOfPlayers,
+                      int totalScore,
+                      int achievementIndex,
+                      String difficulty,
+                      HashMap<Integer, Integer> playerScores) {
         this.type = type;
         this.numberOfPlayers = numberOfPlayers;
         this.totalScore = totalScore;
         this.achievementIndex = achievementIndex;
         this.difficulty = difficulty;
-        this.playerScore = playerScore;
+        this.playerScores = playerScores;
     }
 
     public String getType() {
@@ -40,6 +46,8 @@ public class PlayedGame {
     public int getTotalScore() {
         return totalScore;
     }
+
+    public HashMap<Integer, Integer> getPlayerScores() { return playerScores; }
 
     public String getAchievement() {
         GameManager gameManager = GameManager.getInstance();
