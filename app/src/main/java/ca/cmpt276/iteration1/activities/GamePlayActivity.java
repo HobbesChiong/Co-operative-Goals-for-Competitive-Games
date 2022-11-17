@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 
@@ -36,7 +37,7 @@ public class GamePlayActivity extends AppCompatActivity {
     private PlayedGame playedGame;
 
     private String difficulty;
-    private int numberOfPlayers;
+    private int playerAmount;
     private int gameScore;
 
     private HashMap<Integer, Integer> playerScores;
@@ -76,7 +77,7 @@ public class GamePlayActivity extends AppCompatActivity {
         gameType = gameManager.getGameTypeFromString(gameTypeString);
         playedGame = gameManager.getSpecificPlayedGames(gameTypeString).get(gamePlayedPosition);
         difficulty = playedGame.getDifficulty();
-        numberOfPlayers = playedGame.getNumberOfPlayers();
+        playerAmount = playedGame.getNumberOfPlayers();
         gameScore = playedGame.getTotalScore();
         playerScores = playedGame.getPlayerScores();
 
@@ -153,7 +154,12 @@ public class GamePlayActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+            try {
+                playerAmount = Integer.parseInt(etPlayerAmount.getText().toString());
+            }
+            catch (NumberFormatException numberFormatException){
+                Toast.makeText(GamePlayActivity.this, "Invalid player amount", Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
@@ -161,6 +167,19 @@ public class GamePlayActivity extends AppCompatActivity {
 
         }
     };
+
+    private void updateRecyclerViewAdapter(){
+
+    }
+
+    private void setupRecyclerView(){
+
+    }
+
+    private void setupGameInfoModels() {
+
+    }
+
 
     private final TextWatcher playerScoreInputWatcher = new TextWatcher() {
 
