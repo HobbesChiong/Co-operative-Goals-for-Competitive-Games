@@ -20,11 +20,12 @@ import android.widget.Toast;
 import java.util.HashMap;
 
 import ca.cmpt276.iteration1.R;
+import ca.cmpt276.iteration1.interfaces.PlayerScoreInputRecyclerViewInterface;
 import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 import ca.cmpt276.iteration1.model.PlayedGame;
 
-public class GamePlayActivity extends AppCompatActivity {
+public class GamePlayActivity extends AppCompatActivity implements PlayerScoreInputRecyclerViewInterface {
 
     private final int GAME_PLAYED_POSITION_NON_EXISTENT = -1;
 
@@ -136,12 +137,15 @@ public class GamePlayActivity extends AppCompatActivity {
     }
 
     private void enableHiddenElements(){
+        // The player amount edittext and recyclerview containing cards to fill in player scores are hidden by default
+        // The user must select a difficulty first in order to select amount of players and input scores
         TextView tvChoosePlayerAmount = findViewById(R.id.tvChoosePlayerAmount);
         etPlayerAmount = findViewById(R.id.etPlayerCount);
         rvPlayerScoreInputs = findViewById(R.id.rvPlayerScoreInputs);
 
         tvChoosePlayerAmount.setVisibility(View.VISIBLE);
         etPlayerAmount.setVisibility(View.VISIBLE);
+        etPlayerAmount.addTextChangedListener(playerCountInputWatcher);
         rvPlayerScoreInputs.setVisibility(View.VISIBLE);
     }
 
@@ -203,4 +207,8 @@ public class GamePlayActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void signifyPlayerScoreChanged(int position) {
+
+    }
 }
