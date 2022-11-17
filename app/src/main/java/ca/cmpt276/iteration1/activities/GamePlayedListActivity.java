@@ -19,7 +19,6 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -35,7 +34,7 @@ import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 import ca.cmpt276.iteration1.model.PlayedGame;
-import ca.cmpt276.iteration1.adapters.GamePlayedListRecyclerView;
+import ca.cmpt276.iteration1.adapters.GamePlayedListRecyclerViewAdapter;
 import ca.cmpt276.iteration1.interfaces.GamePlayedListRecyclerViewInterface;
 
 
@@ -51,7 +50,7 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
     private GameManager gm;
     private String gameTypeString;
     private GameType gameType;
-    private GamePlayedListRecyclerView adapter;
+    private GamePlayedListRecyclerViewAdapter adapter;
 
     private TextView achievementLevels;
     private EditText achievementLevelPlayerCount;
@@ -146,15 +145,9 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
 
     private void setUpFab() {
         FloatingActionButton fab = findViewById(R.id.fab_addGame);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GameType t = gm.getGameTypeAtIndex(gameTypeIndex);
-                String gameType = t.getGameType();
-
-                Intent intent = GameDifficultyScreen.makeIntent(GamePlayedListActivity.this, gameType);
-                startActivity(intent);
-            }
+        fab.setOnClickListener(v -> {
+            Intent intent = GamePlayActivity.makeIntent(GamePlayedListActivity.this, gameTypeString);
+            startActivity(intent);
         });
     }
 
@@ -248,13 +241,13 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
         RecyclerView rv = findViewById(R.id.rv_gameHistory);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        adapter = new GamePlayedListRecyclerView(GamePlayedListActivity.this, GamePlayedListActivity.this, gameTypeString);
+        adapter = new GamePlayedListRecyclerViewAdapter(GamePlayedListActivity.this, GamePlayedListActivity.this, gameTypeString);
         rv.setAdapter(adapter);
     }
 
     @Override
     public void onItemLongClick(int position) {
-        Intent intent = NewGameCreationScreen.makeIntent(GamePlayedListActivity.this, gameTypeString, position);
+        Intent intent = GamePlayActivity.makeIntent(GamePlayedListActivity.this, gameTypeString, position);
         startActivity(intent);
     }
 }

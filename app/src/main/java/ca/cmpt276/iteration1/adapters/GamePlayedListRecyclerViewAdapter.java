@@ -22,7 +22,7 @@ import ca.cmpt276.iteration1.interfaces.GamePlayedListRecyclerViewInterface;
  * Code inspired by blog post on 29 Oct, 2022 from https://thumbb13555.pixnet.net/blog/post/311803031-%E7%A2%BC%E8%BE%B2%E6%97%A5%E5%B8%B8-%E3%80%8Eandroid-studio%E3%80%8F%E5%9F%BA%E6%9C%ACrecyclerview%E7%94%A8%E6%B3%95
  * Citation: https://www.youtube.com/watch?v=7GPUpvcU1FE
  * */
-public class GamePlayedListRecyclerView extends RecyclerView.Adapter<GamePlayedListRecyclerView.ViewHolder> {
+public class GamePlayedListRecyclerViewAdapter extends RecyclerView.Adapter<GamePlayedListRecyclerViewAdapter.ViewHolder> {
 
     private final GamePlayedListRecyclerViewInterface recyclerViewInterface;
 
@@ -31,7 +31,7 @@ public class GamePlayedListRecyclerView extends RecyclerView.Adapter<GamePlayedL
     ArrayList<PlayedGame> playedGames;
     Context context;
 
-    public GamePlayedListRecyclerView(Context context, GamePlayedListRecyclerViewInterface recyclerViewInterface, String gameTypeString){
+    public GamePlayedListRecyclerViewAdapter(Context context, GamePlayedListRecyclerViewInterface recyclerViewInterface, String gameTypeString){
         this.gameManager = GameManager.getInstance();
         this.gameType = gameManager.getGameTypeFromString(gameTypeString);
         this.playedGames = gameManager.getSpecificPlayedGames(gameTypeString);
@@ -67,9 +67,9 @@ public class GamePlayedListRecyclerView extends RecyclerView.Adapter<GamePlayedL
 
     @NonNull
     @Override
-    public GamePlayedListRecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public GamePlayedListRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_history_list_layout, parent, false);
-        return new GamePlayedListRecyclerView.ViewHolder(view, recyclerViewInterface);
+        return new GamePlayedListRecyclerViewAdapter.ViewHolder(view, recyclerViewInterface);
     }
 
     @Override

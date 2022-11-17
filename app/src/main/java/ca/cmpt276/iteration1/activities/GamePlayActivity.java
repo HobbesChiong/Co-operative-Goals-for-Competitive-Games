@@ -1,5 +1,6 @@
 package ca.cmpt276.iteration1.activities;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -7,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -86,10 +88,15 @@ public class GamePlayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_play);
 
         gameManager = GameManager.getInstance();
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("Create New Game");
+
         setDifficultyButtons();
         extractIntentExtras();
 
-        if (difficultySelected){
+        if (editGameActivity == true && difficultySelected == true){
+            actionBar.setTitle("Edit Game");
             enableHiddenElements();
         }
     }
@@ -138,7 +145,5 @@ public class GamePlayActivity extends AppCompatActivity {
     private void setEditGameInfo(){
 
     }
-
-
 
 }

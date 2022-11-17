@@ -172,8 +172,8 @@ public class NewGameCreationScreen extends AppCompatActivity {
                 try {
                     // Creating a new game
                     if (gamePlayedPosition == POSITION_NON_EXISTENT){
-                        PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementIndex(gameScore, numberOfPlayers,difficulty), difficulty, playerScore);
-                        gm.addPlayedGame(currGame);
+                        //PlayedGame currGame = new PlayedGame(gameTypeString, numberOfPlayers, gameScore, gameType.getAchievementIndex(gameScore, numberOfPlayers,difficulty), difficulty, playerScore);
+                        //gm.addPlayedGame(currGame);
 
                         String res = gameTypeString + getString(R.string.game_saved_toast);
                         Toast.makeText(this, res,Toast.LENGTH_SHORT).show();
