@@ -111,8 +111,8 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
         if (editGameActivity == true && difficultySelected == true){
             actionBar.setTitle("Edit Game");
-            enableHiddenElements();
         }
+
     }
 
     @Override
@@ -139,6 +139,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
                     }
                     // Editing an existing game
                     else {
+                        Toast.makeText(GamePlayActivity.this, "Game changes saved.", Toast.LENGTH_SHORT).show();
                         saveExistingGame();
                     }
 
@@ -196,7 +197,8 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     }
 
     void saveExistingGame(){
-
+        int achievementIndex = gameType.getAchievementIndex(totalScore, playerAmount, difficulty);
+        playedGame.editPlayedGame(playerAmount, totalScore, achievementIndex, difficulty, playerScores);
     }
 
     private void setDifficultyButtons(){
@@ -287,10 +289,14 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             for (int i = 0; i < playerAmount; i++){
                 playerScoreInputs.add(new PlayerScoreInput(i, playerScores.get(i)));
             }
+
+            setupRecyclerView(playerScoreInputs);
         }
     }
 
     private void setEditGameInfo(){
+        enableHiddenElements();
+
         editGameActivity = true;
         difficultySelected = true;
 
@@ -302,8 +308,13 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         totalScore = playedGame.getTotalScore();
         playerScores = playedGame.getPlayerScores();
 
-        EditText etPlayerScoreInput = findViewById(R.id.etPlayerScoreInput);
-        etPlayerScoreInput.setText(String.valueOf(playerAmount));
+        EditText etPlayerCount = findViewById(R.id.etPlayerCount);
+        etPlayerCount.setText(String.valueOf(playerAmount));
+
+        TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
+        String achievementTitle = gameType.getAchievementLevel(totalScore, playerAmount, difficulty);
+
+        tvScoreWithAchievementLevel.setText("Score: " + totalScore + " - " + achievementTitle);
 
         setupGameInfoModels();
     }

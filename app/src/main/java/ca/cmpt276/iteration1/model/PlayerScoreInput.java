@@ -8,12 +8,12 @@ public class PlayerScoreInput {
 
     public PlayerScoreInput(int playerNumber) {
         this.playerId = playerNumber;
-        this.playerName = "Player " + playerId;
+        this.playerName = "Player " + (playerId + 1);
     }
 
     public PlayerScoreInput(int playerNumber, int playerScore){
         this.playerId = playerNumber;
-        this.playerName = "Player " + playerId;
+        this.playerName = "Player " + (playerId + 1);
         this.playerScore = playerScore;
     }
 
@@ -23,12 +23,13 @@ public class PlayerScoreInput {
     public String getPlayerName(){
         return playerName;
     }
+    public int getPlayerScore() { return playerScore; }
 
     public void setPlayerId(int playerId){
         this.playerId = playerId;
     }
     public void setPlayerName(int playerId){
-        this.playerName = "Player " + playerId;
+        this.playerName = "Player " + (playerId + 1);
     }
 
 }

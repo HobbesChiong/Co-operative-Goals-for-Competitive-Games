@@ -75,6 +75,10 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
         // As we are creating new cards on the spot, we need to assign them IDs that will stay persistent throughout the activity
         int id = createCustomId(position);
         holder.etPlayerScoreInput.setId(id);
+
+        // If we are editing an existing game, set the edit text fields to existing player scores
+        holder.etPlayerScoreInput.setText(String.valueOf(playerScoreInputs.get(position).getPlayerScore()));
+
         holder.etPlayerScoreInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
