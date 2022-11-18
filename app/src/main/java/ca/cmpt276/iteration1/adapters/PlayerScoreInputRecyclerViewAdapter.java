@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import ca.cmpt276.iteration1.R;
+import ca.cmpt276.iteration1.activities.GamePlayActivity;
 import ca.cmpt276.iteration1.interfaces.PlayerScoreInputRecyclerViewInterface;
 import ca.cmpt276.iteration1.model.PlayerScoreInput;
 
@@ -30,7 +31,6 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
     private Context context;
     private boolean editGame;
     private ArrayList<PlayerScoreInput> playerScoreInputs;
-    private ArrayList<Integer> playerScoreInputIds = new ArrayList<>();
     private PlayerScoreInputRecyclerViewInterface recyclerViewInterface;
 
     // Stores the data in the edit text for all the recyclerviews
@@ -89,9 +89,7 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
         int id = createCustomId(position);
         holder.etPlayerScoreInput.setId(id);
 
-        // If we are editing an existing game, set the edit text fields to existing player scores
-
-        // todo: set precvious game scores into the stored int array!!
+        // Load in the previous value the edit text had
         holder.etPlayerScoreInput.setText(String.valueOf(recyclerViewEditTextData[position]));
 
 
@@ -105,7 +103,6 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 // Toast.makeText(context, "Player " + (position + 1) + " (ID: " + id + ") has been updated.", Toast.LENGTH_SHORT).show();
                 Log.i("Something", id + " has changed");
-                recyclerViewInterface.checkAllPlayerScoreInputs();
 
                 // Try to record the current value of the score if it exists
                 try {
@@ -114,6 +111,9 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
                 } catch (Exception e){
 
                 }
+
+
+                recyclerViewInterface.checkAllPlayerScoreInputs();
             }
 
             @Override
@@ -123,8 +123,6 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
         });
 
         holder.setIsRecyclable(false);
-
-        playerScoreInputIds.add(id);
     }
 
     private int createCustomId(int position){
@@ -146,7 +144,12 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
         return playerScoreInputs.size();
     }
 
-    public ArrayList<Integer> getPlayerScoreInputIds(){
-        return playerScoreInputIds;
+    public ArrayList<Integer> getScores() {
+        ArrayList<Integer> score = new ArrayList<>();
+        for (int i : recyclerViewEditTextData) {
+            score.add(i);
+        }
+
+        return score;
     }
 }

@@ -337,33 +337,34 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     @Override
     public void checkAllPlayerScoreInputs() {
         grabPlayerScoreInputIds();
+        updateScoreTextView();
     }
 
     private void grabPlayerScoreInputIds() {
-        ArrayList<Integer> playerScoreInputIds = recyclerViewAdapter.getPlayerScoreInputIds();
-        playerScores = new ArrayList<>();
+//        ArrayList<Integer> playerScoreInputIds = recyclerViewAdapter.getPlayerScoreInputIds();
+//        playerScores = new ArrayList<>();
+//
+//        TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
+//        tvScoreWithAchievementLevel.setText("Calculating total score...");
+//
+//        for (int id : playerScoreInputIds){
+//            EditText playerScoreInput = findViewById(id);
+//
+//            if (playerScoreInput == null){
+//                Log.i("some message", id + " seems to be null");
+//            }
+//
+//            try {
+//                int value = Integer.parseInt(playerScoreInput.getText().toString());
+//                playerScores.add(Integer.parseInt(playerScoreInput.getText().toString()));
+//            }
+//            catch (Exception exception){
+//                Log.i("IncompleteInputs", "User has not finished inputting all values");
+//                return;
+//            }
+//        }
 
-        TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
-        tvScoreWithAchievementLevel.setText("Calculating total score...");
-
-        for (int id : playerScoreInputIds){
-            EditText playerScoreInput = findViewById(id);
-
-            if (playerScoreInput == null){
-                Log.i("some message", id + " seems to be null");
-            }
-
-            try {
-                int value = Integer.parseInt(playerScoreInput.getText().toString());
-                playerScores.add(Integer.parseInt(playerScoreInput.getText().toString()));
-            }
-            catch (Exception exception){
-                Log.i("IncompleteInputs", "User has not finished inputting all values");
-                return;
-            }
-        }
-
-        setTotalGameScore(playerScores);
+        setTotalGameScore(recyclerViewAdapter.getScores());
     }
 
     private void setTotalGameScore(ArrayList<Integer> playerScores){
@@ -377,7 +378,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         gameCompleted = true;
     }
 
-    private void updateScoreTextView() {
+    public void updateScoreTextView() {
         // If there aren't any players, don't update the score textview
         if (playerAmount == 0) {
             return;
