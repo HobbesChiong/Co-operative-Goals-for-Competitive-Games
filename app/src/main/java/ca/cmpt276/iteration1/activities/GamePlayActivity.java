@@ -267,7 +267,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
                 setupGameInfoModels();
             }
             catch (NumberFormatException numberFormatException){
-                //Toast.makeText(GamePlayActivity.this, "Invalid player amount", Toast.LENGTH_SHORT).show();
                 playersSelected = false;
                 Log.i("Undefined Player Amount", "User has deleted player amount, awaiting new input.");
             }
@@ -341,29 +340,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     }
 
     private void grabPlayerScoreInputIds() {
-//        ArrayList<Integer> playerScoreInputIds = recyclerViewAdapter.getPlayerScoreInputIds();
-//        playerScores = new ArrayList<>();
-//
-//        TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
-//        tvScoreWithAchievementLevel.setText("Calculating total score...");
-//
-//        for (int id : playerScoreInputIds){
-//            EditText playerScoreInput = findViewById(id);
-//
-//            if (playerScoreInput == null){
-//                Log.i("some message", id + " seems to be null");
-//            }
-//
-//            try {
-//                int value = Integer.parseInt(playerScoreInput.getText().toString());
-//                playerScores.add(Integer.parseInt(playerScoreInput.getText().toString()));
-//            }
-//            catch (Exception exception){
-//                Log.i("IncompleteInputs", "User has not finished inputting all values");
-//                return;
-//            }
-//        }
-
         setTotalGameScore(recyclerViewAdapter.getScores());
     }
 
@@ -372,7 +348,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         for (int score : playerScores){
             totalScore += score;
         }
-
+        this.playerScores = playerScores;
         updateScoreTextView();
 
         gameCompleted = true;
