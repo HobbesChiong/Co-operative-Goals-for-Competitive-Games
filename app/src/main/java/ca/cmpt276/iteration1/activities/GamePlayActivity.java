@@ -2,6 +2,7 @@ package ca.cmpt276.iteration1.activities;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -17,13 +19,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import ca.cmpt276.iteration1.R;
+import ca.cmpt276.iteration1.adapters.PlayerScoreInputRecyclerViewAdapter;
 import ca.cmpt276.iteration1.interfaces.PlayerScoreInputRecyclerViewInterface;
 import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 import ca.cmpt276.iteration1.model.PlayedGame;
+import ca.cmpt276.iteration1.model.PlayerScoreInput;
 
 public class GamePlayActivity extends AppCompatActivity implements PlayerScoreInputRecyclerViewInterface {
 
@@ -160,9 +165,11 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             try {
                 playerAmount = Integer.parseInt(etPlayerAmount.getText().toString());
+                setupGameInfoModels();
             }
             catch (NumberFormatException numberFormatException){
-                Toast.makeText(GamePlayActivity.this, "Invalid player amount", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(GamePlayActivity.this, "Invalid player amount", Toast.LENGTH_SHORT).show();
+                Log.i("Undefined Player Amount", "User has deleted player amount, awaiting new input.");
             }
         }
 
@@ -172,43 +179,39 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         }
     };
 
-    private void updateRecyclerViewAdapter(){
-
-    }
-
-    private void setupRecyclerView(){
-
-    }
-
     private void setupGameInfoModels() {
+        // Nothing too complicated, we're just giving each "player score input card" an id ranging from 0 to playerAmount
+        // This will help is keep track of which cards have a score inputted or not later on
 
+        // If we are creating a new game, we do not need to pull existing scores from the existing game
+        if (editGameActivity == false){
+            ArrayList<PlayerScoreInput> playerScoreInputs = new ArrayList<>();
+            for (int i = 0; i < playerAmount; i++){
+                playerScoreInputs.add(new PlayerScoreInput(i));
+            }
+
+            setupRecyclerView(playerScoreInputs);
+        }
+        // If we are editing a game, we need to pull
     }
 
+    private void setupRecyclerView(ArrayList<PlayerScoreInput> playerScoreInputs){
+        RecyclerView recyclerView = findViewById(R.id.rvPlayerScoreInputs);
+        PlayerScoreInputRecyclerViewAdapter adapter = new PlayerScoreInputRecyclerViewAdapter(GamePlayActivity.this, playerScoreInputs, editGameActivity, GamePlayActivity.this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(GamePlayActivity.this));
+    }
 
-    private final TextWatcher playerScoreInputWatcher = new TextWatcher() {
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-
-        }
-    };
+    private void grabPlayerScores() {
+        
+    }
 
     private void setEditGameInfo(){
 
     }
 
     @Override
-    public void signifyPlayerScoreChanged(int position) {
+    public void checkAllPlayerScoreInputs() {
 
     }
 }
