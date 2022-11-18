@@ -29,7 +29,7 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
     private Context context;
     private boolean editGame;
     private ArrayList<PlayerScoreInput> playerScoreInputs;
-    private ArrayList<Integer> playerScoreInputIds;
+    private ArrayList<Integer> playerScoreInputIds = new ArrayList<>();
     private PlayerScoreInputRecyclerViewInterface recyclerViewInterface;
 
     public PlayerScoreInputRecyclerViewAdapter(Context context, ArrayList<PlayerScoreInput> playerScoreInputs, boolean editGame, PlayerScoreInputRecyclerViewInterface recyclerViewInterface){

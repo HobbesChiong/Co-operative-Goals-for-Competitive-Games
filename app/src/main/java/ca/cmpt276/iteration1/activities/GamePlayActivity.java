@@ -12,12 +12,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,11 +42,13 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
     private String difficulty;
     private int playerAmount;
-    private int gameScore;
+    private int totalScore;
 
     private HashMap<Integer, Integer> playerScores;
+
     private EditText etPlayerAmount;
     private RecyclerView rvPlayerScoreInputs;
+    private PlayerScoreInputRecyclerViewAdapter recyclerViewAdapter;
 
     // If a context and gameType are given, we are creating a new game
     public static Intent makeIntent(Context context, String gameTypeString){
@@ -84,7 +84,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         playedGame = gameManager.getSpecificPlayedGames(gameTypeString).get(gamePlayedPosition);
         difficulty = playedGame.getDifficulty();
         playerAmount = playedGame.getNumberOfPlayers();
-        gameScore = playedGame.getTotalScore();
+        totalScore = playedGame.getTotalScore();
         playerScores = playedGame.getPlayerScores();
 
         // If we are editing a game, set up the screen to display info
@@ -165,6 +165,14 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             try {
                 playerAmount = Integer.parseInt(etPlayerAmount.getText().toString());
+
+                // When the user chagnes the amount of players, we want to reset the adapter and textview for total score
+                // This prevents any old data from persisting and being carried over - basically gives the user a fresh start!
+                recyclerViewAdapter = null;
+                TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
+                tvScoreWithAchievementLevel.setText("Awaiting player score inputs...");
+
+
                 setupGameInfoModels();
             }
             catch (NumberFormatException numberFormatException){
@@ -197,13 +205,43 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
     private void setupRecyclerView(ArrayList<PlayerScoreInput> playerScoreInputs){
         RecyclerView recyclerView = findViewById(R.id.rvPlayerScoreInputs);
-        PlayerScoreInputRecyclerViewAdapter adapter = new PlayerScoreInputRecyclerViewAdapter(GamePlayActivity.this, playerScoreInputs, editGameActivity, GamePlayActivity.this);
-        recyclerView.setAdapter(adapter);
+        recyclerViewAdapter = new PlayerScoreInputRecyclerViewAdapter(GamePlayActivity.this, playerScoreInputs, editGameActivity, GamePlayActivity.this);
+        recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(GamePlayActivity.this));
     }
 
-    private void grabPlayerScores() {
-        
+    private void grabPlayerScoreInputIds() {
+        ArrayList<Integer> playerScoreInputIds = recyclerViewAdapter.getPlayerScoreInputIds();
+        ArrayList<Integer> playerScores = new ArrayList<>();
+
+        TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
+        tvScoreWithAchievementLevel.setText("Calculating total score...");
+
+        for (int id : playerScoreInputIds){
+            EditText playerScoreInput = findViewById(id);
+
+            try {
+                int value = Integer.parseInt(playerScoreInput.getText().toString());
+                playerScores.add(Integer.parseInt(playerScoreInput.getText().toString()));
+            }
+            catch (NumberFormatException numberFormatException){
+                Log.i("IncompleteInputs", "User has not finished inputting all values");
+                return;
+            }
+        }
+
+        setTotalGameScore(playerScores);
+    }
+
+    private void setTotalGameScore(ArrayList<Integer> playerScores){
+        TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
+
+        totalScore = 0;
+        for (int score : playerScores){
+            totalScore += score;
+        }
+
+        tvScoreWithAchievementLevel.setText(String.valueOf(totalScore));
     }
 
     private void setEditGameInfo(){
@@ -212,6 +250,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
     @Override
     public void checkAllPlayerScoreInputs() {
-
+        grabPlayerScoreInputIds();
     }
 }
