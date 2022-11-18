@@ -60,6 +60,10 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
     private ArrayList<Integer> playerScores;
 
+    // Array that stores the value input into each element in the recyclerview, so it's not lost
+    // when scrolled offscreen
+    private int[] recyclerViewData;
+
     private EditText etPlayerAmount;
     private RecyclerView rvPlayerScoreInputs;
     private PlayerScoreInputRecyclerViewAdapter recyclerViewAdapter;

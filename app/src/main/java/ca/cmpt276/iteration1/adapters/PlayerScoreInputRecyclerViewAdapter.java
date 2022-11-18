@@ -33,11 +33,24 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
     private ArrayList<Integer> playerScoreInputIds = new ArrayList<>();
     private PlayerScoreInputRecyclerViewInterface recyclerViewInterface;
 
+    // Stores the data in the edit text for all the recyclerviews
+    private int[] recyclerViewEditTextData;
+
     public PlayerScoreInputRecyclerViewAdapter(Context context, ArrayList<PlayerScoreInput> playerScoreInputs, boolean editGame, PlayerScoreInputRecyclerViewInterface recyclerViewInterface){
         this.context = context;
         this.playerScoreInputs = playerScoreInputs;
         this.editGame = editGame;
         this.recyclerViewInterface = recyclerViewInterface;
+
+        recyclerViewEditTextData = new int[playerScoreInputs.size()];
+
+        // If we're editing the game, load all our previous scores into the list of data
+        if (editGame) {
+            for (int i = 0; i < playerScoreInputs.size(); i ++) {
+                int playerScore = playerScoreInputs.get(i).getPlayerScore();
+                recyclerViewEditTextData[i] = playerScore;
+            }
+        }
     }
 
     // Viewholder for recyclerview
@@ -77,7 +90,10 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
         holder.etPlayerScoreInput.setId(id);
 
         // If we are editing an existing game, set the edit text fields to existing player scores
-        holder.etPlayerScoreInput.setText(String.valueOf(playerScoreInputs.get(position).getPlayerScore()));
+
+        // todo: set precvious game scores into the stored int array!!
+        holder.etPlayerScoreInput.setText(String.valueOf(recyclerViewEditTextData[position]));
+
 
         holder.etPlayerScoreInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -90,6 +106,14 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
                 // Toast.makeText(context, "Player " + (position + 1) + " (ID: " + id + ") has been updated.", Toast.LENGTH_SHORT).show();
                 Log.i("Something", id + " has changed");
                 recyclerViewInterface.checkAllPlayerScoreInputs();
+
+                // Try to record the current value of the score if it exists
+                try {
+                    int scoreValue = Integer.parseInt(holder.etPlayerScoreInput.getText().toString());
+                    recyclerViewEditTextData[position] = scoreValue;
+                } catch (Exception e){
+
+                }
             }
 
             @Override

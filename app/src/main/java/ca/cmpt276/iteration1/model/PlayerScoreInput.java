@@ -31,5 +31,8 @@ public class PlayerScoreInput {
     public void setPlayerName(int playerId){
         this.playerName = "Player " + (playerId + 1);
     }
+    public void setPlayerScore(int playerScore){
+        this.playerScore = playerScore;
+    }
 
 }
