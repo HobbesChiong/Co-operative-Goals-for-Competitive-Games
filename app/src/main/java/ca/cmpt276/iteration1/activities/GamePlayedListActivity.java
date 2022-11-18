@@ -25,9 +25,15 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import ca.cmpt276.iteration1.R;
@@ -152,9 +158,28 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
     }
 
     private void saveGamesPlayedList(){
+        // https://www.youtube.com/watch?v=jcliHGR3CHo
         SharedPreferences sharedPreferences = getSharedPreferences("Game Played Preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
+
+        // https://www.javadoc.io/doc/com.google.code.gson/gson/latest/com.google.gson/com/google/gson/GsonBuilder.html
+        // https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/time/LocalDateTime.html
+        // https://www.javadoc.io/doc/com.google.code.gson/gson/2.8.1/com/google/gson/TypeAdapter.html
+        // https://www.javadoc.io/doc/com.google.code.gson/gson/2.6.2/com/google/gson/stream/JsonWriter.html
+        // https://stackoverflow.com/questions/61432170/how-to-serialize-localdate-using-gson
+
+        Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class,
+                new TypeAdapter<LocalDateTime>() {
+                    @Override
+                    public void write(JsonWriter jsonWriter,
+                                      LocalDateTime localDateTime) throws IOException {
+                        jsonWriter.value(localDateTime.toString());
+                    }
+                    @Override
+                    public LocalDateTime read(JsonReader jsonReader) throws IOException {
+                        return LocalDateTime.parse(jsonReader.nextString());
+                    }
+                }).setPrettyPrinting().create();
 
         String json = gson.toJson(gm.getPlayedGames());
 
@@ -165,8 +190,27 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
     private void loadGamesPlayedList() {
         gm = GameManager.getInstance();
 
+        // https://www.youtube.com/watch?v=jcliHGR3CHo
         SharedPreferences sharedPreferences = getSharedPreferences("Game Played Preferences", MODE_PRIVATE);
-        Gson gson = new Gson();
+
+        // https://www.javadoc.io/doc/com.google.code.gson/gson/latest/com.google.gson/com/google/gson/GsonBuilder.html
+        // https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/time/LocalDateTime.html
+        // https://www.javadoc.io/doc/com.google.code.gson/gson/2.8.1/com/google/gson/TypeAdapter.html
+        // https://www.javadoc.io/doc/com.google.code.gson/gson/2.6.2/com/google/gson/stream/JsonWriter.html
+        // https://stackoverflow.com/questions/61432170/how-to-serialize-localdate-using-gson
+
+        Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class,
+                new TypeAdapter<LocalDateTime>() {
+                    @Override
+                    public void write(JsonWriter jsonWriter,
+                                      LocalDateTime localDateTime) throws IOException {
+                        jsonWriter.value(localDateTime.toString());
+                    }
+                    @Override
+                    public LocalDateTime read(JsonReader jsonReader) throws IOException {
+                        return LocalDateTime.parse(jsonReader.nextString());
+                    }
+                }).setPrettyPrinting().create();
 
         String json = sharedPreferences.getString("Game Played List", null);
         Type type = new TypeToken<ArrayList<PlayedGame>>() {}.getType();

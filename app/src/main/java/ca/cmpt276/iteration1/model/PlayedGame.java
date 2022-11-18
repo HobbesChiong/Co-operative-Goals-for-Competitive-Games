@@ -64,10 +64,12 @@ public class PlayedGame {
         return GameType.getAchievementName(achievementIndex, gameManager.getAchievementTheme());
     }
 
-    public void editPlayedGame(int numberOfPlayers, int score, int achievementIndex){
+    public void editPlayedGame(int numberOfPlayers, int score, int achievementIndex, String difficulty, ArrayList<Integer> playerScores){
         this.numberOfPlayers = numberOfPlayers;
         this.totalScore = score;
         this.achievementIndex = achievementIndex;
+        this.difficulty = difficulty;
+        this.playerScores = playerScores;
     }
 
     @NonNull

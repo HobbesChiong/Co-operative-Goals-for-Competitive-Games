@@ -25,6 +25,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,18 +91,8 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             return;
         }
 
-        // If it does not exit, we are editing an existing game
-        // So grab the needed values
-        editGameActivity = true;
-        difficultySelected = true;
-        gameType = gameManager.getGameTypeFromString(gameTypeString);
-        playedGame = gameManager.getSpecificPlayedGames(gameTypeString).get(gamePlayedPosition);
-        difficulty = playedGame.getDifficulty();
-        playerAmount = playedGame.getNumberOfPlayers();
-        totalScore = playedGame.getTotalScore();
-        playerScores = playedGame.getPlayerScores();
-
-        // If we are editing a game, set up the screen to display info
+        // If a position exit, we are editing an existing game
+        // Set up the screen to display info
         setEditGameInfo();
     }
 
@@ -282,15 +274,38 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         // Nothing too complicated, we're just giving each "player score input card" an id ranging from 0 to playerAmount
         // This will help is keep track of which cards have a score inputted or not later on
 
+        ArrayList<PlayerScoreInput> playerScoreInputs = new ArrayList<>();
         // If we are creating a new game, we do not need to pull existing scores from the existing game
         if (editGameActivity == false){
-            ArrayList<PlayerScoreInput> playerScoreInputs = new ArrayList<>();
             for (int i = 0; i < playerAmount; i++){
                 playerScoreInputs.add(new PlayerScoreInput(i));
             }
 
             setupRecyclerView(playerScoreInputs);
         }
+        if (editGameActivity == true){
+            for (int i = 0; i < playerAmount; i++){
+                playerScoreInputs.add(new PlayerScoreInput(i, playerScores.get(i)));
+            }
+        }
+    }
+
+    private void setEditGameInfo(){
+        editGameActivity = true;
+        difficultySelected = true;
+
+        gameType = gameManager.getGameTypeFromString(gameTypeString);
+
+        playedGame = gameManager.getSpecificPlayedGames(gameTypeString).get(gamePlayedPosition);
+        difficulty = playedGame.getDifficulty();
+        playerAmount = playedGame.getNumberOfPlayers();
+        totalScore = playedGame.getTotalScore();
+        playerScores = playedGame.getPlayerScores();
+
+        EditText etPlayerScoreInput = findViewById(R.id.etPlayerScoreInput);
+        etPlayerScoreInput.setText(String.valueOf(playerAmount));
+
+        setupGameInfoModels();
     }
 
     private void setupRecyclerView(ArrayList<PlayerScoreInput> playerScoreInputs){
@@ -345,10 +360,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         String achievementTitle = gameType.getAchievementLevel(totalScore, playerAmount, difficulty);
         tvScoreWithAchievementLevel.setText("Score: " + totalScore + " - " + achievementTitle);
         gameCompleted = true;
-    }
-
-    private void setEditGameInfo(){
-
     }
 
 }
