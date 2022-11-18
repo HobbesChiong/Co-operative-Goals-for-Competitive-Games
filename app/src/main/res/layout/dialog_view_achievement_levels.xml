@@ -35,26 +35,27 @@
                 android:id="@+id/tvDialogInstructions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="150dp"
+                android:layout_marginBottom="16dp"
                 android:text="@string/input_player_count_below"
                 android:textAlignment="center"
                 android:textColor="#000000"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/btnDialogDifficultyNormal"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.507"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <EditText
                 android:id="@+id/etAchievementLevelPlayerCount"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="65dp"
                 android:ems="10"
                 android:inputType="number"
                 android:minHeight="48dp"
                 android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvDialogInstructions" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/tvAchievementLevels"
@@ -68,6 +69,33 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btnDialogDifficultyEasy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/easy"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btnDialogDifficultyNormal" />
+
+            <Button
+                android:id="@+id/btnDialogDifficultyNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/normal"
+                app:layout_constraintBottom_toTopOf="@+id/etAchievementLevelPlayerCount"
+                app:layout_constraintEnd_toStartOf="@+id/btnDialogDifficultyHard"
+                app:layout_constraintStart_toEndOf="@+id/btnDialogDifficultyEasy" />
+
+            <Button
+                android:id="@+id/btnDialogDifficultyHard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@string/hard"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btnDialogDifficultyNormal" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

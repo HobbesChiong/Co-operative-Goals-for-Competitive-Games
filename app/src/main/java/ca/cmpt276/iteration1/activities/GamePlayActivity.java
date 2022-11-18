@@ -212,16 +212,19 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             difficulty = "Easy";
             difficultySelected = true;
             enableHiddenElements();
+            updateScoreTextView();
         });
         btnDifficultyNormal.setOnClickListener(view -> {
             difficulty = "Normal";
             difficultySelected = true;
             enableHiddenElements();
+            updateScoreTextView();
         });
         btnDifficultyHard.setOnClickListener(view -> {
             difficulty = "Hard";
             difficultySelected = true;
             enableHiddenElements();
+            updateScoreTextView();
         });
     }
 
@@ -299,6 +302,8 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
         editGameActivity = true;
         difficultySelected = true;
+        playersSelected = true;
+        gameCompleted = true;
 
         gameType = gameManager.getGameTypeFromString(gameTypeString);
 
@@ -311,10 +316,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         EditText etPlayerCount = findViewById(R.id.etPlayerCount);
         etPlayerCount.setText(String.valueOf(playerAmount));
 
-        TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
-        String achievementTitle = gameType.getAchievementLevel(totalScore, playerAmount, difficulty);
-
-        tvScoreWithAchievementLevel.setText("Score: " + totalScore + " - " + achievementTitle);
+        updateScoreTextView();
 
         setupGameInfoModels();
     }
@@ -361,16 +363,20 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     }
 
     private void setTotalGameScore(ArrayList<Integer> playerScores){
-        TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
-
         totalScore = 0;
         for (int score : playerScores){
             totalScore += score;
         }
 
+        updateScoreTextView();
+
+        gameCompleted = true;
+    }
+
+    private void updateScoreTextView(){
+        TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
         String achievementTitle = gameType.getAchievementLevel(totalScore, playerAmount, difficulty);
         tvScoreWithAchievementLevel.setText("Score: " + totalScore + " - " + achievementTitle);
-        gameCompleted = true;
     }
 
 }

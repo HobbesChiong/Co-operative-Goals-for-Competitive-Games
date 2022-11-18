@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
@@ -50,6 +51,7 @@ import ca.cmpt276.iteration1.interfaces.GamePlayedListRecyclerViewInterface;
 public class GamePlayedListActivity extends AppCompatActivity implements GamePlayedListRecyclerViewInterface {
 
     private static final String GAME_TYPE_INDEX = "Position";
+
     // Index of which type of game we're dealing with
     private int gameTypeIndex;
 
@@ -58,8 +60,11 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
     private GameType gameType;
     private GamePlayedListRecyclerViewAdapter adapter;
 
+    // Fields for the achievement levels dialog
+    private Dialog achievementLevelsDialog;
     private TextView achievementLevels;
     private EditText achievementLevelPlayerCount;
+    private String dialogSelectedDifficulty = "Normal";
 
     public static Intent makeIntent(Context context, int pos){
         Intent intent = new Intent(context, GamePlayedListActivity.class);
@@ -224,17 +229,51 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
     }
 
     private void createAchievementLevelDialog() {
-        Dialog achievementLevelsDialog = new Dialog(GamePlayedListActivity.this);
+        achievementLevelsDialog = new Dialog(GamePlayedListActivity.this);
         achievementLevelsDialog.setContentView(R.layout.dialog_view_achievement_levels);
         achievementLevelsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         achievementLevelsDialog.show();
 
         gameType = gm.getGameTypeFromString(this.gameTypeString);
 
-        achievementLevels = achievementLevelsDialog.findViewById(R.id.tvAchievementLevels);
+        Button btnDialogDifficultyEasy = achievementLevelsDialog.findViewById(R.id.btnDialogDifficultyEasy);
+        Button btnDialogDifficultyNormal = achievementLevelsDialog.findViewById(R.id.btnDialogDifficultyNormal);
+        Button btnDialogDifficultyHard = achievementLevelsDialog.findViewById(R.id.btnDialogDifficultyHard);
+
+        btnDialogDifficultyEasy.setOnClickListener(view -> {
+            dialogSelectedDifficulty = "Easy";
+            setAchievementLevelsText();
+            Toast.makeText(GamePlayedListActivity.this, "Selected \"Easy\" difficulty multiplier.", Toast.LENGTH_SHORT).show();
+        });
+        btnDialogDifficultyNormal.setOnClickListener(view -> {
+            dialogSelectedDifficulty = "Normal";
+            setAchievementLevelsText();
+            Toast.makeText(GamePlayedListActivity.this, "Selected \"Normal\" difficulty multiplier.", Toast.LENGTH_SHORT).show();
+        });
+        btnDialogDifficultyHard.setOnClickListener(view -> {
+            dialogSelectedDifficulty = "Hard";
+            setAchievementLevelsText();
+            Toast.makeText(GamePlayedListActivity.this, "Selected \"Hard\" difficulty multiplier.", Toast.LENGTH_SHORT).show();
+        });
 
         achievementLevelPlayerCount = achievementLevelsDialog.findViewById(R.id.etAchievementLevelPlayerCount);
-        achievementLevelPlayerCount.addTextChangedListener(playerCountInputWatcher);
+        achievementLevelPlayerCount.addTextChangedListener(new TextWatcher() {
+            // https://stackoverflow.com/questions/8543449/how-to-use-the-textwatcher-class-in-android
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                setAchievementLevelsText();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         Button closeAchievementLevelsDialog = achievementLevelsDialog.findViewById(R.id.btnCloseAchievementLevelsDialog);
         closeAchievementLevelsDialog.setOnClickListener(view -> {
@@ -242,41 +281,27 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
         });
     }
 
-    // https://stackoverflow.com/questions/8543449/how-to-use-the-textwatcher-class-in-android
-    private final TextWatcher playerCountInputWatcher = new TextWatcher() {
+    private void setAchievementLevelsText(){
+        achievementLevels = achievementLevelsDialog.findViewById(R.id.tvAchievementLevels);
+        try {
+            int playerCount = Integer.parseInt(achievementLevelPlayerCount.getText().toString());
 
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            try {
-                int playerCount = Integer.parseInt(achievementLevelPlayerCount.getText().toString());
-
-                // If user enters in 0 players
-                if (playerCount == 0){
-                    achievementLevels.setText(R.string.invalid_num_of_player);
-                }
-                else {
-                    String message = "";
-                    for (String line : gameType.getAchievementLevelScoreRequirements(playerCount)) {
-                        message += line + "\n";
-                    }
-                    achievementLevels.setText(message);
-                }
+            // If user enters in 0 players
+            if (playerCount == 0){
+                achievementLevels.setText(R.string.invalid_num_of_player);
             }
-            catch (NumberFormatException numberFormatException){
-                achievementLevels.setText(R.string.waiting_for_input);
+            else {
+                String message = "";
+                for (String line : gameType.getAchievementLevelScoreRequirements(playerCount, dialogSelectedDifficulty)) {
+                    message += line + "\n";
+                }
+                achievementLevels.setText(message);
             }
         }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-
+        catch (NumberFormatException numberFormatException){
+            achievementLevels.setText(R.string.waiting_for_input);
         }
-    };
+    }
 
     /*
 * Code inspired by blog post on 29 Oct, 2022 from https://thumbb13555.pixnet.net/blog/post/311803031-%E7%A2%BC%E8%BE%B2%E6%97%A5%E5%B8%B8-%E3%80%8Eandroid-studio%E3%80%8F%E5%9F%BA%E6%9C%ACrecyclerview%E7%94%A8%E6%B3%95
