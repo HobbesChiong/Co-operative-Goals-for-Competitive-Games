@@ -25,11 +25,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.adapters.PlayerScoreInputRecyclerViewAdapter;
@@ -335,12 +332,20 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
     @Override
     public void checkAllPlayerScoreInputs() {
-        grabPlayerScoreInputIds();
+        updatePlayerScores();
         updateScoreTextView();
     }
 
-    private void grabPlayerScoreInputIds() {
-        setTotalGameScore(recyclerViewAdapter.getScores());
+    private void updatePlayerScores() {
+        ArrayList<Integer> playerScores = recyclerViewAdapter.getScores();
+
+        // One or more of the scores must be invalid, the game hasn't been completed, don't recalculate!
+        if (playerScores == null) {
+            gameCompleted = false;
+            return;
+        }
+
+        setTotalGameScore(playerScores);
     }
 
     private void setTotalGameScore(ArrayList<Integer> playerScores){
@@ -361,6 +366,13 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         }
 
         TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
+
+
+        if (!gameCompleted) {
+            tvScoreWithAchievementLevel.setText("Awaiting player score inputs...");
+            return;
+        }
+
         String achievementTitle = gameType.getAchievementLevel(totalScore, playerAmount, difficulty);
         tvScoreWithAchievementLevel.setText("Score: " + totalScore + " - " + achievementTitle);
     }

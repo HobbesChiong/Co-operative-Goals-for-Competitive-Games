@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.activities.GamePlayActivity;
@@ -27,6 +28,7 @@ import ca.cmpt276.iteration1.model.PlayerScoreInput;
 public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<PlayerScoreInputRecyclerViewAdapter.MyViewHolder> {
 
     private final String PLAYER_SCORE_EDIT_TEXT_KEY = "id";
+    private final int INVALID_SCORE = -1;
 
     private Context context;
     private boolean editGame;
@@ -43,6 +45,8 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
         this.recyclerViewInterface = recyclerViewInterface;
 
         recyclerViewEditTextData = new int[playerScoreInputs.size()];
+
+        Arrays.fill(recyclerViewEditTextData, INVALID_SCORE);
 
         // If we're editing the game, load all our previous scores into the list of data
         if (editGame) {
@@ -90,7 +94,10 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
         holder.etPlayerScoreInput.setId(id);
 
         // Load in the previous value the edit text had
-        holder.etPlayerScoreInput.setText(String.valueOf(recyclerViewEditTextData[position]));
+        int playerScore = recyclerViewEditTextData[position];
+        if (playerScore != INVALID_SCORE) {
+            holder.etPlayerScoreInput.setText(String.valueOf(playerScore));
+        }
 
 
         holder.etPlayerScoreInput.addTextChangedListener(new TextWatcher() {
@@ -109,7 +116,7 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
                     int scoreValue = Integer.parseInt(holder.etPlayerScoreInput.getText().toString());
                     recyclerViewEditTextData[position] = scoreValue;
                 } catch (Exception e){
-
+                    recyclerViewEditTextData[position] = INVALID_SCORE;
                 }
 
 
@@ -145,11 +152,17 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
     }
 
     public ArrayList<Integer> getScores() {
+        // Create a list of scores
         ArrayList<Integer> score = new ArrayList<>();
         for (int i : recyclerViewEditTextData) {
+            // One of the score fields hasn't been filled out, return nothing!
+            if (i == INVALID_SCORE) {
+                return null;
+            }
+
+            // Otherwise, add the current score to our list of scores
             score.add(i);
         }
-
         return score;
     }
 }
