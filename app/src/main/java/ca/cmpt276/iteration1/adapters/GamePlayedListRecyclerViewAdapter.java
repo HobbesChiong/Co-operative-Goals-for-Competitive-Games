@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import ca.cmpt276.iteration1.R;
@@ -26,10 +27,13 @@ public class GamePlayedListRecyclerViewAdapter extends RecyclerView.Adapter<Game
 
     private final GamePlayedListRecyclerViewInterface recyclerViewInterface;
 
+    Context context;
+
     GameManager gameManager;
     GameType gameType;
     ArrayList<PlayedGame> playedGames;
-    Context context;
+
+    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM dd @ hh.mm a");
 
     public GamePlayedListRecyclerViewAdapter(Context context, GamePlayedListRecyclerViewInterface recyclerViewInterface, String gameTypeString){
         this.gameManager = GameManager.getInstance();
@@ -41,7 +45,7 @@ public class GamePlayedListRecyclerViewAdapter extends RecyclerView.Adapter<Game
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView dScore, dNoOfPlayer, dAchievement, dDifficulty;
+        TextView dScore, dNoOfPlayer, dAchievement, dDifficulty, dDatePlayed;
 
         public ViewHolder(@NonNull View itemView, GamePlayedListRecyclerViewInterface recyclerViewInterface) {
             super(itemView);
@@ -49,6 +53,7 @@ public class GamePlayedListRecyclerViewAdapter extends RecyclerView.Adapter<Game
             dNoOfPlayer = itemView.findViewById(R.id.tvDisplayNoOfPlayer);
             dAchievement = itemView.findViewById(R.id.tvDisplayAchievement);
             dDifficulty = itemView.findViewById(R.id.tvDisplayDifficulty);
+            dDatePlayed = itemView.findViewById(R.id.tvDatePlayed);
 
             itemView.setOnLongClickListener(view -> {
                 Log.i("Tag", "something has been long clicked");
@@ -78,6 +83,7 @@ public class GamePlayedListRecyclerViewAdapter extends RecyclerView.Adapter<Game
         holder.dNoOfPlayer.setText(String.valueOf(playedGames.get(position).getNumberOfPlayers()));
         holder.dAchievement.setText(playedGames.get(position).getAchievement());
         holder.dDifficulty.setText(playedGames.get(position).getDifficulty());
+        holder.dDatePlayed.setText("Date played: " + playedGames.get(position).getDatePlayed().format(dateTimeFormatter));
     }
 
     @Override

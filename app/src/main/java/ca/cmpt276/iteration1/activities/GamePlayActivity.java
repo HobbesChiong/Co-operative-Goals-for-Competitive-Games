@@ -1,22 +1,31 @@
 package ca.cmpt276.iteration1.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -31,9 +40,12 @@ import ca.cmpt276.iteration1.model.PlayerScoreInput;
 public class GamePlayActivity extends AppCompatActivity implements PlayerScoreInputRecyclerViewInterface {
 
     private final int GAME_PLAYED_POSITION_NON_EXISTENT = -1;
+    private int gamePlayedPosition;
 
     private boolean editGameActivity = false;
     private boolean difficultySelected = false;
+    private boolean playersSelected = false;
+    private boolean gameCompleted = false;
 
     private GameManager gameManager;
     private String gameTypeString;
@@ -44,7 +56,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     private int playerAmount;
     private int totalScore;
 
-    private HashMap<Integer, Integer> playerScores;
+    private ArrayList<Integer> playerScores;
 
     private EditText etPlayerAmount;
     private RecyclerView rvPlayerScoreInputs;
@@ -69,8 +81,9 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         Intent intent = getIntent();
 
         gameTypeString = intent.getStringExtra("GameTypeString");
+        gameType = gameManager.getGameTypeFromString(gameTypeString);
 
-        int gamePlayedPosition = intent.getIntExtra("GamePlayedPosition", GAME_PLAYED_POSITION_NON_EXISTENT);
+        gamePlayedPosition = intent.getIntExtra("GamePlayedPosition", GAME_PLAYED_POSITION_NON_EXISTENT);
         if (gamePlayedPosition == GAME_PLAYED_POSITION_NON_EXISTENT){
             // Creating a new game if this condition is true
             return;
@@ -117,6 +130,83 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()){
+            case (R.id.btnSave): {
+                try {
+                    if (difficultySelected == false || playersSelected == false || gameCompleted == false){
+                        Toast.makeText(GamePlayActivity.this, "There is nothing to save!", Toast.LENGTH_SHORT).show();
+                        throw new Exception("There is nothing to save!");
+                    }
+
+                    // Creating a new game
+                    if (gamePlayedPosition == GAME_PLAYED_POSITION_NON_EXISTENT){
+                        Toast.makeText(GamePlayActivity.this, "Game created.", Toast.LENGTH_SHORT).show();
+                        saveNewGame();
+                    }
+                    // Editing an existing game
+                    else {
+                        saveExistingGame();
+                    }
+
+                    // Animate the star to signify the achievement
+                    ImageView starImage = findViewById(R.id.ivGameSaveAnimation);
+                    Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+                    starImage.startAnimation(animation);
+                    starImage.setVisibility(View.VISIBLE);
+
+                    // Store a reference to the activity so we can end the activity after an animation finishes
+                    Activity thisActivity = this;
+
+                    // End the activity after the animation finished https://stackoverflow.com/questions/7606498/end-animation-event-android
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                            rvPlayerScoreInputs.setVisibility(View.INVISIBLE);
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            //taken from https://stackoverflow.com/questions/37248300/how-to-finish-specific-activities-not-all-activities
+                            Intent intent = new Intent(thisActivity, GamePlayedListActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {}
+                    });
+
+                    // Play a sound
+                    MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.achievement_jingle);
+                    mediaPlayer.start(); // no need to call prepare(); create() does that for you
+
+                    return false;
+                }
+                catch (Exception e){
+                    return false;
+                }
+            }
+            case (android.R.id.home): {
+                finish();
+            }
+        }
+
+        return true;
+    }
+
+    void saveNewGame(){
+        int achievementIndex = gameType.getAchievementIndex(totalScore, playerAmount, difficulty);
+        LocalDateTime datePlayed = LocalDateTime.now();
+        PlayedGame currentGame = new PlayedGame(gameTypeString, playerAmount, totalScore, achievementIndex, difficulty, playerScores, datePlayed);
+        gameManager.addPlayedGame(currentGame);
+    }
+
+    void saveExistingGame(){
+
+    }
+
     private void setDifficultyButtons(){
         Button btnDifficultyEasy = findViewById(R.id.btnDifficultyEasy);
         Button btnDifficultyNormal = findViewById(R.id.btnDifficultyNormal);
@@ -125,17 +215,17 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         // Choosing player count is hidden by default as a user needs to select a difficulty first
         // If any of these buttons are pressed, enable player count input
         btnDifficultyEasy.setOnClickListener(view -> {
-            difficulty = "easy";
+            difficulty = "Easy";
             difficultySelected = true;
             enableHiddenElements();
         });
         btnDifficultyNormal.setOnClickListener(view -> {
-            difficulty = "normal";
+            difficulty = "Normal";
             difficultySelected = true;
             enableHiddenElements();
         });
         btnDifficultyHard.setOnClickListener(view -> {
-            difficulty = "hard";
+            difficulty = "Hard";
             difficultySelected = true;
             enableHiddenElements();
         });
@@ -172,11 +262,12 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
                 TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
                 tvScoreWithAchievementLevel.setText("Awaiting player score inputs...");
 
-
+                playersSelected = true;
                 setupGameInfoModels();
             }
             catch (NumberFormatException numberFormatException){
                 //Toast.makeText(GamePlayActivity.this, "Invalid player amount", Toast.LENGTH_SHORT).show();
+                playersSelected = false;
                 Log.i("Undefined Player Amount", "User has deleted player amount, awaiting new input.");
             }
         }
@@ -200,7 +291,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
             setupRecyclerView(playerScoreInputs);
         }
-        // If we are editing a game, we need to pull
     }
 
     private void setupRecyclerView(ArrayList<PlayerScoreInput> playerScoreInputs){
@@ -219,7 +309,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
     private void grabPlayerScoreInputIds() {
         ArrayList<Integer> playerScoreInputIds = recyclerViewAdapter.getPlayerScoreInputIds();
-        ArrayList<Integer> playerScores = new ArrayList<>();
+        playerScores = new ArrayList<>();
 
         TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
         tvScoreWithAchievementLevel.setText("Calculating total score...");
@@ -252,7 +342,9 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             totalScore += score;
         }
 
-        tvScoreWithAchievementLevel.setText(String.valueOf(totalScore));
+        String achievementTitle = gameType.getAchievementLevel(totalScore, playerAmount, difficulty);
+        tvScoreWithAchievementLevel.setText("Score: " + totalScore + " - " + achievementTitle);
+        gameCompleted = true;
     }
 
     private void setEditGameInfo(){

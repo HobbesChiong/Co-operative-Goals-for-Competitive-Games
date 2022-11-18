@@ -10,29 +10,37 @@ package ca.cmpt276.iteration1.model;
 
 import androidx.annotation.NonNull;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class PlayedGame {
     private final String type;
+
     private int numberOfPlayers;
     private int totalScore;
+
     private int achievementIndex;
     private String difficulty;
-    private HashMap<Integer, Integer> playerScores;
+    private ArrayList<Integer> playerScores;
+
+    private LocalDateTime datePlayed;
 
     public PlayedGame(String type,
                       int numberOfPlayers,
                       int totalScore,
                       int achievementIndex,
                       String difficulty,
-                      HashMap<Integer, Integer> playerScores) {
+                      ArrayList<Integer> playerScores,
+                      LocalDateTime datePlayed) {
         this.type = type;
         this.numberOfPlayers = numberOfPlayers;
         this.totalScore = totalScore;
         this.achievementIndex = achievementIndex;
         this.difficulty = difficulty;
         this.playerScores = playerScores;
+        this.datePlayed = datePlayed;
     }
 
     public String getType() {
@@ -47,7 +55,9 @@ public class PlayedGame {
         return totalScore;
     }
 
-    public HashMap<Integer, Integer> getPlayerScores() { return playerScores; }
+    public ArrayList<Integer> getPlayerScores() { return playerScores; }
+
+    public LocalDateTime getDatePlayed() { return datePlayed; }
 
     public String getAchievement() {
         GameManager gameManager = GameManager.getInstance();

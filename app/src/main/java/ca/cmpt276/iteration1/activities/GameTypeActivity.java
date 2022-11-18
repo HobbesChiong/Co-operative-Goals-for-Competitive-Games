@@ -133,8 +133,13 @@ public class GameTypeActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    editGameType();
-                    finish();
+                    try {
+                        editGameType();
+                        finish();
+                    }
+                    catch (Exception e) {
+                        Toast.makeText(GameTypeActivity.this, "Invalid configuration.", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 break;
             }

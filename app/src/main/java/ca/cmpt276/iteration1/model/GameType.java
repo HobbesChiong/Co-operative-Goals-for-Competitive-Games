@@ -87,6 +87,10 @@ public class GameType {
         this.type = type;
         this.goodScore = goodScore;
         this.badScore = badScore;
+
+        if (goodScore < badScore){
+            throw new IllegalArgumentException("Bad score should be less than the good score.");
+        }
     }
 
     /**
