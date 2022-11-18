@@ -94,6 +94,8 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
             }
         });
 
+        holder.setIsRecyclable(false);
+
         playerScoreInputIds.add(id);
     }
 

@@ -208,6 +208,13 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         recyclerViewAdapter = new PlayerScoreInputRecyclerViewAdapter(GamePlayActivity.this, playerScoreInputs, editGameActivity, GamePlayActivity.this);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(GamePlayActivity.this));
+        //recyclerView.getRecycledViewPool().setMaxRecycledViews(1, 0);
+    }
+
+
+    @Override
+    public void checkAllPlayerScoreInputs() {
+        grabPlayerScoreInputIds();
     }
 
     private void grabPlayerScoreInputIds() {
@@ -219,6 +226,10 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
         for (int id : playerScoreInputIds){
             EditText playerScoreInput = findViewById(id);
+
+            if (playerScoreInput == null){
+                Log.i("some message", id + " seems to be null");
+            }
 
             try {
                 int value = Integer.parseInt(playerScoreInput.getText().toString());
@@ -248,8 +259,4 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
     }
 
-    @Override
-    public void checkAllPlayerScoreInputs() {
-        grabPlayerScoreInputIds();
-    }
 }
