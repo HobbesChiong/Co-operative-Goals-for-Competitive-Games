@@ -373,7 +373,12 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         gameCompleted = true;
     }
 
-    private void updateScoreTextView(){
+    private void updateScoreTextView() {
+        // If there aren't any players, don't update the score textview
+        if (playerAmount == 0) {
+            return;
+        }
+
         TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
         String achievementTitle = gameType.getAchievementLevel(totalScore, playerAmount, difficulty);
         tvScoreWithAchievementLevel.setText("Score: " + totalScore + " - " + achievementTitle);
