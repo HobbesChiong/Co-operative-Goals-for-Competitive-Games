@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +73,7 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
         holder.tvPlayerNumber.setText("Player " + (position + 1));
 
         // As we are creating new cards on the spot, we need to assign them IDs that will stay persistent throughout the activity
-        int id = createCustomId(playerScoreInputs.get(position).getPlayerId());
+        int id = createCustomId(position);
         holder.etPlayerScoreInput.setId(id);
         holder.etPlayerScoreInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -82,7 +83,8 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Toast.makeText(context, "Player " + (position + 1) + " (ID: " + id + ") has been updated.", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(context, "Player " + (position + 1) + " (ID: " + id + ") has been updated.", Toast.LENGTH_SHORT).show();
+                Log.i("Something", id + " has changed");
                 recyclerViewInterface.checkAllPlayerScoreInputs();
             }
 
@@ -95,7 +97,7 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
         playerScoreInputIds.add(id);
     }
 
-    private int createCustomId(int playerId){
+    private int createCustomId(int position){
         // We are dynamically creating edit texts
         // Create unique custom id's for each one so they can be accessed from classes other than this one
 
@@ -103,7 +105,7 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
         for (int i = 0; i < PLAYER_SCORE_EDIT_TEXT_KEY.length(); i++){
             stringKey.append(PLAYER_SCORE_EDIT_TEXT_KEY.charAt(i) - 'a' + 1);
         }
-        stringKey.append(String.valueOf(playerId));
+        stringKey.append(position);
 
         String sbString = stringKey.toString().replaceAll("\\D", "");
         return Integer.parseInt(sbString);

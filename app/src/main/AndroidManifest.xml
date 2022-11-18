@@ -20,24 +20,8 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".activities.GameDifficultyScreen"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".activities.OptionsActivity"
             android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".activities.NewGameCreationScreen"
-            android:exported="false"
-            android:parentActivityName=".activities.GamePlayedListActivity"
-            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

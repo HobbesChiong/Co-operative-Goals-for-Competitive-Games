@@ -224,7 +224,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
                 int value = Integer.parseInt(playerScoreInput.getText().toString());
                 playerScores.add(Integer.parseInt(playerScoreInput.getText().toString()));
             }
-            catch (NumberFormatException numberFormatException){
+            catch (Exception exception){
                 Log.i("IncompleteInputs", "User has not finished inputting all values");
                 return;
             }
