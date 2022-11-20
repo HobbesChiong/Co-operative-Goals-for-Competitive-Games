@@ -37,6 +37,7 @@
         android:id="@+id/btnDifficultyEasy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/purple_500"
         android:text="@string/easy"
         app:layout_constraintEnd_toStartOf="@+id/btnDifficultyNormal"
         app:layout_constraintStart_toStartOf="parent"

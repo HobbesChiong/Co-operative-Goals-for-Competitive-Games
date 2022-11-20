@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Editable;
@@ -40,6 +41,8 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
     private final int GAME_PLAYED_POSITION_NON_EXISTENT = -1;
     private int gamePlayedPosition;
+
+    private ArrayList<Button> difficultyButtons;
 
     private boolean editGameActivity = false;
 
@@ -104,8 +107,8 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("Create New Game");
 
-        setDifficultyButtons();
         extractIntentExtras();
+        setDifficultyButtons();
 
         if (editGameActivity == true && difficultySelected == true){
             actionBar.setTitle("Edit Game");
@@ -126,8 +129,8 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             case (R.id.btnSave): {
                 try {
                     if (difficultySelected == false || playersSelected == false || gameCompleted == false){
-                        Toast.makeText(GamePlayActivity.this, "There is nothing to save!", Toast.LENGTH_SHORT).show();
-                        throw new Exception("There is nothing to save!");
+                        Toast.makeText(GamePlayActivity.this, "All fields must be filled in!", Toast.LENGTH_SHORT).show();
+                        throw new Exception("All fields must be filled in!");
                     }
 
                     // Creating a new game
@@ -204,26 +207,56 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         Button btnDifficultyNormal = findViewById(R.id.btnDifficultyNormal);
         Button btnDifficultyHard = findViewById(R.id.btnDifficultyHard);
 
+        btnDifficultyEasy.setTag("Easy");
+        btnDifficultyNormal.setTag("Normal");
+        btnDifficultyHard.setTag("Hard");
+
+        difficultyButtons = new ArrayList<>();
+        difficultyButtons.add(btnDifficultyEasy);
+        difficultyButtons.add(btnDifficultyNormal);
+        difficultyButtons.add(btnDifficultyHard);
+
+        if (editGameActivity == true){
+            highlightSelectedDifficultyButton(difficulty);
+        }
+
         // Choosing player count is hidden by default as a user needs to select a difficulty first
         // If any of these buttons are pressed, enable player count input
         btnDifficultyEasy.setOnClickListener(view -> {
+            highlightSelectedDifficultyButton("Easy");
+
             difficulty = "Easy";
             difficultySelected = true;
             enableHiddenElements();
             updateScoreTextView();
         });
         btnDifficultyNormal.setOnClickListener(view -> {
+            highlightSelectedDifficultyButton("Normal");
+
             difficulty = "Normal";
             difficultySelected = true;
             enableHiddenElements();
             updateScoreTextView();
         });
         btnDifficultyHard.setOnClickListener(view -> {
+            highlightSelectedDifficultyButton("Hard");
+
             difficulty = "Hard";
             difficultySelected = true;
             enableHiddenElements();
             updateScoreTextView();
         });
+    }
+
+    private void highlightSelectedDifficultyButton(String selectedDifficultyButtonTag){
+        for (Button difficultyButton : difficultyButtons){
+            if (difficultyButton.getTag().equals(selectedDifficultyButtonTag)){
+                difficultyButton.setBackgroundColor(Color.BLACK);
+            }
+            else {
+                difficultyButton.setBackgroundColor(getColor(R.color.purple_500));
+            }
+        }
     }
 
     private void enableHiddenElements(){
