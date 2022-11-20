@@ -1,4 +1,4 @@
-Product Owner: ajq1
-Scrum Master: yka92
-Repository Manager: shc26
-Team Member: ccw21
+Product Owner: ccw21
+Scrum Master: shc26
+Repository Manager: yka92
+Team Member: ajq1
