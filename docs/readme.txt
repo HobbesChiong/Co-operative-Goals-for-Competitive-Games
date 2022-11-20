@@ -10,3 +10,20 @@ Creating games and game types:
 
 
 icon picture reference: retrieved 3 Nov, 2022 from https://www.pngegg.com/en/png-zkzwq
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+User Story Estimations:
+
+1 unit = Implement PlayedGame Class 
+
+1.) Setup Game Played Difficulty (5 Units), Setup difficulty settings for each gameplay and reflect the difficulty settings in achievement list and gameplay list. We estimated 5 units of work due to figuring out how to apply the difficulty and reflect it in the UI.
+
+2.) Animation and Effects when achievement is earned (6 units), Play a image with an animation and sound after a game is played. 
+
+3.) Themes for Achievements (6 units), Create themes for achievements and a screen for users to choose which one they want.
+
+4.) Edit Game Played (5 units), Add the ability for users to change the scores or difficulty of a previous game played.
+
+5.) Setup Junit tests (4 units), Add test cases to the GameType class to check for proper achievment output.
+
+6.) Score calculator (5 units), Let the app take in each player's score to find total score and store each player's score per game.
