@@ -1,4 +1,4 @@
-package ca.cmpt276.iteration1;
+package ca.cmpt276.iteration1.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -100,6 +100,7 @@ public class GameTypeTest {
         Assert.assertEquals(6,g.getAchievementIndex(150,2,"Easy"));
         Assert.assertEquals(6,g.getAchievementIndex(200,2,"Normal"));
         Assert.assertEquals(6,g.getAchievementIndex(250,2,"Hard"));
+
     }
 
 
