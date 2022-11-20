@@ -65,6 +65,7 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
     private TextView achievementLevels;
     private EditText achievementLevelPlayerCount;
     private String dialogSelectedDifficulty = "Normal";
+    private ArrayList<Button> difficultyButtons;
 
     public static Intent makeIntent(Context context, int pos){
         Intent intent = new Intent(context, GamePlayedListActivity.class);
@@ -240,17 +241,31 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
         Button btnDialogDifficultyNormal = achievementLevelsDialog.findViewById(R.id.btnDialogDifficultyNormal);
         Button btnDialogDifficultyHard = achievementLevelsDialog.findViewById(R.id.btnDialogDifficultyHard);
 
+        difficultyButtons = new ArrayList<>();
+        difficultyButtons.add(btnDialogDifficultyEasy);
+        difficultyButtons.add(btnDialogDifficultyNormal);
+        difficultyButtons.add(btnDialogDifficultyHard);
+
+        // Since the normal difficulty is selected by default, just set the normal one to black
+        btnDialogDifficultyNormal.setBackgroundColor(Color.BLACK);
+
         btnDialogDifficultyEasy.setOnClickListener(view -> {
+            highlightSelectedDifficultyButton(btnDialogDifficultyEasy.getId());
+
             dialogSelectedDifficulty = "Easy";
             setAchievementLevelsText();
             Toast.makeText(GamePlayedListActivity.this, "Selected \"Easy\" difficulty multiplier.", Toast.LENGTH_SHORT).show();
         });
         btnDialogDifficultyNormal.setOnClickListener(view -> {
+            highlightSelectedDifficultyButton(btnDialogDifficultyNormal.getId());
+
             dialogSelectedDifficulty = "Normal";
             setAchievementLevelsText();
             Toast.makeText(GamePlayedListActivity.this, "Selected \"Normal\" difficulty multiplier.", Toast.LENGTH_SHORT).show();
         });
         btnDialogDifficultyHard.setOnClickListener(view -> {
+            highlightSelectedDifficultyButton(btnDialogDifficultyHard.getId());
+
             dialogSelectedDifficulty = "Hard";
             setAchievementLevelsText();
             Toast.makeText(GamePlayedListActivity.this, "Selected \"Hard\" difficulty multiplier.", Toast.LENGTH_SHORT).show();
@@ -279,6 +294,17 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
         closeAchievementLevelsDialog.setOnClickListener(view -> {
             achievementLevelsDialog.dismiss();
         });
+    }
+
+    private void highlightSelectedDifficultyButton(int selectedDifficultyButtonId){
+        for (Button difficultyButton : difficultyButtons){
+            if (difficultyButton.getId() == selectedDifficultyButtonId){
+                difficultyButton.setBackgroundColor(Color.BLACK);
+            }
+            else {
+                difficultyButton.setBackgroundColor(getColor(R.color.purple_500));
+            }
+        }
     }
 
     private void setAchievementLevelsText(){
