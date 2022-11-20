@@ -45,6 +45,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     private ArrayList<Button> difficultyButtons;
 
     private boolean editGameActivity = false;
+    private int originalPlayerAmount;
 
     private boolean difficultySelected = false;
     private boolean playersSelected = false;
@@ -191,6 +192,8 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     }
 
     void saveNewGame(){
+        updatePlayerScores();
+
         int achievementIndex = gameType.getAchievementIndex(totalScore, playerAmount, difficulty);
         LocalDateTime datePlayed = LocalDateTime.now();
         PlayedGame currentGame = new PlayedGame(gameTypeString, playerAmount, totalScore, achievementIndex, difficulty, playerScores, datePlayed);
@@ -198,6 +201,8 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     }
 
     void saveExistingGame(){
+        updatePlayerScores();
+
         int achievementIndex = gameType.getAchievementIndex(totalScore, playerAmount, difficulty);
         playedGame.editPlayedGame(playerAmount, totalScore, achievementIndex, difficulty, playerScores);
     }
@@ -284,9 +289,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             try {
                 playerAmount = Integer.parseInt(etPlayerAmount.getText().toString());
 
-                // If the player amount field is set equal or less than the original player amount (when editing)
-                // Update the score calculation at the bottom of the activity
-
                 // When the user chagnes the amount of players, we want to reset the adapter and textview for total score
                 // This prevents any old data from persisting and being carried over - basically gives the user a fresh start!
                 recyclerViewAdapter = null;
@@ -296,6 +298,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
                 playersSelected = true;
                 setupGameInfoModels();
 
+                updatePlayerScores();
             }
             catch (NumberFormatException numberFormatException){
                 playersSelected = false;
@@ -352,6 +355,8 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         totalScore = playedGame.getTotalScore();
         playerScores = playedGame.getPlayerScores();
 
+        originalPlayerAmount = playerAmount;
+
         EditText etPlayerCount = findViewById(R.id.etPlayerCount);
         etPlayerCount.setText(String.valueOf(playerAmount));
 
@@ -406,6 +411,11 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
         TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
 
+        // If we increase decrease the player amount, then increase, then decrease again (and all fields are filled)
+        // The game game is still completed. Check if any fields are null and if not, update the text
+        if (recyclerViewAdapter.getScores() != null){
+            gameCompleted = true;
+        }
 
         if (!gameCompleted) {
             tvScoreWithAchievementLevel.setText("Awaiting player score inputs...");
