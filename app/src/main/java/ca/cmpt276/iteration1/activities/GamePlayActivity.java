@@ -361,7 +361,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         etPlayerCount.setText(String.valueOf(playerAmount));
 
         updateScoreTextView();
-
         setupGameInfoModels();
     }
 
