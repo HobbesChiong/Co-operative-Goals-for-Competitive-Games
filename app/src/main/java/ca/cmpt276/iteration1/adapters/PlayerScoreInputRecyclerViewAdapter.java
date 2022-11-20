@@ -52,7 +52,13 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
         if (editGame) {
             for (int i = 0; i < playerScoreInputs.size(); i ++) {
                 int playerScore = playerScoreInputs.get(i).getPlayerScore();
-                recyclerViewEditTextData[i] = playerScore;
+
+                if (playerScore == -1){
+                    recyclerViewEditTextData[i] = INVALID_SCORE;
+                }
+                else {
+                    recyclerViewEditTextData[i] = playerScore;
+                }
             }
         }
     }

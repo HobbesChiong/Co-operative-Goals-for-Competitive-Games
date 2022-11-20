@@ -42,6 +42,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     private int gamePlayedPosition;
 
     private boolean editGameActivity = false;
+
     private boolean difficultySelected = false;
     private boolean playersSelected = false;
     private boolean gameCompleted = false;
@@ -56,10 +57,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     private int totalScore;
 
     private ArrayList<Integer> playerScores;
-
-    // Array that stores the value input into each element in the recyclerview, so it's not lost
-    // when scrolled offscreen
-    private int[] recyclerViewData;
 
     private EditText etPlayerAmount;
     private RecyclerView rvPlayerScoreInputs;
@@ -254,6 +251,9 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             try {
                 playerAmount = Integer.parseInt(etPlayerAmount.getText().toString());
 
+                // If the player amount field is set equal or less than the original player amount (when editing)
+                // Update the score calculation at the bottom of the activity
+
                 // When the user chagnes the amount of players, we want to reset the adapter and textview for total score
                 // This prevents any old data from persisting and being carried over - basically gives the user a fresh start!
                 recyclerViewAdapter = null;
@@ -262,6 +262,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
                 playersSelected = true;
                 setupGameInfoModels();
+
             }
             catch (NumberFormatException numberFormatException){
                 playersSelected = false;
@@ -290,7 +291,12 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         }
         if (editGameActivity == true){
             for (int i = 0; i < playerAmount; i++){
-                playerScoreInputs.add(new PlayerScoreInput(i, playerScores.get(i)));
+                if (i >= playerScores.size()){
+                    playerScoreInputs.add(new PlayerScoreInput(i));
+                }
+                else {
+                    playerScoreInputs.add(new PlayerScoreInput(i, playerScores.get(i)));
+                }
             }
 
             setupRecyclerView(playerScoreInputs);
@@ -306,8 +312,8 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         gameCompleted = true;
 
         gameType = gameManager.getGameTypeFromString(gameTypeString);
-
         playedGame = gameManager.getSpecificPlayedGames(gameTypeString).get(gamePlayedPosition);
+
         difficulty = playedGame.getDifficulty();
         playerAmount = playedGame.getNumberOfPlayers();
         totalScore = playedGame.getTotalScore();

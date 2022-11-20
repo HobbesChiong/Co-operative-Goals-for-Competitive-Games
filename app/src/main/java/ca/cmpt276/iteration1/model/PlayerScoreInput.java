@@ -9,6 +9,11 @@ public class PlayerScoreInput {
     public PlayerScoreInput(int playerNumber) {
         this.playerId = playerNumber;
         this.playerName = "Player " + (playerId + 1);
+
+        // If playerScore is not set, we will set it to -1 by default
+        // This prevents the recyclerviewadapter from trying to pull 0 and setting it as
+        // the edittext's input field
+        this.playerScore = -1;
     }
 
     public PlayerScoreInput(int playerNumber, int playerScore){
