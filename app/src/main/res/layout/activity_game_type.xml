@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".activities.GameTypeActivity">
 
+    <ImageView
+        android:id="@+id/iv_gameTypeBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/boardgame"
+        android:scaleType="centerCrop"/>
+
     <EditText
         android:id="@+id/etGameName"
         android:layout_width="wrap_content"
@@ -24,7 +31,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="100dp"
         android:text="@string/game_name"
-        android:textColor="#673AB7"
+        android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +55,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="40dp"
         android:text="@string/bad_score"
-        android:textColor="#673AB7"
+        android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,7 +79,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="40dp"
         android:text="@string/good_score"
-        android:textColor="#673AB7"
+        android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
