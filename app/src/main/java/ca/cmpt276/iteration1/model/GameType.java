@@ -87,6 +87,10 @@ public class GameType {
         this.type = type;
         this.goodScore = goodScore;
         this.badScore = badScore;
+
+        if (goodScore < badScore){
+            throw new IllegalArgumentException("Bad score should be less than the good score.");
+        }
     }
 
     /**
@@ -111,22 +115,11 @@ public class GameType {
      */
     public int getAchievementIndex(int score, int playerNumber, String difficulty) {
         int achievementTheme = GameManager.getInstance().getAchievementTheme();
-        float scaling = 1;
+        float scaling = getDifficultyMultiplier(difficulty);
 
         // Number of achievements
         int achievementCount = achievementLevels[achievementTheme].length;
 
-        switch (difficulty) {
-            case "Easy":
-                scaling = 0.75F;
-                break;
-            case "Normal":
-                scaling = 1;
-                break;
-            case "Hard":
-                scaling = 1.25F;
-                break;
-        }
         score /= playerNumber;
 
         // If worse than a bad score, return the worst achievement levels
@@ -153,8 +146,10 @@ public class GameType {
         return getAchievementName(achievementIndex,achievementTheme);
     }
 
-    public ArrayList<String> getAchievementLevelScoreRequirements(int playerNumber){
+    public ArrayList<String> getAchievementLevelScoreRequirements(int playerNumber, String difficulty){
         int achievementTheme = GameManager.getInstance().getAchievementTheme();
+
+        float scaling = getDifficultyMultiplier(difficulty);
 
         ArrayList<String> res = new ArrayList<>();
         // gets the good score - bad score and divides by 5 to get the intervals between achievements
@@ -162,18 +157,34 @@ public class GameType {
 
         int max = achievementLevels[achievementTheme].length;
 
-        res.add(achievementLevels[achievementTheme][0] + " <" + badScore*playerNumber);
-        res.add(achievementLevels[achievementTheme][1] + " " + badScore*playerNumber);
+        res.add(achievementLevels[achievementTheme][0] + " <" + (int) ((badScore*playerNumber) * scaling));
+        res.add(achievementLevels[achievementTheme][1] + " " + (int) ((badScore*playerNumber) * scaling));
         for(int i = 2; i<=max-3; i++){
             // below algo uses the formula from https://math.stackexchange.com/questions/914823/shift-numbers-into-a-different-range
             // Isolated t which is the score requirement for i which is the index of the achievement levels
             // if the game score divided by player number is >= to t then that is the achievement the game gets.
-            int minScoreRequirement = (int) Math.ceil((((i-1)*difference) + badScore));
+            int minScoreRequirement = (int) (Math.ceil((((i-1)*difference) + badScore)) * scaling);
             minScoreRequirement = (minScoreRequirement*playerNumber);
             res.add(achievementLevels[achievementTheme][i] + " " + (minScoreRequirement));
         }
-        res.add(achievementLevels[achievementTheme][max-2] + " " + goodScore*playerNumber);
-        res.add(achievementLevels[achievementTheme][max-1] + " >" + goodScore*playerNumber);
+        res.add(achievementLevels[achievementTheme][max-2] + " " + (int) ((goodScore*playerNumber) * scaling));
+        res.add(achievementLevels[achievementTheme][max-1] + " >" + (int) ((goodScore*playerNumber) * scaling));
         return res;
+    }
+
+    private float getDifficultyMultiplier(String difficulty){
+        float scaling = 0;
+        switch (difficulty) {
+            case "Easy":
+                scaling = 0.75F;
+                break;
+            case "Normal":
+                scaling = 1;
+                break;
+            case "Hard":
+                scaling = 1.25F;
+                break;
+        }
+        return scaling;
     }
 }

@@ -1,7 +1,5 @@
 package ca.cmpt276.iteration1.activities;
 
-import static android.util.Log.DEBUG;
-
 import static ca.cmpt276.iteration1.activities.OptionsActivity.ACHIEVEMENT_THEME_INDEX;
 import static ca.cmpt276.iteration1.activities.OptionsActivity.OPTIONS_PREFERENCES;
 
@@ -11,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,7 +32,7 @@ import ca.cmpt276.iteration1.model.GameType;
  * Activity which lists possible game configurations.
  * Has a FAB which lets the user launch into an activity for creating a new game configuration.
  */
-public class GameList extends AppCompatActivity {
+public class GameListActivity extends AppCompatActivity {
 
     GameManager gm;
 
@@ -57,7 +54,7 @@ public class GameList extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = GamePlayed.makeIntent(GameList.this, position);
+                Intent intent = GamePlayedListActivity.makeIntent(GameListActivity.this, position);
                 startActivity(intent);
             }
         });
@@ -67,7 +64,7 @@ public class GameList extends AppCompatActivity {
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Intent intent = GameTypeActivity.makeIntent(GameList.this, gm.getGameTypes().get(position).getGameType());
+                Intent intent = GameTypeActivity.makeIntent(GameListActivity.this, gm.getGameTypes().get(position).getGameType());
                 startActivity(intent);
 
                 return true;
@@ -123,7 +120,7 @@ public class GameList extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = GameTypeActivity.makeIntent(GameList.this);
+                Intent intent = GameTypeActivity.makeIntent(GameListActivity.this);
                 startActivity(intent);
             }
         });
@@ -133,7 +130,7 @@ public class GameList extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.btnOptions: {
-                Intent intent = new Intent(GameList.this, OptionsActivity.class);
+                Intent intent = new Intent(GameListActivity.this, OptionsActivity.class);
                 startActivity(intent);
 
                 return true;

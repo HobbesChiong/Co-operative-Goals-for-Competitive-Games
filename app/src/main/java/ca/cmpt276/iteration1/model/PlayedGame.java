@@ -10,21 +10,37 @@ package ca.cmpt276.iteration1.model;
 
 import androidx.annotation.NonNull;
 
-import ca.cmpt276.iteration1.R;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class PlayedGame {
     private final String type;
+
     private int numberOfPlayers;
-    private int score;
+    private int totalScore;
+
     private int achievementIndex;
     private String difficulty;
+    private ArrayList<Integer> playerScores;
 
-    public PlayedGame(String type, int numberOfPlayers, int score, int achievementIndex, String difficulty) {
+    private LocalDateTime datePlayed;
+
+    public PlayedGame(String type,
+                      int numberOfPlayers,
+                      int totalScore,
+                      int achievementIndex,
+                      String difficulty,
+                      ArrayList<Integer> playerScores,
+                      LocalDateTime datePlayed) {
         this.type = type;
         this.numberOfPlayers = numberOfPlayers;
-        this.score = score;
+        this.totalScore = totalScore;
         this.achievementIndex = achievementIndex;
         this.difficulty = difficulty;
+        this.playerScores = playerScores;
+        this.datePlayed = datePlayed;
     }
 
     public String getType() {
@@ -35,26 +51,32 @@ public class PlayedGame {
         return numberOfPlayers;
     }
 
-    public int getScore() {
-        return score;
+    public int getTotalScore() {
+        return totalScore;
     }
+
+    public ArrayList<Integer> getPlayerScores() { return playerScores; }
+
+    public LocalDateTime getDatePlayed() { return datePlayed; }
 
     public String getAchievement() {
         GameManager gameManager = GameManager.getInstance();
         return GameType.getAchievementName(achievementIndex, gameManager.getAchievementTheme());
     }
 
-    public void editPlayedGame(int numberOfPlayers, int score, int achievementIndex){
+    public void editPlayedGame(int numberOfPlayers, int score, int achievementIndex, String difficulty, ArrayList<Integer> playerScores){
         this.numberOfPlayers = numberOfPlayers;
-        this.score = score;
+        this.totalScore = score;
         this.achievementIndex = achievementIndex;
+        this.difficulty = difficulty;
+        this.playerScores = playerScores;
     }
 
     @NonNull
     @Override
     public String toString() {
         String output;
-        output = "Score: " + score + ", " + numberOfPlayers + "Players, " + getAchievement();
+        output = "Score: " + totalScore + ", " + numberOfPlayers + "Players, " + getAchievement();
         return output;
     }
 
