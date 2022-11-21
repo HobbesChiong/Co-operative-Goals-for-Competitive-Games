@@ -1,5 +1,11 @@
 package ca.cmpt276.iteration1.model;
 
+/**
+* Storing information for each player
+* Each particular player's score
+* Representing each single player
+* */
+
 public class PlayerScoreInput {
 
     private int playerId;

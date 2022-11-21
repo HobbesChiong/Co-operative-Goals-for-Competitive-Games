@@ -2,7 +2,13 @@ package ca.cmpt276.iteration1.model;
 
 import java.util.ArrayList;
 
-
+/**
+* Singleton class
+* Storing information for all games
+* Array List gameTypes stored all the game type and its info (name, good score, and bad score)
+* Array List playedGame stored all game history that has been played before
+* Integer achievementTheme stored which theme does the user chosen.
+* */
 public class GameManager {
     private ArrayList<GameType> gameTypes = new ArrayList<>();
     private ArrayList<PlayedGame> playedGames = new ArrayList<>();

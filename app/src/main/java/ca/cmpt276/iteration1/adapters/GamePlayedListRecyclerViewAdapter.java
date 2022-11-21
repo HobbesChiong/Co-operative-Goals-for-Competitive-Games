@@ -19,10 +19,13 @@ import ca.cmpt276.iteration1.model.GameType;
 import ca.cmpt276.iteration1.model.PlayedGame;
 import ca.cmpt276.iteration1.interfaces.GamePlayedListRecyclerViewInterface;
 
-/*
+/**
  * Code inspired by blog post on 29 Oct, 2022 from https://thumbb13555.pixnet.net/blog/post/311803031-%E7%A2%BC%E8%BE%B2%E6%97%A5%E5%B8%B8-%E3%80%8Eandroid-studio%E3%80%8F%E5%9F%BA%E6%9C%ACrecyclerview%E7%94%A8%E6%B3%95
  * Citation: https://www.youtube.com/watch?v=7GPUpvcU1FE
+ * Custom RecyclerView Adapter for displaying the game history in GamePlayedListActivity
+ * Display all played game history with the chosen game type.
  * */
+
 public class GamePlayedListRecyclerViewAdapter extends RecyclerView.Adapter<GamePlayedListRecyclerViewAdapter.ViewHolder> {
 
     private final GamePlayedListRecyclerViewInterface recyclerViewInterface;

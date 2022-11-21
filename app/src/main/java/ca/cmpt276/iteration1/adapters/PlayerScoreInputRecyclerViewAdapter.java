@@ -25,6 +25,11 @@ import ca.cmpt276.iteration1.model.PlayerScoreInput;
 
 
 // Citation: https://www.youtube.com/watch?v=O9hdu8i-u9c
+/**
+* Custom RecyclerView Adapter for the player score input in GamePlayActivity
+* Display textView and editText field to let user enter each player's score
+* */
+
 public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<PlayerScoreInputRecyclerViewAdapter.MyViewHolder> {
 
     private final String PLAYER_SCORE_EDIT_TEXT_KEY = "id";

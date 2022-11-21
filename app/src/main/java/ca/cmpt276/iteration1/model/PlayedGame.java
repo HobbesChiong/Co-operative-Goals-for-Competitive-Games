@@ -1,11 +1,12 @@
 package ca.cmpt276.iteration1.model;
 
-/*
+/**
 * The PlayedGame class is for storing played game's data.
 * type for game name
 * numberOfPlayers for #Players
 * score for the total score of the whole team game
 * achievement for the achievement that the team got according to their score.
+* ArrayList to store each player's score and information
 * */
 
 import androidx.annotation.NonNull;

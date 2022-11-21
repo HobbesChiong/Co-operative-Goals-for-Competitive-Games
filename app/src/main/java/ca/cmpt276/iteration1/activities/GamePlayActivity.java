@@ -37,6 +37,9 @@ import ca.cmpt276.iteration1.model.GameType;
 import ca.cmpt276.iteration1.model.PlayedGame;
 import ca.cmpt276.iteration1.model.PlayerScoreInput;
 
+/**
+* Activity to allow user input the game information by choosing the difficulty, number of player, and each player's score
+* */
 public class GamePlayActivity extends AppCompatActivity implements PlayerScoreInputRecyclerViewInterface {
 
     private final int GAME_PLAYED_POSITION_NON_EXISTENT = -1;
