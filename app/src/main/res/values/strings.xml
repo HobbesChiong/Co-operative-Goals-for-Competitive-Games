@@ -57,5 +57,14 @@
     <string name="difficulty_selection">Difficulty Selection</string>
     <string name="total_score">Total Score:</string>
     <string name="calculate_score">Calculate Score</string>/>
-    <string name="difficulty">Difficulty:</string>/>
+    <string name="difficulty">Difficulty:</string>
+    <string name="create_new_game">Create New Game</string>
+    <string name="edit_game">Edit Game</string>
+    <string name="require_user_to_fill_all_field">All fields must be filled in!</string>
+    <string name="game_created">Game created.</string>
+    <string name="game_changes_saved">Game changes saved.</string>
+    <string name="waiting_player_score_input">Awaiting player score inputs...</string>
+    <string name="waiting_user_new_input">User has deleted player amount, awaiting new input.</string>
+    <string name="display_score">Score: %1$d - %2$s</string>
+    />
 </resources>

@@ -106,13 +106,13 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         gameManager = GameManager.getInstance();
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("Create New Game");
+        actionBar.setTitle(R.string.create_new_game);
 
         extractIntentExtras();
         setDifficultyButtons();
 
         if (editGameActivity == true && difficultySelected == true){
-            actionBar.setTitle("Edit Game");
+            actionBar.setTitle(R.string.edit_game);
         }
 
     }
@@ -130,18 +130,18 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             case (R.id.btnSave): {
                 try {
                     if (difficultySelected == false || playersSelected == false || gameCompleted == false){
-                        Toast.makeText(GamePlayActivity.this, "All fields must be filled in!", Toast.LENGTH_SHORT).show();
-                        throw new Exception("All fields must be filled in!");
+                        Toast.makeText(GamePlayActivity.this, R.string.require_user_to_fill_all_field, Toast.LENGTH_SHORT).show();
+                        throw new Exception(String.valueOf(R.string.require_user_to_fill_all_field));
                     }
 
                     // Creating a new game
                     if (gamePlayedPosition == GAME_PLAYED_POSITION_NON_EXISTENT){
-                        Toast.makeText(GamePlayActivity.this, "Game created.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GamePlayActivity.this, R.string.game_created, Toast.LENGTH_SHORT).show();
                         saveNewGame();
                     }
                     // Editing an existing game
                     else {
-                        Toast.makeText(GamePlayActivity.this, "Game changes saved.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GamePlayActivity.this, R.string.game_changes_saved, Toast.LENGTH_SHORT).show();
                         saveExistingGame();
                     }
 
@@ -293,7 +293,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
                 // This prevents any old data from persisting and being carried over - basically gives the user a fresh start!
                 recyclerViewAdapter = null;
                 TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
-                tvScoreWithAchievementLevel.setText("Awaiting player score inputs...");
+                tvScoreWithAchievementLevel.setText(R.string.waiting_player_score_input);
 
                 playersSelected = true;
                 setupGameInfoModels();
@@ -302,7 +302,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             }
             catch (NumberFormatException numberFormatException){
                 playersSelected = false;
-                Log.i("Undefined Player Amount", "User has deleted player amount, awaiting new input.");
+                Log.i("Undefined Player Amount", getString(R.string.waiting_user_new_input));
             }
         }
 
@@ -369,7 +369,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         recyclerViewAdapter = new PlayerScoreInputRecyclerViewAdapter(GamePlayActivity.this, playerScoreInputs, editGameActivity, GamePlayActivity.this);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(GamePlayActivity.this));
-        //recyclerView.getRecycledViewPool().setMaxRecycledViews(1, 0);
     }
 
 
@@ -417,12 +416,12 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         }
 
         if (!gameCompleted) {
-            tvScoreWithAchievementLevel.setText("Awaiting player score inputs...");
+            tvScoreWithAchievementLevel.setText(R.string.waiting_player_score_input);
             return;
         }
 
         String achievementTitle = gameType.getAchievementLevel(totalScore, playerAmount, difficulty);
-        tvScoreWithAchievementLevel.setText("Score: " + totalScore + " - " + achievementTitle);
+        tvScoreWithAchievementLevel.setText(getString(R.string.display_score, totalScore, achievementTitle));
     }
 
 }
