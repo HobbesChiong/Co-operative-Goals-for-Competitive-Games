@@ -7,6 +7,13 @@
     tools:context=".activities.GamePlayActivity">
 
     <ImageView
+        android:id="@+id/iv_gamePlayBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/boardgame"
+        android:scaleType="centerCrop"/>
+
+    <ImageView
         android:id="@+id/ivGameSaveAnimation"
         android:layout_width="113dp"
         android:layout_height="108dp"
@@ -65,6 +72,7 @@
         android:gravity="center"
         android:inputType="number"
         android:minHeight="48dp"
+        android:textColor="#000000"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/tvChoosePlayerAmount"
         app:layout_constraintStart_toStartOf="@+id/tvChoosePlayerAmount"
@@ -108,8 +116,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:textAlignment="center"
+        android:textColor="#FFFFFF"
         android:textStyle="bold|italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".activities.OptionsActivity">
 
+    <ImageView
+        android:id="@+id/iv_optionBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/boardgame"
+        android:scaleType="centerCrop"/>
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
