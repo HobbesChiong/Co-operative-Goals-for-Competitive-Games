@@ -10,6 +10,7 @@ Creating games and game types:
 
 
 icon picture reference: retrieved 3 Nov, 2022 from https://www.pngegg.com/en/png-zkzwq
+background image reference: retrieved 20 Nov, 2022 from https://www.pexels.com/photo/close-up-photo-of-monopoly-board-game-776654/
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 User Story Estimations:
