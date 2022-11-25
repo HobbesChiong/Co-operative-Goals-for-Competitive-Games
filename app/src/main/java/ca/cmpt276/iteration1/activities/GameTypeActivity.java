@@ -1,16 +1,27 @@
 package ca.cmpt276.iteration1.activities;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import ca.cmpt276.iteration1.R;
@@ -88,8 +99,33 @@ public class GameTypeActivity extends AppCompatActivity {
         }
 
         ab.setTitle(appBarTitle);
+
+        // Register photo button
+        Button b = findViewById(R.id.btPhoto);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityIntent.launch(cameraIntent);
+            }
+        });
     }
 
+    // https://stackoverflow.com/questions/71082372/startactivityforresult-is-deprecated-im-trying-to-update-my-code
+    ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+//                    Bitmap bm = result.
+                    Intent i = result.getData();
+                    Bundle extras = i.getExtras();
+                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+                    ImageView imageView = findViewById(R.id.ivGameBox);
+                    imageView.setImageBitmap(imageBitmap);
+                    Toast.makeText(GameTypeActivity.this, "Returned from camera", Toast.LENGTH_SHORT).show();
+                }
+            });
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
