@@ -8,12 +8,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +28,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
@@ -105,6 +115,7 @@ public class GameTypeActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Launch the camera and take a picture
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityIntent.launch(cameraIntent);
             }
@@ -117,13 +128,45 @@ public class GameTypeActivity extends AppCompatActivity {
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
-//                    Bitmap bm = result.
+                    // Extract the bitmap the camera just took a photo of
                     Intent i = result.getData();
                     Bundle extras = i.getExtras();
                     Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+                    // Apply the bitmap to our imageview
                     ImageView imageView = findViewById(R.id.ivGameBox);
                     imageView.setImageBitmap(imageBitmap);
-                    Toast.makeText(GameTypeActivity.this, "Returned from camera", Toast.LENGTH_SHORT).show();
+
+                    // Save the bitmap to storage (https://www.youtube.com/watch?v=oLcxTunwaFk)
+
+                    // todo: migrate this into one big permission check (does the user have storage AND camera perms?)
+                    if (ContextCompat.checkSelfPermission(GameTypeActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                        ActivityCompat.requestPermissions(GameTypeActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},100);
+                    }
+
+                    // Create a folder for storing images of board games
+                    File directory = new File(Environment.getExternalStorageDirectory(), "BoardGameImages");
+                    if (!directory.exists()) {
+                        directory.mkdirs();
+                    }
+
+                    // Save the image to a jpeg
+                    File imageFile = new File(directory, System.currentTimeMillis() + ".jpg");
+                    OutputStream outputStream;
+                    try {
+                        // Create the output stream
+                        outputStream = new FileOutputStream(imageFile);
+
+                        // Compress the bitmap
+                        imageBitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
+
+                        // Close the output stream
+                        outputStream.flush();
+                        outputStream.close();
+                    } catch (Exception e) {
+                        // Show a (un)helpful toast if any errors occurred along the way
+                        Toast.makeText(GameTypeActivity.this, "Couldn't save image! Did you grant the appropriate permissions?", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
 

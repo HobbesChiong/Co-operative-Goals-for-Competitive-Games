@@ -10,8 +10,10 @@
         android:id="@+id/iv_gameTypeBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="centerCrop"
         android:src="@drawable/boardgame"
-        android:scaleType="centerCrop"/>
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
 
     <EditText
         android:id="@+id/etGameName"
@@ -89,22 +91,24 @@
         android:id="@+id/btPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="36dp"
         android:text="Add Photo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvGameName3" />
+        app:layout_constraintTop_toBottomOf="@+id/etBadScore" />
 
     <ImageView
         android:id="@+id/ivGameBox"
-        android:layout_width="82dp"
-        android:layout_height="83dp"
-        android:layout_marginBottom="104dp"
+        android:layout_width="161dp"
+        android:layout_height="222dp"
+        android:layout_marginTop="98dp"
+        android:layout_marginBottom="72dp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_gameTypeBackground"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btPhoto"
+        app:layout_constraintVertical_bias="0.0"
         tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
