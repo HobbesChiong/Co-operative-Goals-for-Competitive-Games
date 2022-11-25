@@ -1,5 +1,9 @@
 package ca.cmpt276.iteration1.activities;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,11 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -45,8 +51,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     private final int GAME_PLAYED_POSITION_NON_EXISTENT = -1;
     private int gamePlayedPosition;
 
-    private ArrayList<Button> difficultyButtons;
-
     private boolean editGameActivity = false;
     private int originalPlayerAmount;
 
@@ -62,12 +66,15 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     private String difficulty;
     private int playerAmount;
     private int totalScore;
+    private String takePhoto;
 
     private ArrayList<Integer> playerScores;
 
     private EditText etPlayerAmount;
     private RecyclerView rvPlayerScoreInputs;
     private PlayerScoreInputRecyclerViewAdapter recyclerViewAdapter;
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     // If a context and gameType are given, we are creating a new game
     public static Intent makeIntent(Context context, String gameTypeString){
@@ -113,6 +120,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
         extractIntentExtras();
         setDifficultyButtons();
+        setPhotoOptionsButtons();
 
         if (editGameActivity == true && difficultySelected == true){
             actionBar.setTitle(R.string.edit_game);
@@ -219,19 +227,19 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         btnDifficultyNormal.setTag("Normal");
         btnDifficultyHard.setTag("Hard");
 
-        difficultyButtons = new ArrayList<>();
+        ArrayList<Button> difficultyButtons = new ArrayList<>();
         difficultyButtons.add(btnDifficultyEasy);
         difficultyButtons.add(btnDifficultyNormal);
         difficultyButtons.add(btnDifficultyHard);
 
         if (editGameActivity == true){
-            highlightSelectedDifficultyButton(difficulty);
+            highlightSelectedButton(difficulty, difficultyButtons);
         }
 
         // Choosing player count is hidden by default as a user needs to select a difficulty first
         // If any of these buttons are pressed, enable player count input
         btnDifficultyEasy.setOnClickListener(view -> {
-            highlightSelectedDifficultyButton("Easy");
+            highlightSelectedButton("Easy", difficultyButtons);
 
             difficulty = "Easy";
             difficultySelected = true;
@@ -239,7 +247,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             updateScoreTextView();
         });
         btnDifficultyNormal.setOnClickListener(view -> {
-            highlightSelectedDifficultyButton("Normal");
+            highlightSelectedButton("Normal", difficultyButtons);
 
             difficulty = "Normal";
             difficultySelected = true;
@@ -247,7 +255,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             updateScoreTextView();
         });
         btnDifficultyHard.setOnClickListener(view -> {
-            highlightSelectedDifficultyButton("Hard");
+            highlightSelectedButton("Hard", difficultyButtons);
 
             difficulty = "Hard";
             difficultySelected = true;
@@ -256,9 +264,42 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         });
     }
 
-    private void highlightSelectedDifficultyButton(String selectedDifficultyButtonTag){
-        for (Button difficultyButton : difficultyButtons){
-            if (difficultyButton.getTag().equals(selectedDifficultyButtonTag)){
+    //this function is to set up the yes no button that asking whether the user willing to take a photo to save for the game play
+    private void setPhotoOptionsButtons() {
+        Button btnYes = findViewById(R.id.btnYesToTakePhoto);
+        Button btnNo = findViewById(R.id.btnNoToTakePhoto);
+        ArrayList<Button> takePhotoButton = new ArrayList<>();
+
+        btnYes.setTag("Yes");
+        btnNo.setTag("No");
+
+        takePhotoButton.add(btnYes);
+        takePhotoButton.add(btnNo);
+
+        if(editGameActivity){
+            highlightSelectedButton(takePhoto, takePhotoButton);
+        }
+
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightSelectedButton("Yes", takePhotoButton);
+                takePhoto = "Yes";
+
+            }
+        });
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightSelectedButton("No", takePhotoButton);
+                takePhoto = "No";
+            }
+        });
+    }
+
+    private void highlightSelectedButton(String selectedButtonTag, ArrayList<Button> buttons){
+        for (Button difficultyButton : buttons){
+            if (difficultyButton.getTag().equals(selectedButtonTag)){
                 difficultyButton.setBackgroundColor(Color.BLACK);
             }
             else {

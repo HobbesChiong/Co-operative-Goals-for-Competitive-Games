@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tv"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.GamePlayActivity">
@@ -10,8 +11,10 @@
         android:id="@+id/iv_gamePlayBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="centerCrop"
         android:src="@drawable/boardgame"
-        android:scaleType="centerCrop"/>
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="-290dp" />
 
     <ImageView
         android:id="@+id/ivGameSaveAnimation"
@@ -39,16 +42,6 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnDifficultyNormal" />
-
-    <Button
-        android:id="@+id/btnDifficultyEasy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/purple_500"
-        android:text="@string/easy"
-        app:layout_constraintEnd_toStartOf="@+id/btnDifficultyNormal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btnDifficultyNormal" />
 
     <TextView
         android:id="@+id/tvChooseDifficulty"
@@ -80,6 +73,16 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
     <Button
+        android:id="@+id/btnDifficultyEasy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/purple_500"
+        android:text="@string/easy"
+        app:layout_constraintEnd_toStartOf="@+id/btnDifficultyNormal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnDifficultyNormal" />
+
+    <Button
         android:id="@+id/btnDifficultyHard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -102,7 +105,7 @@
         android:id="@+id/rvPlayerScoreInputs"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="8dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/tvScoreWithAchievementLevel"
         app:layout_constraintEnd_toEndOf="parent"
@@ -114,12 +117,46 @@
         android:id="@+id/tvScoreWithAchievementLevel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="8dp"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textStyle="bold|italic"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_askUserWillingToTakePhoto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_askUserWillingToTakePhoto"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
+        android:background="#48FFFFFF"
+        android:text="Do you want to take a photo and save for the game record?"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnYesToTakePhoto"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnYesToTakePhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Yes"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnNoToTakePhoto"
+        app:layout_constraintStart_toStartOf="@+id/tv_askUserWillingToTakePhoto" />
+
+    <Button
+        android:id="@+id/btnNoToTakePhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="72dp"
+        android:layout_marginBottom="8dp"
+        android:text="No"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
