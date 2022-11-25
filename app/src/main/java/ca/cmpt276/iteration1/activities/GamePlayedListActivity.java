@@ -109,6 +109,10 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
                 createAchievementLevelDialog();
                 break;
             }
+            case (R.id.btnStatistics):{
+                createStatisticsDialog();
+                break;
+            }
             case (android.R.id.home): {
                 finish();
                 break;
@@ -117,6 +121,7 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
 
         return true;
     }
+
 
     @Override
     public void onBackPressed(){
@@ -294,6 +299,9 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
         closeAchievementLevelsDialog.setOnClickListener(view -> {
             achievementLevelsDialog.dismiss();
         });
+    }
+
+    private void createStatisticsDialog() {
     }
 
     private void highlightSelectedDifficultyButton(int selectedDifficultyButtonId){
