@@ -311,25 +311,7 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
         statisticsDialog.show();
 
         gameType = gm.getGameTypeFromString(this.gameTypeString);
-
-        // for each played game in specific played game create an array with indexes as achievement index and arr[i] as amt of achievements O(n + k) run time vs O(8n)
         populateStatisticsDialog();
-//        ArrayList<PlayedGame> specificPlayedGames = gm.getSpecificPlayedGames(this.gameTypeString);
-//        int[] achievementsEarnedInts = new int[8];
-//        String[] achievementsEarnedStrings = new String[8];
-//        int achievementTheme = gm.getAchievementTheme();
-//
-//
-//        for(PlayedGame currGame : specificPlayedGames){
-//            achievementsEarnedInts[currGame.getAchievementIndex()] += 1;
-//        }
-//
-//        for(int i = 0; i < 8; i++){
-//            achievementsEarnedStrings[i] = gameType.getSpecificAchievement(achievementTheme,i) + ": " + achievementsEarnedInts[i];
-//        }
-
-
-
     }
 
     /**
@@ -360,7 +342,7 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.statistics_list, achievementsEarnedStrings);
-        ListView list = findViewById(R.id.lvStatistics);
+        ListView list = statisticsDialog.findViewById(R.id.lvStatistics);
         list.setAdapter(adapter);
     }
 
