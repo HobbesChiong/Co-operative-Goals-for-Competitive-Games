@@ -19,8 +19,10 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +64,7 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
 
     // Fields for the achievement levels dialog
     private Dialog achievementLevelsDialog;
+    private Dialog statisticsDialog;
     private TextView achievementLevels;
     private EditText achievementLevelPlayerCount;
     private String dialogSelectedDifficulty = "Normal";
@@ -302,6 +305,63 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
     }
 
     private void createStatisticsDialog() {
+        statisticsDialog = new Dialog(GamePlayedListActivity.this);
+        statisticsDialog.setContentView(R.layout.dialog_statistics);
+        statisticsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        statisticsDialog.show();
+
+        gameType = gm.getGameTypeFromString(this.gameTypeString);
+
+        // for each played game in specific played game create an array with indexes as achievement index and arr[i] as amt of achievements O(n + k) run time vs O(8n)
+        populateStatisticsDialog();
+//        ArrayList<PlayedGame> specificPlayedGames = gm.getSpecificPlayedGames(this.gameTypeString);
+//        int[] achievementsEarnedInts = new int[8];
+//        String[] achievementsEarnedStrings = new String[8];
+//        int achievementTheme = gm.getAchievementTheme();
+//
+//
+//        for(PlayedGame currGame : specificPlayedGames){
+//            achievementsEarnedInts[currGame.getAchievementIndex()] += 1;
+//        }
+//
+//        for(int i = 0; i < 8; i++){
+//            achievementsEarnedStrings[i] = gameType.getSpecificAchievement(achievementTheme,i) + ": " + achievementsEarnedInts[i];
+//        }
+
+
+
+    }
+
+    /**
+     * for each played game in specific played game create an array with indexes as achievement index and arr[i] as amt of achievements
+     * Stores strings in format "achievment: 4" for adapter then displays on list view
+     * O(n) n = specificPlayedGames size
+     */
+    private void populateStatisticsDialog(){
+        // for each played game in specific played game create an array with indexes as achievement index and arr[i] as amt of achievements O(n + k) run time vs O(8n)
+        ArrayList<PlayedGame> specificPlayedGames = gm.getSpecificPlayedGames(this.gameTypeString);
+        int[] achievementsEarnedInts = new int[8];
+        String[] achievementsEarnedStrings = new String[8];
+        int achievementTheme = gm.getAchievementTheme();
+
+        // initialize each index to have 0 achievements earned instead of garbage/null values
+        for(int i = 0; i < 8; i++) {
+            achievementsEarnedInts[i] = 0;
+        }
+
+        // adds 1 for each achievement earned per currGame
+        for(PlayedGame currGame : specificPlayedGames){
+            achievementsEarnedInts[currGame.getAchievementIndex()] += 1;
+        }
+
+        // stores the strings for adapter
+        for(int i = 0; i < 8; i++){
+            achievementsEarnedStrings[i] = gameType.getSpecificAchievement(achievementTheme,i) + ": " + achievementsEarnedInts[i];
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.statistics_list, achievementsEarnedStrings);
+        ListView list = findViewById(R.id.lvStatistics);
+        list.setAdapter(adapter);
     }
 
     private void highlightSelectedDifficultyButton(int selectedDifficultyButtonId){

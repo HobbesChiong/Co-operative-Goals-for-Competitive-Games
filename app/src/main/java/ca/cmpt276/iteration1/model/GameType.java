@@ -146,6 +146,10 @@ public class GameType {
         return getAchievementName(achievementIndex,achievementTheme);
     }
 
+    public String getSpecificAchievement(int theme, int level){
+        return achievementLevels[theme][level];
+    }
+
     public ArrayList<String> getAchievementLevelScoreRequirements(int playerNumber, String difficulty){
         int achievementTheme = GameManager.getInstance().getAchievementTheme();
 
