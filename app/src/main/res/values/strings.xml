@@ -66,5 +66,6 @@
     <string name="waiting_player_score_input">Awaiting player score inputs...</string>
     <string name="waiting_user_new_input">User has deleted player amount, awaiting new input.</string>
     <string name="display_score">Score: %1$d - %2$s</string>
+    <string name="take_photo">Take Photo</string>
     />
 </resources>

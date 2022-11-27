@@ -26,7 +26,7 @@ public class PlayedGame {
     private String difficulty;
     private ArrayList<Integer> playerScores;
 
-    private LocalDateTime datePlayed;
+    private final LocalDateTime datePlayed;
 
     public PlayedGame(String type,
                       int numberOfPlayers,

@@ -7,16 +7,35 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageCapture;
+import androidx.camera.core.ImageCaptureException;
+import androidx.camera.core.Preview;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+
+import android.Manifest;
+import android.content.ContentValues;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,19 +43,27 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.common.util.concurrent.ListenableFuture;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
 
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.adapters.PlayerScoreInputRecyclerViewAdapter;
+import ca.cmpt276.iteration1.databinding.ActivityMainBinding;
 import ca.cmpt276.iteration1.interfaces.PlayerScoreInputRecyclerViewInterface;
 import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
@@ -74,7 +101,9 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     private RecyclerView rvPlayerScoreInputs;
     private PlayerScoreInputRecyclerViewAdapter recyclerViewAdapter;
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private ActivityMainBinding viewBinding;
+    private ImageCapture imageCapture = null;
+    private ExecutorService cameraExecutor;
 
     // If a context and gameType are given, we are creating a new game
     public static Intent makeIntent(Context context, String gameTypeString){
@@ -111,6 +140,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_game_play);
 
         gameManager = GameManager.getInstance();
@@ -118,6 +148,9 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.create_new_game);
 
+        if(!allPermissionGranted()){
+            ActivityCompat.requestPermissions(GamePlayActivity.this, Configuration.REQUIRED_PERMISSION, Configuration.REQUEST_CODE_PERMISSION);
+        }
         extractIntentExtras();
         setDifficultyButtons();
         setPhotoOptionsButtons();
@@ -125,7 +158,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         if (editGameActivity == true && difficultySelected == true){
             actionBar.setTitle(R.string.edit_game);
         }
-
     }
 
     @Override
@@ -285,7 +317,33 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             public void onClick(View v) {
                 highlightSelectedButton("Yes", takePhotoButton);
                 takePhoto = "Yes";
+                startCamera();
+                /*Button imageCaptureButton = findViewById(R.id.image_capture_button);
+                imageCaptureButton.setVisibility(View.VISIBLE);
+                imageCaptureButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        takePhoto();
+                    }
+                });*/
+                cameraExecutor = Executors.newSingleThreadExecutor();
 
+                /*Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivity(cameraIntent);
+
+                ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        Intent i = result.getData();
+                        Bundle extras = i.getExtras();
+                        Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+                        ImageView iv = findViewById(R.id.ivGamePhoto);
+                        iv.setImageBitmap(imageBitmap);
+
+                        grabImage(imageBitmap);
+                    }
+                });*/
             }
         });
         btnNo.setOnClickListener(new View.OnClickListener() {
@@ -295,6 +353,133 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
                 takePhoto = "No";
             }
         });
+    }
+
+    public boolean allPermissionGranted(){
+        for(String permission : GamePlayActivity.Configuration.REQUIRED_PERMISSION){
+            if(ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == Configuration.REQUEST_CODE_PERMISSION){
+            if(allPermissionGranted()){
+                startCamera();
+            }
+            else{
+                Toast.makeText(this, "User decline to give access to the application", Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }
+    }
+
+    private void startCamera() {
+        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+        cameraProviderFuture.addListener(() -> {
+            try {
+                //Used to bind the lifecycle of cameras to the lifecycle owner
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+
+                //Preview
+                PreviewView viewFinder = findViewById(R.id.viewFinder);
+                viewFinder.setImplementationMode(PreviewView.ImplementationMode.COMPATIBLE);
+                Preview preview = new Preview.Builder().build();
+                preview.setSurfaceProvider(viewFinder.getSurfaceProvider());
+                imageCapture = new ImageCapture.Builder().build();
+
+                // Select back camera as a default
+                CameraSelector cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA;
+
+                //Unbind use cases before rebinding
+                cameraProvider.unbindAll();
+
+                //Bind use cases to camera
+                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
+
+            } catch (Exception e) {
+                Log.e(Configuration.TAG, "Use case binding failed" + e);
+            }
+        }, ContextCompat.getMainExecutor(this));
+    }
+
+    private void takePhoto(){
+        if(imageCapture == null){
+            return;
+        }
+        //Create time stamped name and MediaStore entry.
+        String name = new SimpleDateFormat(Configuration.FILENAME_FORMAT, Locale.US).format(System.currentTimeMillis());
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
+        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
+            contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image");
+        }
+
+        //Create output options object which contains file + metadata
+        ImageCapture.OutputFileOptions outputOptions = new ImageCapture.OutputFileOptions.Builder(getContentResolver(), MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues).build();
+
+        //Set up image capture listener, which is triggered after photo has been taken
+        imageCapture.takePicture(outputOptions, ContextCompat.getMainExecutor(this), new ImageCapture.OnImageSavedCallback(){
+            @Override
+            public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                String msg = "Photo capture succeeded: " + outputFileResults.getSavedUri();
+                Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
+                Log.d(Configuration.TAG, msg);
+            }
+
+            @Override
+            public void onError(@NonNull ImageCaptureException exception) {
+                Log.e(Configuration.TAG, "Photo capture failed: " + exception.getMessage());
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        cameraExecutor.shutdown();
+    }
+
+    static class Configuration{
+        public static final String TAG = "CameraxBasic";
+        public static final String FILENAME_FORMAT = "yyyy-MM-dd-HH-mm";
+        public static final int REQUEST_CODE_PERMISSION = 10;
+        public static final String[] REQUIRED_PERMISSION = Build.VERSION.SDK_INT <= Build.VERSION_CODES.P ?
+                new String[]{Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE}:
+                new String[]{Manifest.permission.CAMERA};
+    }
+
+
+    private void grabImage(Bitmap imageBitmap) {
+        //Create a folder for storing images of each game play
+        File directory = new File(Environment.getExternalStorageDirectory(), "gamePlayPhotos");
+        if(!directory.exists()){
+            directory.mkdirs();
+        }
+
+        //Save the image to jpeg
+        File imageFile = new File(directory, System.currentTimeMillis() + ".jpg");
+        OutputStream outputStream;
+        try{
+            //Create the output stream
+            outputStream = new FileOutputStream(imageFile);
+
+            //Compress the bitmap
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+
+            //Close the output stream
+            outputStream.flush();
+            outputStream.close();
+        }
+        catch(Exception e){
+            Toast.makeText(this, "Couldn't save image! Permission required.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void highlightSelectedButton(String selectedButtonTag, ArrayList<Button> buttons){
@@ -312,6 +497,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         // The player amount edittext and recyclerview containing cards to fill in player scores are hidden by default
         // The user must select a difficulty first in order to select amount of players and input scores
         TextView tvChoosePlayerAmount = findViewById(R.id.tvChoosePlayerAmount);
+        ScrollView svPhotoTakingOptions = findViewById(R.id.svPhotoOption);
         etPlayerAmount = findViewById(R.id.etPlayerCount);
         rvPlayerScoreInputs = findViewById(R.id.rvPlayerScoreInputs);
 
@@ -319,6 +505,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         etPlayerAmount.setVisibility(View.VISIBLE);
         etPlayerAmount.addTextChangedListener(playerCountInputWatcher);
         rvPlayerScoreInputs.setVisibility(View.VISIBLE);
+        svPhotoTakingOptions.setVisibility(View.VISIBLE);
     }
 
     private final TextWatcher playerCountInputWatcher = new TextWatcher() {

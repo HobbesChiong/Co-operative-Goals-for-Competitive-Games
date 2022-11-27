@@ -36,7 +36,7 @@ public class GamePlayedListRecyclerViewAdapter extends RecyclerView.Adapter<Game
     GameType gameType;
     ArrayList<PlayedGame> playedGames;
 
-    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM dd @ hh.mm a");
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM dd @ hh.mm a");
 
     public GamePlayedListRecyclerViewAdapter(Context context, GamePlayedListRecyclerViewInterface recyclerViewInterface, String gameTypeString){
         this.gameManager = GameManager.getInstance();

@@ -5,9 +5,11 @@ import static ca.cmpt276.iteration1.activities.OptionsActivity.OPTIONS_PREFERENC
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,6 +44,7 @@ public class GameListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_list);
 
         gm = GameManager.getInstance();
+
 
         loadGameTypeList();
         setUpFab();
@@ -135,12 +138,13 @@ public class GameListActivity extends AppCompatActivity {
 
                 return true;
             }
-
             default: return true;
         }
 
-
     }
+
+    //request user permission
+
 
     private void populateListView() {
         // Get list of game type names

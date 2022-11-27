@@ -35,13 +35,13 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
     private final String PLAYER_SCORE_EDIT_TEXT_KEY = "id";
     private final int INVALID_SCORE = -1;
 
-    private Context context;
-    private boolean editGame;
-    private ArrayList<PlayerScoreInput> playerScoreInputs;
-    private PlayerScoreInputRecyclerViewInterface recyclerViewInterface;
+    private final Context context;
+    private final boolean editGame;
+    private final ArrayList<PlayerScoreInput> playerScoreInputs;
+    private final PlayerScoreInputRecyclerViewInterface recyclerViewInterface;
 
     // Stores the data in the edit text for all the recyclerviews
-    private int[] recyclerViewEditTextData;
+    private final int[] recyclerViewEditTextData;
 
     public PlayerScoreInputRecyclerViewAdapter(Context context, ArrayList<PlayerScoreInput> playerScoreInputs, boolean editGame, PlayerScoreInputRecyclerViewInterface recyclerViewInterface){
         this.context = context;
