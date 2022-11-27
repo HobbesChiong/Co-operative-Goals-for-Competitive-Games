@@ -5,7 +5,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -16,7 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -30,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
@@ -51,6 +49,7 @@ public class GameTypeActivity extends AppCompatActivity {
 
     private boolean editGameActivity;
     private String gameTypeString;
+    private String gamePicturePath;
     private GameType gameType;
 
     EditText gameName;
@@ -122,6 +121,11 @@ public class GameTypeActivity extends AppCompatActivity {
         });
     }
 
+    private void updateGameImageView(Bitmap imageBitmap) {
+        ImageView imageView = findViewById(R.id.ivGameBox);
+        imageView.setImageBitmap(imageBitmap);
+    }
+
     // https://stackoverflow.com/questions/71082372/startactivityforresult-is-deprecated-im-trying-to-update-my-code
     ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -133,9 +137,8 @@ public class GameTypeActivity extends AppCompatActivity {
                     Bundle extras = i.getExtras();
                     Bitmap imageBitmap = (Bitmap) extras.get("data");
 
-                    // Apply the bitmap to our imageview
-                    ImageView imageView = findViewById(R.id.ivGameBox);
-                    imageView.setImageBitmap(imageBitmap);
+                    // Display the bitmap
+                    updateGameImageView(imageBitmap);
 
                     // Save the bitmap to storage (https://www.youtube.com/watch?v=oLcxTunwaFk)
 
@@ -163,6 +166,7 @@ public class GameTypeActivity extends AppCompatActivity {
                         // Close the output stream
                         outputStream.flush();
                         outputStream.close();
+                        gamePicturePath = imageFile.getAbsolutePath();
                     } catch (Exception e) {
                         // Show a (un)helpful toast if any errors occurred along the way
                         Toast.makeText(GameTypeActivity.this, "Couldn't save image! Did you grant the appropriate permissions?", Toast.LENGTH_SHORT).show();
@@ -200,7 +204,7 @@ public class GameTypeActivity extends AppCompatActivity {
                             throw new IllegalArgumentException("Game name cannot be empty!");
                         }
 
-                        GameType gameType = new GameType(gameName, goodScore, badScore);
+                        GameType gameType = new GameType(gameName, goodScore, badScore, gamePicturePath);
                         String res = gameName + " " + getString(R.string.configuration_saved);
                         Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
 
@@ -255,11 +259,15 @@ public class GameTypeActivity extends AppCompatActivity {
 
     private void setGameTypeInfo(){
         // When the user is editing an existing game type, set the text fields accordingly
-
         gameName.setText(gameType.getGameType());
         goodScore.setText(String.valueOf(gameType.getGoodScore()));
         badScore.setText(String.valueOf(gameType.getBadScore()));
 
+        // Update the game's image
+        // Get the bitmap from a directory
+        // https://stackoverflow.com/questions/16804404/create-a-bitmap-drawable-from-file-path
+        Bitmap imageBitmap = BitmapFactory.decodeFile(gameType.getImagePath());
+        updateGameImageView(imageBitmap);
     }
 
     private String getStringFromEditText(int editTextID) {
