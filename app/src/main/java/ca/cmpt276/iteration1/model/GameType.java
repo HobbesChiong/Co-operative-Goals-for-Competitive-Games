@@ -87,10 +87,11 @@ public class GameType {
 
     public String getImagePath() { return imagePath; }
 
-    public void editGameType(String type, int goodScore, int badScore) {
+    public void editGameType(String type, int goodScore, int badScore, String imagePath) {
         this.type = type;
         this.goodScore = goodScore;
         this.badScore = badScore;
+        this.imagePath = imagePath;
 
         if (goodScore < badScore){
             throw new IllegalArgumentException("Bad score should be less than the good score.");

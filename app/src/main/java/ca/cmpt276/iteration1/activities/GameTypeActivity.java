@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Path;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -254,7 +255,7 @@ public class GameTypeActivity extends AppCompatActivity {
         int newGoodScore = Integer.parseInt(goodScore.getText().toString());
         int newBadScore = Integer.parseInt(badScore.getText().toString());
 
-        gameType.editGameType(newGameName, newGoodScore, newBadScore);
+        gameType.editGameType(newGameName, newGoodScore, newBadScore, gamePicturePath);
     }
 
     private void setGameTypeInfo(){
@@ -266,8 +267,21 @@ public class GameTypeActivity extends AppCompatActivity {
         // Update the game's image
         // Get the bitmap from a directory
         // https://stackoverflow.com/questions/16804404/create-a-bitmap-drawable-from-file-path
-        Bitmap imageBitmap = BitmapFactory.decodeFile(gameType.getImagePath());
-        updateGameImageView(imageBitmap);
+        updateGameImageView(getBitmapFromPath(gameType.getImagePath()));
+    }
+
+    /*
+    Returns the bitmap found at a path. If the path is invalid, returns
+    a default bitmap.
+     */
+    public static Bitmap getBitmapFromPath(String imagePath) {
+        try {
+            Bitmap imageBitmap = BitmapFactory.decodeFile(imagePath);
+            return imageBitmap;
+        } catch (Exception e) {
+            // Return default bitmap
+            return null;
+        }
     }
 
     private String getStringFromEditText(int editTextID) {
