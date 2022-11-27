@@ -197,7 +197,8 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     }
 
     private void saveNewGame(){
-        updatePlayerScores();
+        // Just reinitialize playerScores as we do not want to keep "invisible" data
+        playerScores = recyclerViewAdapter.getScores();
 
         int achievementIndex = gameType.getAchievementIndex(totalScore, playerAmount, difficulty);
         LocalDateTime datePlayed = LocalDateTime.now();
@@ -206,7 +207,8 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     }
 
     private void saveExistingGame(){
-        updatePlayerScores();
+        // Just reinitialize playerScores as we do not want to keep "invisible" data
+        playerScores = recyclerViewAdapter.getScores();
 
         int achievementIndex = gameType.getAchievementIndex(totalScore, playerAmount, difficulty);
         playedGame.editPlayedGame(playerAmount, totalScore, achievementIndex, difficulty, playerScores);
@@ -308,6 +310,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
                 tvScoreWithAchievementLevel.setText(R.string.waiting_player_score_input);
 
                 setupRecyclerView();
+                updateTotalGameScore();
             }
             catch (NumberFormatException numberFormatException){
                 Log.i("Undefined Player Amount", getString(R.string.waiting_user_new_input));
@@ -353,43 +356,24 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             playerScores.set(i, inputtedScores.get(i));
         }
 
-        return;
+        updateTotalGameScore();
     }
-
-    private void updatePlayerScores() {
-        if (playerAmount > playerScores.size()){
-            // https://stackoverflow.com/questions/5600668/how-can-i-initialize-an-arraylist-with-all-zeroes-in-java
-
-        }
-        if (recyclerViewAdapter == null){
-            return;
-        }
-        ArrayList<Integer> definedScores = recyclerViewAdapter.getScores();
-
-        for (int i = 0; i < definedScores.size(); i++){
-            playerScores.set(i, definedScores.get(i));
-        }
-    }
-
-/*    private void updatePlayerScores() {
-        ArrayList<Integer> playerScores = recyclerViewAdapter.getScores();
-
-        // One or more of the scores must be invalid, the game hasn't been completed, don't recalculate!
-        if (playerScores == null) {
-            gameCompleted = false;
-            return;
-        }
-
-        setTotalGameScore(playerScores);
-    }*/
 
     private void updateTotalGameScore(){
         totalScore = 0;
         gameCompleted = true;
-        for (int score : playerScores){
-            totalScore += score;
-            if (score == INVALID_SCORE){
-                gameCompleted = false;
+
+        // We only go up to player amount to not add "invisible" scores
+        for (int i = 0; i < playerAmount; i++){
+            if (i < playerScores.size()){
+                totalScore += playerScores.get(i);
+                if (playerScores.get(i) == INVALID_SCORE){
+                    // If there is any unfilled data, do not allow user to save
+                    gameCompleted = false;
+                }
+            }
+            else {
+                totalScore += 0;
             }
         }
 
