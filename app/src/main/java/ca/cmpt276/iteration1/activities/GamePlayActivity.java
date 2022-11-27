@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.adapters.PlayerScoreInputRecyclerViewAdapter;
@@ -43,6 +44,7 @@ import ca.cmpt276.iteration1.model.PlayerScoreInput;
 public class GamePlayActivity extends AppCompatActivity implements PlayerScoreInputRecyclerViewInterface {
 
     private final int GAME_PLAYED_POSITION_NON_EXISTENT = -1;
+    private final int INVALID_SCORE = -1;
     private int gamePlayedPosition;
 
     private ArrayList<Button> difficultyButtons;
@@ -101,20 +103,23 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         setContentView(R.layout.activity_game_play);
 
         gameManager = GameManager.getInstance();
+        rvPlayerScoreInputs = findViewById(R.id.rvPlayerScoreInputs);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         extractIntentExtras();
 
         if (editGameActivity == true){
             actionBar.setTitle(R.string.edit_game);
-            setExistingProperties();
+            setExistingValues();
         }
         if (editGameActivity == false){
             actionBar.setTitle(R.string.create_new_game);
-            setDefaultProperties();
+            setDefaultValues();
         }
 
         setupDifficultyButtons();
+        setupPlayerCountInput();
+        setupRecyclerView();
     }
 
     @Override
@@ -256,15 +261,14 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         }
     }
 
-    private void setDefaultProperties(){
+    private void setDefaultValues(){
         playerAmount = 4;
         difficulty = "Normal";
-        playerScores = new ArrayList<>();
-
-        setupPlayerCountInput();
+        playerScores = new ArrayList<Integer>(Collections.nCopies(playerAmount, INVALID_SCORE));
+        updateScoreTextView();
     }
 
-    private void setExistingProperties(){
+    private void setExistingValues(){
         editGameActivity = true;
         gameCompleted = true;
 
@@ -276,17 +280,13 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         totalScore = playedGame.getTotalScore();
         playerScores = playedGame.getPlayerScores();
 
-        setupPlayerCountInput();
         updateScoreTextView();
-        setupPlayerScoreInputModels();
     }
 
     private void setupPlayerCountInput(){
         etPlayerAmount = findViewById(R.id.etPlayerCount);
         etPlayerAmount.setText(String.valueOf(playerAmount));
         etPlayerAmount.addTextChangedListener(playerCountInputWatcher);
-
-        setupPlayerScoreInputModels();
     }
 
     private final TextWatcher playerCountInputWatcher = new TextWatcher() {
@@ -307,8 +307,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
                 TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
                 tvScoreWithAchievementLevel.setText(R.string.waiting_player_score_input);
 
-                setupPlayerScoreInputModels();
-                updatePlayerScores();
+                setupRecyclerView();
             }
             catch (NumberFormatException numberFormatException){
                 Log.i("Undefined Player Amount", getString(R.string.waiting_user_new_input));
@@ -321,55 +320,58 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         }
     };
 
-    private void setupPlayerScoreInputModels(){
-        // Nothing too complicated, we're just giving each player score input row an id ranging from 0 to playerAmount
-        // This will help us keep track of which cards have a score inputted or not later on
-        ArrayList<PlayerScoreInput> playerScoreInputs = new ArrayList<>();
-
+    private void setupRecyclerView(){
+        // Create the models to send into the recyclerview adapter
+        ArrayList<PlayerScoreInput> playerScoreInputModels = new ArrayList<>();
         for (int i = 0; i < playerAmount; i++){
             try {
-                playerScoreInputs.add(new PlayerScoreInput(i, playerScores.get(i)));
+                if (playerScores.get(i) == INVALID_SCORE){
+                    playerScoreInputModels.add(new PlayerScoreInput(i));
+                }
+                if (playerScores.get(i) != INVALID_SCORE){
+                    playerScoreInputModels.add(new PlayerScoreInput(i, playerScores.get(i)));
+                }
             }
             catch (IndexOutOfBoundsException exception){
-                // If playerScores.get(i) returns an IndexOutOfBoundsException, it means no score
-                // exists for that particular player. Therefore, just default to an empty score.
-                playerScoreInputs.add(new PlayerScoreInput(i));
+                playerScoreInputModels.add(new PlayerScoreInput(i));
             }
         }
 
-        setupRecyclerView(playerScoreInputs);
-    }
-
-    private void setupRecyclerView(ArrayList<PlayerScoreInput> playerScoreInputs){
-        RecyclerView recyclerView = findViewById(R.id.rvPlayerScoreInputs);
-        recyclerViewAdapter = new PlayerScoreInputRecyclerViewAdapter(GamePlayActivity.this, playerScoreInputs, editGameActivity, GamePlayActivity.this);
-        recyclerView.setAdapter(recyclerViewAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(GamePlayActivity.this));
+        recyclerViewAdapter = new PlayerScoreInputRecyclerViewAdapter(GamePlayActivity.this, playerScoreInputModels, editGameActivity, GamePlayActivity.this);
+        rvPlayerScoreInputs.setAdapter(recyclerViewAdapter);
+        rvPlayerScoreInputs.setLayoutManager(new LinearLayoutManager(GamePlayActivity.this));
     }
 
     @Override
-    public void checkAllPlayerScoreInputs() {
-        updatePlayerScores();
-        updateScoreTextView();
+    public void updatePlayerScoreInputs() {
+        if (playerAmount > playerScores.size()){
+            playerScores = new ArrayList<Integer>(Collections.nCopies(playerAmount, INVALID_SCORE));
+        }
+        ArrayList<Integer> inputtedScores = recyclerViewAdapter.getScores();
+
+        for (int i = 0; i < inputtedScores.size(); i++){
+            playerScores.set(i, inputtedScores.get(i));
+        }
+
+        return;
     }
 
     private void updatePlayerScores() {
+        if (playerAmount > playerScores.size()){
+            // https://stackoverflow.com/questions/5600668/how-can-i-initialize-an-arraylist-with-all-zeroes-in-java
 
-/*        // If the current playerAmount is greater than the size of the arraylist
-        // Increase the size of the arraylist to account for the possible scores that
-        // the user may have added for higher player numbers
-        if (playerAmount > recyclerViewEditTextTempStorage.size()){
-            recyclerViewEditTextTempStorage.ensureCapacity(playerAmount);
         }
-
-        ArrayList<Integer> playerScores = recyclerViewAdapter.getScores();
-        for (int i = 0; i < playerScores.size(); i++){
-            recyclerViewEditTextTempStorage.set(i, playerScores.get(i));
+        if (recyclerViewAdapter == null){
+            return;
         }
+        ArrayList<Integer> definedScores = recyclerViewAdapter.getScores();
 
-        setTotalGameScore(playerScores);*/
+        for (int i = 0; i < definedScores.size(); i++){
+            playerScores.set(i, definedScores.get(i));
+        }
+    }
 
-
+/*    private void updatePlayerScores() {
         ArrayList<Integer> playerScores = recyclerViewAdapter.getScores();
 
         // One or more of the scores must be invalid, the game hasn't been completed, don't recalculate!
@@ -379,17 +381,19 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         }
 
         setTotalGameScore(playerScores);
-    }
+    }*/
 
-    private void setTotalGameScore(ArrayList<Integer> playerScores){
+    private void updateTotalGameScore(){
         totalScore = 0;
+        gameCompleted = true;
         for (int score : playerScores){
             totalScore += score;
+            if (score == INVALID_SCORE){
+                gameCompleted = false;
+            }
         }
-        this.playerScores = playerScores;
-        updateScoreTextView();
 
-        gameCompleted = true;
+        updateScoreTextView();
     }
 
     public void updateScoreTextView() {
@@ -399,12 +403,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         }
 
         TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
-
-        // If we increase decrease the player amount, then increase, then decrease again (and all fields are filled)
-        // The game game is still completed. Check if any fields are null and if not, update the text
-        if (recyclerViewAdapter.getScores() != null){
-            gameCompleted = true;
-        }
 
         if (!gameCompleted) {
             tvScoreWithAchievementLevel.setText(R.string.waiting_player_score_input);
