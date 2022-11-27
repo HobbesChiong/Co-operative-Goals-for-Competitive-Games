@@ -134,6 +134,9 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         switch(item.getItemId()){
             case (R.id.btnSave): {
                 try {
+                    updatePlayerScoreInputs();
+                    updateTotalGameScore();
+
                     if (gameCompleted == false){
                         Toast.makeText(GamePlayActivity.this, R.string.require_user_to_fill_all_field, Toast.LENGTH_SHORT).show();
                         throw new Exception(String.valueOf(R.string.require_user_to_fill_all_field));
@@ -347,8 +350,9 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
     @Override
     public void updatePlayerScoreInputs() {
+        // https://stackoverflow.com/questions/5600668/how-can-i-initialize-an-arraylist-with-all-zeroes-in-java
         if (playerAmount > playerScores.size()){
-            playerScores = new ArrayList<Integer>(Collections.nCopies(playerAmount, INVALID_SCORE));
+            playerScores = new ArrayList<>(Collections.nCopies(playerAmount, INVALID_SCORE));
         }
         ArrayList<Integer> inputtedScores = recyclerViewAdapter.getScores();
 
