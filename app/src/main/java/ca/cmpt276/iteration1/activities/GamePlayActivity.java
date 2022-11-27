@@ -48,10 +48,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     private ArrayList<Button> difficultyButtons;
 
     private boolean editGameActivity = false;
-    private int originalPlayerAmount;
 
-    private boolean difficultySelected = false;
-    private boolean playersSelected = false;
     private boolean gameCompleted = false;
 
     private GameManager gameManager;
@@ -114,7 +111,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         extractIntentExtras();
         setDifficultyButtons();
 
-        if (editGameActivity == true && difficultySelected == true){
+        if (editGameActivity == true){
             actionBar.setTitle(R.string.edit_game);
         }
 
@@ -132,7 +129,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         switch(item.getItemId()){
             case (R.id.btnSave): {
                 try {
-                    if (difficultySelected == false || playersSelected == false || gameCompleted == false){
+                    if (gameCompleted == false){
                         Toast.makeText(GamePlayActivity.this, R.string.require_user_to_fill_all_field, Toast.LENGTH_SHORT).show();
                         throw new Exception(String.valueOf(R.string.require_user_to_fill_all_field));
                     }
@@ -234,7 +231,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             highlightSelectedDifficultyButton("Easy");
 
             difficulty = "Easy";
-            difficultySelected = true;
             enableHiddenElements();
             updateScoreTextView();
         });
@@ -242,7 +238,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             highlightSelectedDifficultyButton("Normal");
 
             difficulty = "Normal";
-            difficultySelected = true;
             enableHiddenElements();
             updateScoreTextView();
         });
@@ -250,7 +245,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             highlightSelectedDifficultyButton("Hard");
 
             difficulty = "Hard";
-            difficultySelected = true;
             enableHiddenElements();
             updateScoreTextView();
         });
@@ -292,19 +286,16 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             try {
                 playerAmount = Integer.parseInt(etPlayerAmount.getText().toString());
 
-                // When the user chagnes the amount of players, we want to reset the adapter and textview for total score
+                // When the user changes the amount of players, we want to reset the adapter and textview for total score
                 // This prevents any old data from persisting and being carried over - basically gives the user a fresh start!
                 recyclerViewAdapter = null;
                 TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
                 tvScoreWithAchievementLevel.setText(R.string.waiting_player_score_input);
 
-                playersSelected = true;
                 setupGameInfoModels();
-
                 updatePlayerScores();
             }
             catch (NumberFormatException numberFormatException){
-                playersSelected = false;
                 Log.i("Undefined Player Amount", getString(R.string.waiting_user_new_input));
             }
         }
@@ -346,8 +337,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         enableHiddenElements();
 
         editGameActivity = true;
-        difficultySelected = true;
-        playersSelected = true;
         gameCompleted = true;
 
         gameType = gameManager.getGameTypeFromString(gameTypeString);
@@ -357,8 +346,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         playerAmount = playedGame.getNumberOfPlayers();
         totalScore = playedGame.getTotalScore();
         playerScores = playedGame.getPlayerScores();
-
-        originalPlayerAmount = playerAmount;
 
         EditText etPlayerCount = findViewById(R.id.etPlayerCount);
         etPlayerCount.setText(String.valueOf(playerAmount));
