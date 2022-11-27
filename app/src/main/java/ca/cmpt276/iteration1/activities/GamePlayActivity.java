@@ -48,7 +48,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     private ArrayList<Button> difficultyButtons;
 
     private boolean editGameActivity = false;
-
     private boolean gameCompleted = false;
 
     private GameManager gameManager;
@@ -88,14 +87,12 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         gameType = gameManager.getGameTypeFromString(gameTypeString);
 
         gamePlayedPosition = intent.getIntExtra("GamePlayedPosition", GAME_PLAYED_POSITION_NON_EXISTENT);
-        if (gamePlayedPosition == GAME_PLAYED_POSITION_NON_EXISTENT){
-            // Creating a new game if this condition is true
-            return;
-        }
 
-        // If a position exit, we are editing an existing game
-        // Set up the screen to display info
-        setEditGameInfo();
+        // If we are editing a game, it will give a position relative to the list of
+        // games played for a certain type
+        if (gamePlayedPosition != GAME_PLAYED_POSITION_NON_EXISTENT){
+            editGameActivity = true;
+        }
     }
 
     @Override
@@ -106,15 +103,18 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         gameManager = GameManager.getInstance();
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(R.string.create_new_game);
-
         extractIntentExtras();
-        setDifficultyButtons();
 
         if (editGameActivity == true){
             actionBar.setTitle(R.string.edit_game);
+            setExistingProperties();
+        }
+        if (editGameActivity == false){
+            actionBar.setTitle(R.string.create_new_game);
+            setDefaultProperties();
         }
 
+        setupDifficultyButtons();
     }
 
     @Override
@@ -191,7 +191,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         return true;
     }
 
-    void saveNewGame(){
+    private void saveNewGame(){
         updatePlayerScores();
 
         int achievementIndex = gameType.getAchievementIndex(totalScore, playerAmount, difficulty);
@@ -200,14 +200,14 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         gameManager.addPlayedGame(currentGame);
     }
 
-    void saveExistingGame(){
+    private void saveExistingGame(){
         updatePlayerScores();
 
         int achievementIndex = gameType.getAchievementIndex(totalScore, playerAmount, difficulty);
         playedGame.editPlayedGame(playerAmount, totalScore, achievementIndex, difficulty, playerScores);
     }
 
-    private void setDifficultyButtons(){
+    private void setupDifficultyButtons(){
         Button btnDifficultyEasy = findViewById(R.id.btnDifficultyEasy);
         Button btnDifficultyNormal = findViewById(R.id.btnDifficultyNormal);
         Button btnDifficultyHard = findViewById(R.id.btnDifficultyHard);
@@ -221,31 +221,26 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         difficultyButtons.add(btnDifficultyNormal);
         difficultyButtons.add(btnDifficultyHard);
 
-        if (editGameActivity == true){
-            highlightSelectedDifficultyButton(difficulty);
-        }
+        highlightSelectedDifficultyButton(difficulty);
 
         // Choosing player count is hidden by default as a user needs to select a difficulty first
         // If any of these buttons are pressed, enable player count input
         btnDifficultyEasy.setOnClickListener(view -> {
-            highlightSelectedDifficultyButton("Easy");
+            highlightSelectedDifficultyButton(btnDifficultyEasy.getTag().toString());
 
             difficulty = "Easy";
-            enableHiddenElements();
             updateScoreTextView();
         });
         btnDifficultyNormal.setOnClickListener(view -> {
-            highlightSelectedDifficultyButton("Normal");
+            highlightSelectedDifficultyButton(btnDifficultyNormal.getTag().toString());
 
             difficulty = "Normal";
-            enableHiddenElements();
             updateScoreTextView();
         });
         btnDifficultyHard.setOnClickListener(view -> {
-            highlightSelectedDifficultyButton("Hard");
+            highlightSelectedDifficultyButton(btnDifficultyHard.getTag().toString());
 
             difficulty = "Hard";
-            enableHiddenElements();
             updateScoreTextView();
         });
     }
@@ -261,17 +256,37 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         }
     }
 
-    private void enableHiddenElements(){
-        // The player amount edittext and recyclerview containing cards to fill in player scores are hidden by default
-        // The user must select a difficulty first in order to select amount of players and input scores
-        TextView tvChoosePlayerAmount = findViewById(R.id.tvChoosePlayerAmount);
-        etPlayerAmount = findViewById(R.id.etPlayerCount);
-        rvPlayerScoreInputs = findViewById(R.id.rvPlayerScoreInputs);
+    private void setDefaultProperties(){
+        playerAmount = 4;
+        difficulty = "Normal";
+        playerScores = new ArrayList<>();
 
-        tvChoosePlayerAmount.setVisibility(View.VISIBLE);
-        etPlayerAmount.setVisibility(View.VISIBLE);
+        setupPlayerCountInput();
+    }
+
+    private void setExistingProperties(){
+        editGameActivity = true;
+        gameCompleted = true;
+
+        gameType = gameManager.getGameTypeFromString(gameTypeString);
+        playedGame = gameManager.getSpecificPlayedGames(gameTypeString).get(gamePlayedPosition);
+
+        difficulty = playedGame.getDifficulty();
+        playerAmount = playedGame.getNumberOfPlayers();
+        totalScore = playedGame.getTotalScore();
+        playerScores = playedGame.getPlayerScores();
+
+        setupPlayerCountInput();
+        updateScoreTextView();
+        setupPlayerScoreInputModels();
+    }
+
+    private void setupPlayerCountInput(){
+        etPlayerAmount = findViewById(R.id.etPlayerCount);
+        etPlayerAmount.setText(String.valueOf(playerAmount));
         etPlayerAmount.addTextChangedListener(playerCountInputWatcher);
-        rvPlayerScoreInputs.setVisibility(View.VISIBLE);
+
+        setupPlayerScoreInputModels();
     }
 
     private final TextWatcher playerCountInputWatcher = new TextWatcher() {
@@ -292,7 +307,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
                 TextView tvScoreWithAchievementLevel = findViewById(R.id.tvScoreWithAchievementLevel);
                 tvScoreWithAchievementLevel.setText(R.string.waiting_player_score_input);
 
-                setupGameInfoModels();
+                setupPlayerScoreInputModels();
                 updatePlayerScores();
             }
             catch (NumberFormatException numberFormatException){
@@ -306,52 +321,23 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         }
     };
 
-    private void setupGameInfoModels() {
-        // Nothing too complicated, we're just giving each "player score input card" an id ranging from 0 to playerAmount
-        // This will help is keep track of which cards have a score inputted or not later on
-
+    private void setupPlayerScoreInputModels(){
+        // Nothing too complicated, we're just giving each player score input row an id ranging from 0 to playerAmount
+        // This will help us keep track of which cards have a score inputted or not later on
         ArrayList<PlayerScoreInput> playerScoreInputs = new ArrayList<>();
-        // If we are creating a new game, we do not need to pull existing scores from the existing game
-        if (editGameActivity == false){
-            for (int i = 0; i < playerAmount; i++){
+
+        for (int i = 0; i < playerAmount; i++){
+            try {
+                playerScoreInputs.add(new PlayerScoreInput(i, playerScores.get(i)));
+            }
+            catch (IndexOutOfBoundsException exception){
+                // If playerScores.get(i) returns an IndexOutOfBoundsException, it means no score
+                // exists for that particular player. Therefore, just default to an empty score.
                 playerScoreInputs.add(new PlayerScoreInput(i));
             }
-
-            setupRecyclerView(playerScoreInputs);
         }
-        if (editGameActivity == true){
-            for (int i = 0; i < playerAmount; i++){
-                if (i >= playerScores.size()){
-                    playerScoreInputs.add(new PlayerScoreInput(i));
-                }
-                else {
-                    playerScoreInputs.add(new PlayerScoreInput(i, playerScores.get(i)));
-                }
-            }
 
-            setupRecyclerView(playerScoreInputs);
-        }
-    }
-
-    private void setEditGameInfo(){
-        enableHiddenElements();
-
-        editGameActivity = true;
-        gameCompleted = true;
-
-        gameType = gameManager.getGameTypeFromString(gameTypeString);
-        playedGame = gameManager.getSpecificPlayedGames(gameTypeString).get(gamePlayedPosition);
-
-        difficulty = playedGame.getDifficulty();
-        playerAmount = playedGame.getNumberOfPlayers();
-        totalScore = playedGame.getTotalScore();
-        playerScores = playedGame.getPlayerScores();
-
-        EditText etPlayerCount = findViewById(R.id.etPlayerCount);
-        etPlayerCount.setText(String.valueOf(playerAmount));
-
-        updateScoreTextView();
-        setupGameInfoModels();
+        setupRecyclerView(playerScoreInputs);
     }
 
     private void setupRecyclerView(ArrayList<PlayerScoreInput> playerScoreInputs){
@@ -361,7 +347,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         recyclerView.setLayoutManager(new LinearLayoutManager(GamePlayActivity.this));
     }
 
-
     @Override
     public void checkAllPlayerScoreInputs() {
         updatePlayerScores();
@@ -369,6 +354,22 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     }
 
     private void updatePlayerScores() {
+
+/*        // If the current playerAmount is greater than the size of the arraylist
+        // Increase the size of the arraylist to account for the possible scores that
+        // the user may have added for higher player numbers
+        if (playerAmount > recyclerViewEditTextTempStorage.size()){
+            recyclerViewEditTextTempStorage.ensureCapacity(playerAmount);
+        }
+
+        ArrayList<Integer> playerScores = recyclerViewAdapter.getScores();
+        for (int i = 0; i < playerScores.size(); i++){
+            recyclerViewEditTextTempStorage.set(i, playerScores.get(i));
+        }
+
+        setTotalGameScore(playerScores);*/
+
+
         ArrayList<Integer> playerScores = recyclerViewAdapter.getScores();
 
         // One or more of the scores must be invalid, the game hasn't been completed, don't recalculate!
