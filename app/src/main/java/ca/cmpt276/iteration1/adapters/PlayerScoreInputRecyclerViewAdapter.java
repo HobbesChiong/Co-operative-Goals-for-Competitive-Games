@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import ca.cmpt276.iteration1.R;
-import ca.cmpt276.iteration1.activities.GamePlayActivity;
 import ca.cmpt276.iteration1.interfaces.PlayerScoreInputRecyclerViewInterface;
 import ca.cmpt276.iteration1.model.PlayerScoreInput;
 
@@ -50,22 +48,19 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
         this.recyclerViewInterface = recyclerViewInterface;
 
         recyclerViewEditTextData = new int[playerScoreInputs.size()];
-
         Arrays.fill(recyclerViewEditTextData, INVALID_SCORE);
 
-        // If we're editing the game, load all our previous scores into the list of data
-        if (editGame) {
-            for (int i = 0; i < playerScoreInputs.size(); i ++) {
-                int playerScore = playerScoreInputs.get(i).getPlayerScore();
+        for (int i = 0; i < playerScoreInputs.size(); i ++) {
+            int playerScore = playerScoreInputs.get(i).getPlayerScore();
 
-                if (playerScore == -1){
-                    recyclerViewEditTextData[i] = INVALID_SCORE;
-                }
-                else {
-                    recyclerViewEditTextData[i] = playerScore;
-                }
+            if (playerScore == INVALID_SCORE){
+                recyclerViewEditTextData[i] = INVALID_SCORE;
+            }
+            else {
+                recyclerViewEditTextData[i] = playerScore;
             }
         }
+
     }
 
     // Viewholder for recyclerview
@@ -131,7 +126,7 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
                 }
 
 
-                recyclerViewInterface.checkAllPlayerScoreInputs();
+                recyclerViewInterface.updatePlayerScoreInputs();
             }
 
             @Override
@@ -166,10 +161,12 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
         // Create a list of scores
         ArrayList<Integer> score = new ArrayList<>();
         for (int i : recyclerViewEditTextData) {
+/*
             // One of the score fields hasn't been filled out, return nothing!
             if (i == INVALID_SCORE) {
                 return null;
             }
+*/
 
             // Otherwise, add the current score to our list of scores
             score.add(i);
