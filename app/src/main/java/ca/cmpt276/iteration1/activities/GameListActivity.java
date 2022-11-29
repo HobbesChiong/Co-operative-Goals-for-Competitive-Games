@@ -143,8 +143,6 @@ public class GameListActivity extends AppCompatActivity {
 
     }
 
-    //request user permission
-
 
     private void populateListView() {
         // Get list of game type names

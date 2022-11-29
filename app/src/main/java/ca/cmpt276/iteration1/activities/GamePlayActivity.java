@@ -317,21 +317,22 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             public void onClick(View v) {
                 highlightSelectedButton("Yes", takePhotoButton);
                 takePhoto = "Yes";
-                startCamera();
-                /*Button imageCaptureButton = findViewById(R.id.image_capture_button);
+                /*startCamera();
+                Button imageCaptureButton = findViewById(R.id.image_capture_button);
                 imageCaptureButton.setVisibility(View.VISIBLE);
                 imageCaptureButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         takePhoto();
                     }
-                });*/
-                cameraExecutor = Executors.newSingleThreadExecutor();
+                });
+                cameraExecutor = Executors.newSingleThreadExecutor();*/
 
                 /*Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivity(cameraIntent);
+                ActivityResultLauncher<Intent> startActivityIntent = null;
+                startActivityIntent.launch(cameraIntent);
 
-                ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                startActivityIntent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         Intent i = result.getData();
@@ -355,6 +356,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         });
     }
 
+    //request user permission
     public boolean allPermissionGranted(){
         for(String permission : GamePlayActivity.Configuration.REQUIRED_PERMISSION){
             if(ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED){
@@ -391,6 +393,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
                 Preview preview = new Preview.Builder().build();
                 preview.setSurfaceProvider(viewFinder.getSurfaceProvider());
                 imageCapture = new ImageCapture.Builder().build();
+                viewFinder.setVisibility(View.VISIBLE);
 
                 // Select back camera as a default
                 CameraSelector cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA;
