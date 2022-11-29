@@ -60,6 +60,10 @@ public class PlayedGame {
         return totalScore;
     }
 
+    public int getAchievementIndex(){
+        return achievementIndex;
+    }
+
     public ArrayList<Integer> getPlayerScores() { return playerScores; }
 
     public LocalDateTime getDatePlayed() { return datePlayed; }

@@ -6,39 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".activities.GamePlayActivity">
 
-    <androidx.camera.view.PreviewView
-        android:id="@+id/viewFinder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <Button
-        android:id="@+id/image_capture_button"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="50dp"
-        android:elevation="2dp"
-        android:text="@string/take_photo"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/vertical_centerline"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/vertical_centerline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".50" />
-
     <ImageView
         android:id="@+id/iv_gamePlayBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
         android:src="@drawable/boardgame"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="-290dp" />
+        android:scaleType="centerCrop"/>
 
     <ImageView
         android:id="@+id/ivGameSaveAnimation"
@@ -61,11 +34,20 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="14sp"
         android:textStyle="bold|italic"
-        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnDifficultyNormal" />
+
+    <Button
+        android:id="@+id/btnDifficultyEasy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/purple_500"
+        android:text="@string/easy"
+        app:layout_constraintEnd_toStartOf="@+id/btnDifficultyNormal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnDifficultyNormal" />
 
     <TextView
         android:id="@+id/tvChooseDifficulty"
@@ -90,21 +72,10 @@
         android:inputType="number"
         android:minHeight="48dp"
         android:textColor="#000000"
-        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/tvChoosePlayerAmount"
         app:layout_constraintStart_toStartOf="@+id/tvChoosePlayerAmount"
         app:layout_constraintTop_toBottomOf="@+id/tvChoosePlayerAmount"
         tools:ignore="SpeakableTextPresentCheck" />
-
-    <Button
-        android:id="@+id/btnDifficultyEasy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/purple_500"
-        android:text="@string/easy"
-        app:layout_constraintEnd_toStartOf="@+id/btnDifficultyNormal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btnDifficultyNormal" />
 
     <Button
         android:id="@+id/btnDifficultyHard"
@@ -129,7 +100,7 @@
         android:id="@+id/rvPlayerScoreInputs"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="invisible"
+        android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toTopOf="@+id/tvScoreWithAchievementLevel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -140,12 +111,12 @@
         android:id="@+id/tvScoreWithAchievementLevel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textStyle="bold|italic"
         app:layout_constraintBottom_toTopOf="@+id/svPhotoOption"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ScrollView
