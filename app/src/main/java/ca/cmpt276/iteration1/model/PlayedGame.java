@@ -28,13 +28,16 @@ public class PlayedGame {
 
     private final LocalDateTime datePlayed;
 
+    private String picturePath;
+
     public PlayedGame(String type,
                       int numberOfPlayers,
                       int totalScore,
                       int achievementIndex,
                       String difficulty,
                       ArrayList<Integer> playerScores,
-                      LocalDateTime datePlayed) {
+                      LocalDateTime datePlayed,
+                      String picturePath) {
         this.type = type;
         this.numberOfPlayers = numberOfPlayers;
         this.totalScore = totalScore;
@@ -42,6 +45,7 @@ public class PlayedGame {
         this.difficulty = difficulty;
         this.playerScores = playerScores;
         this.datePlayed = datePlayed;
+        this.picturePath = picturePath;
     }
 
     public String getType() {
@@ -63,6 +67,10 @@ public class PlayedGame {
     public String getAchievement() {
         GameManager gameManager = GameManager.getInstance();
         return GameType.getAchievementName(achievementIndex, gameManager.getAchievementTheme());
+    }
+
+    public String getPicturePath() {
+        return picturePath;
     }
 
     public void editPlayedGame(int numberOfPlayers, int score, int achievementIndex, String difficulty, ArrayList<Integer> playerScores){

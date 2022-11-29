@@ -7,25 +7,13 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.camera.core.CameraSelector;
-import androidx.camera.core.ImageCapture;
-import androidx.camera.core.ImageCaptureException;
-import androidx.camera.core.Preview;
-import androidx.camera.lifecycle.ProcessCameraProvider;
-import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-
 import android.Manifest;
-import android.content.ContentValues;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 
 import android.app.Activity;
@@ -52,18 +40,14 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.common.util.concurrent.ListenableFuture;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
 
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.adapters.PlayerScoreInputRecyclerViewAdapter;
-import ca.cmpt276.iteration1.databinding.ActivityMainBinding;
 import ca.cmpt276.iteration1.interfaces.PlayerScoreInputRecyclerViewInterface;
 import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
@@ -78,8 +62,8 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     private final int GAME_PLAYED_POSITION_NON_EXISTENT = -1;
     private int gamePlayedPosition;
 
-    private boolean editGameActivity = false;
     private int originalPlayerAmount;
+    private boolean editGameActivity = false;
 
     private boolean difficultySelected = false;
     private boolean playersSelected = false;
@@ -94,16 +78,13 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     private int playerAmount;
     private int totalScore;
     private String takePhoto;
+    private String gamePlayPicturePath;
 
     private ArrayList<Integer> playerScores;
 
     private EditText etPlayerAmount;
     private RecyclerView rvPlayerScoreInputs;
     private PlayerScoreInputRecyclerViewAdapter recyclerViewAdapter;
-
-    private ActivityMainBinding viewBinding;
-    private ImageCapture imageCapture = null;
-    private ExecutorService cameraExecutor;
 
     // If a context and gameType are given, we are creating a new game
     public static Intent makeIntent(Context context, String gameTypeString){
@@ -140,7 +121,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_game_play);
 
         gameManager = GameManager.getInstance();
@@ -239,7 +219,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
         int achievementIndex = gameType.getAchievementIndex(totalScore, playerAmount, difficulty);
         LocalDateTime datePlayed = LocalDateTime.now();
-        PlayedGame currentGame = new PlayedGame(gameTypeString, playerAmount, totalScore, achievementIndex, difficulty, playerScores, datePlayed);
+        PlayedGame currentGame = new PlayedGame(gameTypeString, playerAmount, totalScore, achievementIndex, difficulty, playerScores, datePlayed, gamePlayPicturePath);
         gameManager.addPlayedGame(currentGame);
     }
 
@@ -317,34 +297,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             public void onClick(View v) {
                 highlightSelectedButton("Yes", takePhotoButton);
                 takePhoto = "Yes";
-                /*startCamera();
-                Button imageCaptureButton = findViewById(R.id.image_capture_button);
-                imageCaptureButton.setVisibility(View.VISIBLE);
-                imageCaptureButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        takePhoto();
-                    }
-                });
-                cameraExecutor = Executors.newSingleThreadExecutor();*/
-
-                /*Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                ActivityResultLauncher<Intent> startActivityIntent = null;
-                startActivityIntent.launch(cameraIntent);
-
-                startActivityIntent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        Intent i = result.getData();
-                        Bundle extras = i.getExtras();
-                        Bitmap imageBitmap = (Bitmap) extras.get("data");
-
-                        ImageView iv = findViewById(R.id.ivGamePhoto);
-                        iv.setImageBitmap(imageBitmap);
-
-                        grabImage(imageBitmap);
-                    }
-                });*/
+                startCamera();
             }
         });
         btnNo.setOnClickListener(new View.OnClickListener() {
@@ -355,7 +308,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             }
         });
     }
-
+    //Code from https://developer.android.com/codelabs/camerax-getting-started#1
     //request user permission
     public boolean allPermissionGranted(){
         for(String permission : GamePlayActivity.Configuration.REQUIRED_PERMISSION){
@@ -381,73 +334,33 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     }
 
     private void startCamera() {
-        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
-        cameraProviderFuture.addListener(() -> {
-            try {
-                //Used to bind the lifecycle of cameras to the lifecycle owner
-                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-
-                //Preview
-                PreviewView viewFinder = findViewById(R.id.viewFinder);
-                viewFinder.setImplementationMode(PreviewView.ImplementationMode.COMPATIBLE);
-                Preview preview = new Preview.Builder().build();
-                preview.setSurfaceProvider(viewFinder.getSurfaceProvider());
-                imageCapture = new ImageCapture.Builder().build();
-                viewFinder.setVisibility(View.VISIBLE);
-
-                // Select back camera as a default
-                CameraSelector cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA;
-
-                //Unbind use cases before rebinding
-                cameraProvider.unbindAll();
-
-                //Bind use cases to camera
-                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
-
-            } catch (Exception e) {
-                Log.e(Configuration.TAG, "Use case binding failed" + e);
-            }
-        }, ContextCompat.getMainExecutor(this));
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityIntent.launch(cameraIntent);
     }
 
-    private void takePhoto(){
-        if(imageCapture == null){
-            return;
-        }
-        //Create time stamped name and MediaStore entry.
-        String name = new SimpleDateFormat(Configuration.FILENAME_FORMAT, Locale.US).format(System.currentTimeMillis());
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, name);
-        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-            contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image");
-        }
-
-        //Create output options object which contains file + metadata
-        ImageCapture.OutputFileOptions outputOptions = new ImageCapture.OutputFileOptions.Builder(getContentResolver(), MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues).build();
-
-        //Set up image capture listener, which is triggered after photo has been taken
-        imageCapture.takePicture(outputOptions, ContextCompat.getMainExecutor(this), new ImageCapture.OnImageSavedCallback(){
+        ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
-            public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
-                String msg = "Photo capture succeeded: " + outputFileResults.getSavedUri();
-                Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT).show();
-                Log.d(Configuration.TAG, msg);
-            }
+            public void onActivityResult(ActivityResult result) {
+                Intent i = result.getData();
+                Bundle extras = i.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
 
-            @Override
-            public void onError(@NonNull ImageCaptureException exception) {
-                Log.e(Configuration.TAG, "Photo capture failed: " + exception.getMessage());
+                ImageView iv = findViewById(R.id.ivGamePhoto);
+                iv.setVisibility(View.VISIBLE);
+                iv.setImageBitmap(imageBitmap);
+
+                updateGamePlayImageView(imageBitmap);
+
+                saveImage(imageBitmap);
             }
         });
+
+    private void updateGamePlayImageView(Bitmap imageBitmap) {
+        ImageView imageView = findViewById(R.id.ivGamePhoto);
+        imageView.setImageBitmap(imageBitmap);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        cameraExecutor.shutdown();
-    }
-
+    //Code from https://developer.android.com/codelabs/camerax-getting-started#1
     static class Configuration{
         public static final String TAG = "CameraxBasic";
         public static final String FILENAME_FORMAT = "yyyy-MM-dd-HH-mm";
@@ -459,7 +372,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     }
 
 
-    private void grabImage(Bitmap imageBitmap) {
+    private void saveImage(Bitmap imageBitmap) {
         //Create a folder for storing images of each game play
         File directory = new File(Environment.getExternalStorageDirectory(), "gamePlayPhotos");
         if(!directory.exists()){
@@ -479,6 +392,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             //Close the output stream
             outputStream.flush();
             outputStream.close();
+            gamePlayPicturePath = imageFile.getAbsolutePath();
         }
         catch(Exception e){
             Toast.makeText(this, "Couldn't save image! Permission required.", Toast.LENGTH_SHORT).show();
@@ -588,6 +502,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         playerAmount = playedGame.getNumberOfPlayers();
         totalScore = playedGame.getTotalScore();
         playerScores = playedGame.getPlayerScores();
+        gamePlayPicturePath = playedGame.getPicturePath();
 
         originalPlayerAmount = playerAmount;
 
