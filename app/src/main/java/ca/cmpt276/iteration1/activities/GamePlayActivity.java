@@ -36,7 +36,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,8 +62,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     private final int GAME_PLAYED_POSITION_NON_EXISTENT = -1;
     private final int INVALID_SCORE = -1;
     private int gamePlayedPosition;
-
-    private ArrayList<Button> difficultyButtons;
 
     private boolean editGameActivity = false;
     private boolean gameCompleted = false;
@@ -131,8 +128,8 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             ActivityCompat.requestPermissions(GamePlayActivity.this, Configuration.REQUIRED_PERMISSION, Configuration.REQUEST_CODE_PERMISSION);
         }
         extractIntentExtras();
-        setDifficultyButtons();
-        setPhotoOptionsButtons();
+        setupDifficultyButtons();
+        setUpPhotoOptionsButtons();
 
         if (editGameActivity == true){
             actionBar.setTitle(R.string.edit_game);
@@ -257,43 +254,43 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         difficultyButtons.add(btnDifficultyNormal);
         difficultyButtons.add(btnDifficultyHard);
 
-        highlightSelectedDifficultyButton(difficulty);
+        highlightSelectedButton(difficulty, difficultyButtons);
 
         // Choosing player count is hidden by default as a user needs to select a difficulty first
         // If any of these buttons are pressed, enable player count input
         btnDifficultyEasy.setOnClickListener(view -> {
-            highlightSelectedDifficultyButton(btnDifficultyEasy.getTag().toString());
+            highlightSelectedButton(btnDifficultyEasy.getTag().toString(), difficultyButtons);
 
             difficulty = "Easy";
             updateScoreTextView();
         });
         btnDifficultyNormal.setOnClickListener(view -> {
-            highlightSelectedDifficultyButton(btnDifficultyNormal.getTag().toString());
+            highlightSelectedButton(btnDifficultyNormal.getTag().toString(), difficultyButtons);
 
             difficulty = "Normal";
             updateScoreTextView();
         });
         btnDifficultyHard.setOnClickListener(view -> {
-            highlightSelectedDifficultyButton(btnDifficultyHard.getTag().toString());
+            highlightSelectedButton(btnDifficultyHard.getTag().toString(), difficultyButtons);
 
             difficulty = "Hard";
             updateScoreTextView();
         });
     }
 
-    private void highlightSelectedDifficultyButton(String selectedDifficultyButtonTag){
-        for (Button difficultyButton : difficultyButtons){
-            if (difficultyButton.getTag().equals(selectedDifficultyButtonTag)){
-                difficultyButton.setBackgroundColor(Color.BLACK);
+    private void highlightSelectedButton(String selectedButtonTag, ArrayList<Button> buttons){
+        for (Button btn : buttons){
+            if (btn.getTag().equals(selectedButtonTag)){
+                btn.setBackgroundColor(Color.BLACK);
             }
             else {
-                difficultyButton.setBackgroundColor(getColor(R.color.purple_500));
+                btn.setBackgroundColor(getColor(R.color.purple_500));
             }
         }
     }
 
     //this function is to set up the yes no button that asking whether the user willing to take a photo to save for the game play
-    private void setPhotoOptionsButtons() {
+    private void setUpPhotoOptionsButtons() {
         Button btnYes = findViewById(R.id.btnYesToTakePhoto);
         Button btnNo = findViewById(R.id.btnNoToTakePhoto);
         ArrayList<Button> takePhotoButton = new ArrayList<>();
@@ -413,17 +410,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         }
         catch(Exception e){
             Toast.makeText(this, "Couldn't save image! Permission required.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void highlightSelectedButton(String selectedButtonTag, ArrayList<Button> buttons){
-        for (Button difficultyButton : buttons){
-            if (difficultyButton.getTag().equals(selectedButtonTag)){
-                difficultyButton.setBackgroundColor(Color.BLACK);
-            }
-            else {
-                difficultyButton.setBackgroundColor(getColor(R.color.purple_500));
-            }
         }
     }
 
