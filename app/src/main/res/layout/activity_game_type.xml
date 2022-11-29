@@ -102,13 +102,10 @@
         android:id="@+id/ivGameBox"
         android:layout_width="161dp"
         android:layout_height="222dp"
-        android:layout_marginTop="98dp"
-        android:layout_marginBottom="72dp"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_gameTypeBackground"
+        android:layout_marginTop="36dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btPhoto"
-        app:layout_constraintVertical_bias="0.0"
         tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

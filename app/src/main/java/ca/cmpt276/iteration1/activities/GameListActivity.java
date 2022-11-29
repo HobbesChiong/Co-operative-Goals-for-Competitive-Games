@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -178,7 +179,12 @@ public class GameListActivity extends AppCompatActivity {
 
             // Set the photo
             ImageView gameBox = itemView.findViewById(R.id.iv_gameBox_list);
-            gameBox.setImageBitmap(GameTypeActivity.getBitmapFromPath(currentGame.getImagePath()));
+            Bitmap boxBitmap = GameTypeActivity.getBitmapFromPath(currentGame.getImagePath(), this.getContext().getResources());
+
+            if (boxBitmap != null) {
+                gameBox.setImageBitmap(boxBitmap);
+                gameBox.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            }
 
             return itemView;
         }

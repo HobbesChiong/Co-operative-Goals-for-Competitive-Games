@@ -14,9 +14,11 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Path;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -142,10 +144,13 @@ public class GameTypeActivity extends AppCompatActivity {
                     updateGameImageView(imageBitmap);
 
                     // Save the bitmap to storage (https://www.youtube.com/watch?v=oLcxTunwaFk)
-
-                    // todo: migrate this into one big permission check (does the user have storage AND camera perms?)
-                    if (ContextCompat.checkSelfPermission(GameTypeActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                    // Check permissions
+                    if (!checkPermissions()) {
                         ActivityCompat.requestPermissions(GameTypeActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},100);
+                    }
+
+                    if (!checkPermissions()) {
+                        return;
                     }
 
                     // Create a folder for storing images of board games
@@ -174,6 +179,10 @@ public class GameTypeActivity extends AppCompatActivity {
                     }
                 }
             });
+
+    private boolean checkPermissions() {
+        return (ContextCompat.checkSelfPermission(GameTypeActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -264,24 +273,23 @@ public class GameTypeActivity extends AppCompatActivity {
         goodScore.setText(String.valueOf(gameType.getGoodScore()));
         badScore.setText(String.valueOf(gameType.getBadScore()));
 
-        // Update the game's image
         // Get the bitmap from a directory
         // https://stackoverflow.com/questions/16804404/create-a-bitmap-drawable-from-file-path
-        updateGameImageView(getBitmapFromPath(gameType.getImagePath()));
+        updateGameImageView(getBitmapFromPath(gameType.getImagePath(), this.getResources()));
     }
 
     /*
     Returns the bitmap found at a path. If the path is invalid, returns
     a default bitmap.
      */
-    public static Bitmap getBitmapFromPath(String imagePath) {
-        try {
-            Bitmap imageBitmap = BitmapFactory.decodeFile(imagePath);
-            return imageBitmap;
-        } catch (Exception e) {
-            // Return default bitmap
-            return null;
+    public static Bitmap getBitmapFromPath(String imagePath, Resources resources) {
+        Bitmap imageBitmap = BitmapFactory.decodeFile(imagePath);
+
+        if (imageBitmap == null) {
+            imageBitmap = BitmapFactory.decodeResource(resources, R.mipmap.nogamebox);
         }
+
+        return imageBitmap;
     }
 
     private String getStringFromEditText(int editTextID) {
