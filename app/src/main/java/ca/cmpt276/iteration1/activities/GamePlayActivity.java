@@ -14,11 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -333,7 +335,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         return true;
     }
 
-    @Override
+    /*@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode == Configuration.REQUEST_CODE_PERMISSION){
@@ -345,7 +347,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
                 finish();
             }
         }
-    }
+    }*/
 
     private void startCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -376,8 +378,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
     //Code from https://developer.android.com/codelabs/camerax-getting-started#1
     static class Configuration{
-        public static final String TAG = "CameraxBasic";
-        public static final String FILENAME_FORMAT = "yyyy-MM-dd-HH-mm";
         public static final int REQUEST_CODE_PERMISSION = 10;
         public static final String[] REQUIRED_PERMISSION = Build.VERSION.SDK_INT <= Build.VERSION_CODES.P ?
                 new String[]{Manifest.permission.CAMERA,
@@ -411,6 +411,14 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         catch(Exception e){
             Toast.makeText(this, "Couldn't save image! Permission required.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private static Bitmap getBitmapFromPath(String imagePath, Resources resources){
+        Bitmap imageBitmap = BitmapFactory.decodeFile(imagePath);
+        if(imageBitmap == null){
+            imageBitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher);
+        }
+        return imageBitmap;
     }
 
     private void setDefaultValues(){
