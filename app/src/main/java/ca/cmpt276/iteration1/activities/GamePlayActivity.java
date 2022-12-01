@@ -25,7 +25,6 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -38,6 +37,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +67,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
     private boolean editGameActivity = false;
     private boolean gameCompleted = false;
+    private boolean choiceMade = false;
 
     private GameManager gameManager;
     private String gameTypeString;
@@ -77,7 +78,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     private int playerAmount;
     private int totalScore;
     private String takePhoto;
-    private String gamePlayPicturePath;
+    private String gamePlayImagePath;
 
     private ArrayList<Integer> playerScores;
 
@@ -145,6 +146,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         setupDifficultyButtons();
         setupPlayerCountInput();
         setupRecyclerView();
+        setupImageView();
     }
 
     @Override
@@ -230,7 +232,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
         int achievementIndex = gameType.getAchievementIndex(totalScore, playerAmount, difficulty);
         LocalDateTime datePlayed = LocalDateTime.now();
-        PlayedGame currentGame = new PlayedGame(gameTypeString, playerAmount, totalScore, achievementIndex, difficulty, playerScores, datePlayed, gamePlayPicturePath);
+        PlayedGame currentGame = new PlayedGame(gameTypeString, playerAmount, totalScore, achievementIndex, difficulty, playerScores, datePlayed, takePhoto, gamePlayImagePath);
         gameManager.addPlayedGame(currentGame);
     }
 
@@ -239,7 +241,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         playerScores = recyclerViewAdapter.getScores();
 
         int achievementIndex = gameType.getAchievementIndex(totalScore, playerAmount, difficulty);
-        playedGame.editPlayedGame(playerAmount, totalScore, achievementIndex, difficulty, playerScores);
+        playedGame.editPlayedGame(playerAmount, totalScore, achievementIndex, difficulty, playerScores, takePhoto, gamePlayImagePath);
     }
 
     private void setupDifficultyButtons(){
@@ -303,16 +305,17 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         takePhotoButton.add(btnYes);
         takePhotoButton.add(btnNo);
 
-        if(editGameActivity){
-            highlightSelectedButton(takePhoto, takePhotoButton);
-        }
+        highlightSelectedButton(takePhoto, takePhotoButton);
+
 
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 highlightSelectedButton("Yes", takePhotoButton);
                 takePhoto = "Yes";
+                choiceMade = true;
                 startCamera();
+                updateScoreTextView();
             }
         });
         btnNo.setOnClickListener(new View.OnClickListener() {
@@ -320,6 +323,25 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             public void onClick(View v) {
                 highlightSelectedButton("No", takePhotoButton);
                 takePhoto = "No";
+                choiceMade = true;
+                setGamePhotoIvVisibility(View.INVISIBLE);
+                gamePlayImagePath = null;
+                updateScoreTextView();
+            }
+        });
+    }
+
+    private void setGamePhotoIvVisibility(int visibility) {
+        ImageView imageView = findViewById(R.id.ivGamePhoto);
+        imageView.setVisibility(visibility);
+    }
+
+    private void setupImageView() {
+        ImageView gamePhoto = findViewById(R.id.ivGamePhoto);
+        gamePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startCamera();
             }
         });
     }
@@ -335,20 +357,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         return true;
     }
 
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == Configuration.REQUEST_CODE_PERMISSION){
-            if(allPermissionGranted()){
-                startCamera();
-            }
-            else{
-                Toast.makeText(this, "User decline to give access to the application", Toast.LENGTH_LONG).show();
-                finish();
-            }
-        }
-    }*/
-
     private void startCamera() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityIntent.launch(cameraIntent);
@@ -361,19 +369,16 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
                 Bundle extras = i.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
 
-                ImageView iv = findViewById(R.id.ivGamePhoto);
-                iv.setVisibility(View.VISIBLE);
-                iv.setImageBitmap(imageBitmap);
-
-                updateGamePlayImageView(imageBitmap);
+                setGamePhotoIvVisibility(View.VISIBLE);
+                updateGamePhotoImageView(imageBitmap);
 
                 saveImage(imageBitmap);
             }
         });
 
-    private void updateGamePlayImageView(Bitmap imageBitmap) {
-        ImageView imageView = findViewById(R.id.ivGamePhoto);
-        imageView.setImageBitmap(imageBitmap);
+    private void updateGamePhotoImageView(Bitmap imageBitmap) {
+        ImageView iv = findViewById(R.id.ivGamePhoto);
+        iv.setImageBitmap(imageBitmap);
     }
 
     //Code from https://developer.android.com/codelabs/camerax-getting-started#1
@@ -388,7 +393,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
     private void saveImage(Bitmap imageBitmap) {
         //Create a folder for storing images of each game play
-        File directory = new File(Environment.getExternalStorageDirectory(), "gamePlayPhotos");
+        File directory = new File(this.getFilesDir(), "gamePlayImage");
         if(!directory.exists()){
             directory.mkdirs();
         }
@@ -406,14 +411,15 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
             //Close the output stream
             outputStream.flush();
             outputStream.close();
-            gamePlayPicturePath = imageFile.getAbsolutePath();
+            gamePlayImagePath = imageFile.getAbsolutePath();
         }
         catch(Exception e){
+            Log.e("Exception: ", e.toString());
             Toast.makeText(this, "Couldn't save image! Permission required.", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private static Bitmap getBitmapFromPath(String imagePath, Resources resources){
+    public static Bitmap getBitmapFromPath(String imagePath, Resources resources){
         Bitmap imageBitmap = BitmapFactory.decodeFile(imagePath);
         if(imageBitmap == null){
             imageBitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher);
@@ -425,6 +431,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         playerAmount = 4;
         difficulty = "Normal";
         playerScores = new ArrayList<Integer>(Collections.nCopies(playerAmount, INVALID_SCORE));
+        choiceMade = false;
         updateScoreTextView();
     }
 
@@ -439,8 +446,19 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         playerAmount = playedGame.getNumberOfPlayers();
         totalScore = playedGame.getTotalScore();
         playerScores = playedGame.getPlayerScores();
+        gamePlayImagePath = playedGame.getPicturePath();
+        takePhoto = playedGame.getTakePhotoOptions();
 
+        choiceMade = true;
         updateScoreTextView();
+
+        ScrollView sv = findViewById(R.id.svPhotoOption);
+        sv.setVisibility(View.VISIBLE);
+        updateGamePhotoImageView(getBitmapFromPath(gamePlayImagePath, this.getResources()));
+
+        if(takePhoto.equals("Yes")){
+            setGamePhotoIvVisibility(View.VISIBLE);
+        }
     }
 
     private void setupPlayerCountInput(){
@@ -553,7 +571,15 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         }
 
         String achievementTitle = gameType.getAchievementLevel(totalScore, playerAmount, difficulty);
-        tvScoreWithAchievementLevel.setText(getString(R.string.display_score, totalScore, achievementTitle));
+
+        //If the user still haven't chosen whether they would take photo or not, the achievement is not going to be shown
+        tvScoreWithAchievementLevel.setText(getString(R.string.display_score_only, totalScore));
+        ScrollView sv = findViewById(R.id.svPhotoOption);
+        sv.setVisibility(View.VISIBLE);
+
+        if(choiceMade){
+            tvScoreWithAchievementLevel.setText(getString(R.string.display_score_and_achievement, totalScore, achievementTitle));
+        }
     }
 
 }

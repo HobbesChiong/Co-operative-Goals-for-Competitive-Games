@@ -28,7 +28,7 @@ public class PlayedGame {
 
     private final LocalDateTime datePlayed;
 
-    private String picturePath;
+    private String picturePath, takePhotoOptions;
 
     public PlayedGame(String type,
                       int numberOfPlayers,
@@ -37,6 +37,7 @@ public class PlayedGame {
                       String difficulty,
                       ArrayList<Integer> playerScores,
                       LocalDateTime datePlayed,
+                      String takePhotoOptions,
                       String picturePath) {
         this.type = type;
         this.numberOfPlayers = numberOfPlayers;
@@ -46,6 +47,7 @@ public class PlayedGame {
         this.playerScores = playerScores;
         this.datePlayed = datePlayed;
         this.picturePath = picturePath;
+        this.takePhotoOptions = takePhotoOptions;
     }
 
     public String getType() {
@@ -77,12 +79,18 @@ public class PlayedGame {
         return picturePath;
     }
 
-    public void editPlayedGame(int numberOfPlayers, int score, int achievementIndex, String difficulty, ArrayList<Integer> playerScores){
+    public String getTakePhotoOptions() {
+        return takePhotoOptions;
+    }
+
+    public void editPlayedGame(int numberOfPlayers, int score, int achievementIndex, String difficulty, ArrayList<Integer> playerScores, String takePhotoOptions, String picturePath){
         this.numberOfPlayers = numberOfPlayers;
         this.totalScore = score;
         this.achievementIndex = achievementIndex;
         this.difficulty = difficulty;
         this.playerScores = playerScores;
+        this.takePhotoOptions = takePhotoOptions;
+        this.picturePath = picturePath;
     }
 
     @NonNull

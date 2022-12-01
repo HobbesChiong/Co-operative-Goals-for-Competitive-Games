@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import ca.cmpt276.iteration1.R;
+import ca.cmpt276.iteration1.activities.GamePlayActivity;
 import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 import ca.cmpt276.iteration1.model.PlayedGame;
@@ -48,10 +50,12 @@ public class GamePlayedListRecyclerViewAdapter extends RecyclerView.Adapter<Game
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        ImageView gamePlayImage;
         TextView dScore, dNoOfPlayer, dAchievement, dDifficulty, dDatePlayed;
 
         public ViewHolder(@NonNull View itemView, GamePlayedListRecyclerViewInterface recyclerViewInterface) {
             super(itemView);
+            gamePlayImage = itemView.findViewById(R.id.iv_showGamePlayImage);
             dScore = itemView.findViewById(R.id.tvDisplayScore);
             dNoOfPlayer = itemView.findViewById(R.id.tvDisplayNoOfPlayer);
             dAchievement = itemView.findViewById(R.id.tvDisplayAchievement);
@@ -82,6 +86,7 @@ public class GamePlayedListRecyclerViewAdapter extends RecyclerView.Adapter<Game
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.gamePlayImage.setImageBitmap(GamePlayActivity.getBitmapFromPath(playedGames.get(position).getPicturePath(), context.getResources()));
         holder.dScore.setText(String.valueOf(playedGames.get(position).getTotalScore()));
         holder.dNoOfPlayer.setText(String.valueOf(playedGames.get(position).getNumberOfPlayers()));
         holder.dAchievement.setText(playedGames.get(position).getAchievement());
