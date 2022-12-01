@@ -154,7 +154,7 @@ public class GameTypeActivity extends AppCompatActivity {
                     }
 
                     // Create a folder for storing images of board games
-                    File directory = new File(Environment.getExternalStorageDirectory(), "BoardGameImages");
+                    File directory = new File(getFilesDir(), "BoardGameImages");
                     if (!directory.exists()) {
                         directory.mkdirs();
                     }
