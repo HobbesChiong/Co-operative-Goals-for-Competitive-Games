@@ -1,17 +1,39 @@
 package ca.cmpt276.iteration1.activities;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Path;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
@@ -30,6 +52,7 @@ public class GameTypeActivity extends AppCompatActivity {
 
     private boolean editGameActivity;
     private String gameTypeString;
+    private String gamePicturePath;
     private GameType gameType;
 
     EditText gameName;
@@ -88,8 +111,78 @@ public class GameTypeActivity extends AppCompatActivity {
         }
 
         ab.setTitle(appBarTitle);
+
+        // Register photo button
+        Button b = findViewById(R.id.btPhoto);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Launch the camera and take a picture
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityIntent.launch(cameraIntent);
+            }
+        });
     }
 
+    private void updateGameImageView(Bitmap imageBitmap) {
+        ImageView imageView = findViewById(R.id.ivGameBox);
+        imageView.setImageBitmap(imageBitmap);
+    }
+
+    // https://stackoverflow.com/questions/71082372/startactivityforresult-is-deprecated-im-trying-to-update-my-code
+    ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    // Extract the bitmap the camera just took a photo of
+                    Intent i = result.getData();
+                    Bundle extras = i.getExtras();
+                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+                    // Display the bitmap
+                    updateGameImageView(imageBitmap);
+
+                    // Save the bitmap to storage (https://www.youtube.com/watch?v=oLcxTunwaFk)
+                    // Check permissions
+                    if (!checkPermissions()) {
+                        ActivityCompat.requestPermissions(GameTypeActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},100);
+                    }
+
+                    if (!checkPermissions()) {
+                        return;
+                    }
+
+                    // Create a folder for storing images of board games
+                    File directory = new File(getFilesDir(), "BoardGameImages");
+                    if (!directory.exists()) {
+                        directory.mkdirs();
+                    }
+
+                    // Save the image to a jpeg
+                    File imageFile = new File(directory, System.currentTimeMillis() + ".jpg");
+                    OutputStream outputStream;
+                    try {
+                        // Create the output stream
+                        outputStream = new FileOutputStream(imageFile);
+
+                        // Compress the bitmap
+                        imageBitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
+
+                        // Close the output stream
+                        outputStream.flush();
+                        outputStream.close();
+                        gamePicturePath = imageFile.getAbsolutePath();
+                    } catch (Exception e) {
+                        // Show a (un)helpful toast if any errors occurred along the way
+                        Toast.makeText(GameTypeActivity.this, "Couldn't save image! Did you grant the appropriate permissions?", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+    private boolean checkPermissions() {
+        return (ContextCompat.checkSelfPermission(GameTypeActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -121,7 +214,7 @@ public class GameTypeActivity extends AppCompatActivity {
                             throw new IllegalArgumentException("Game name cannot be empty!");
                         }
 
-                        GameType gameType = new GameType(gameName, goodScore, badScore);
+                        GameType gameType = new GameType(gameName, goodScore, badScore, gamePicturePath);
                         String res = gameName + " " + getString(R.string.configuration_saved);
                         Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
 
@@ -171,16 +264,32 @@ public class GameTypeActivity extends AppCompatActivity {
         int newGoodScore = Integer.parseInt(goodScore.getText().toString());
         int newBadScore = Integer.parseInt(badScore.getText().toString());
 
-        gameType.editGameType(newGameName, newGoodScore, newBadScore);
+        gameType.editGameType(newGameName, newGoodScore, newBadScore, gamePicturePath);
     }
 
     private void setGameTypeInfo(){
         // When the user is editing an existing game type, set the text fields accordingly
-
         gameName.setText(gameType.getGameType());
         goodScore.setText(String.valueOf(gameType.getGoodScore()));
         badScore.setText(String.valueOf(gameType.getBadScore()));
 
+        // Get the bitmap from a directory
+        // https://stackoverflow.com/questions/16804404/create-a-bitmap-drawable-from-file-path
+        updateGameImageView(getBitmapFromPath(gameType.getImagePath(), this.getResources()));
+    }
+
+    /*
+    Returns the bitmap found at a path. If the path is invalid, returns
+    a default bitmap.
+     */
+    public static Bitmap getBitmapFromPath(String imagePath, Resources resources) {
+        Bitmap imageBitmap = BitmapFactory.decodeFile(imagePath);
+
+        if (imageBitmap == null) {
+            imageBitmap = BitmapFactory.decodeResource(resources, R.mipmap.nogamebox);
+        }
+
+        return imageBitmap;
     }
 
     private String getStringFromEditText(int editTextID) {

@@ -15,7 +15,7 @@ import ca.cmpt276.iteration1.model.GameType;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class GameTypeTest {
-
+    /*
 
     @Test
     public void createGameObject() {
@@ -103,5 +103,5 @@ public class GameTypeTest {
 
     }
 
-
+    */
 }
