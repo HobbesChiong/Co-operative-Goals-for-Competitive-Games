@@ -70,5 +70,6 @@
     <string name="statistics">Statistics</string>
     <string name="statistics_text">Statistics</string>
     <string name="take_photo">Take Photo</string>
+    <string name="view_photo">View Photo</string>
     />
 </resources>

@@ -5,34 +5,14 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:background="#ECEBEB"
-    android:orientation="horizontal">
-
-
-    <Space
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-    <ImageView
-        android:id="@+id/iv_showGamePlayImage"
-        android:layout_width="166dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        app:srcCompat="@mipmap/ic_launcher" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="95dp"
+            android:layout_marginEnd="20dp"
             android:orientation="horizontal">
 
             <TextView
@@ -60,7 +40,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="95dp"
+            android:layout_marginEnd="20dp"
             android:orientation="horizontal">
 
             <TextView
@@ -88,7 +68,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="95dp"
+            android:layout_marginEnd="20dp"
             android:orientation="horizontal">
 
             <TextView
@@ -117,7 +97,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="95dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
@@ -146,7 +126,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="95dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
@@ -161,6 +141,5 @@
                 android:textSize="15sp" />
         </LinearLayout>
 
-    </LinearLayout>
 
 </LinearLayout>

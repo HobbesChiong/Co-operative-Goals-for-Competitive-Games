@@ -1,6 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/btnViewPhoto"
+        android:title="@string/view_photo"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/btnSave"
         android:title="@string/save"
         app:showAsAction="always" />
