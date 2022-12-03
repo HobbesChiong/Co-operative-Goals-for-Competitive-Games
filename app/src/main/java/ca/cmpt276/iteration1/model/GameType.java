@@ -10,6 +10,7 @@ public class GameType {
     private int goodScore;
     private int badScore;
     private String type;
+    private String imagePath;
 
     // Names for different achievement levels, sorted from worst to best
     private static final String[][] achievementLevels = {
@@ -45,10 +46,11 @@ public class GameType {
             }
     };
 
-    public GameType(String type, int goodScore, int badScore) {
+    public GameType(String type, int goodScore, int badScore, String imagePath) {
         this.type = type;
         this.goodScore = goodScore;
         this.badScore = badScore;
+        this.imagePath = imagePath;
 
         if (goodScore < badScore) {
             throw new IllegalArgumentException("Bad score should be less than the good score.");
@@ -83,10 +85,13 @@ public class GameType {
         return badScore;
     }
 
-    public void editGameType(String type, int goodScore, int badScore) {
+    public String getImagePath() { return imagePath; }
+
+    public void editGameType(String type, int goodScore, int badScore, String imagePath) {
         this.type = type;
         this.goodScore = goodScore;
         this.badScore = badScore;
+        this.imagePath = imagePath;
 
         if (goodScore < badScore){
             throw new IllegalArgumentException("Bad score should be less than the good score.");

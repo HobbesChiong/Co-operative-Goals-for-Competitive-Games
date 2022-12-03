@@ -4,19 +4,23 @@ import static ca.cmpt276.iteration1.activities.OptionsActivity.ACHIEVEMENT_THEME
 import static ca.cmpt276.iteration1.activities.OptionsActivity.OPTIONS_PREFERENCES;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -44,7 +48,6 @@ public class GameListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_list);
 
         gm = GameManager.getInstance();
-
 
         loadGameTypeList();
         setUpFab();
@@ -143,20 +146,48 @@ public class GameListActivity extends AppCompatActivity {
 
     }
 
-
     private void populateListView() {
         // Get list of game type names
         ArrayList<String> gameTypesList = new ArrayList<>();
 
-        // Get the names of every game type
-        for (GameType game : gm.getGameTypes()) {
-            gameTypesList.add(game.getGameType());
-        }
-
         // Pack the game names into the listview
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.game_type_list, gameTypesList);
+        ArrayAdapter<GameType> adapter = new GameListAdapter();
         ListView lv = findViewById(R.id.lv_gameTypeList);
         lv.setAdapter(adapter);
+    }
+
+    private class GameListAdapter extends ArrayAdapter<GameType> {
+        public GameListAdapter() {
+            super(GameListActivity.this, R.layout.item_view, gm.getGameTypes());
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            // Ensure the view exists
+            View itemView = convertView;
+            if (itemView == null) {
+                itemView = getLayoutInflater().inflate(R.layout.item_view, parent, false);
+            }
+
+            // Populate the view
+            GameType currentGame = gm.getGameTypeAtIndex(position);
+
+            // Set the game's name
+            TextView gameName = itemView.findViewById(R.id.tv_gameTitle);
+            gameName.setText(currentGame.getGameType());
+
+            // Set the photo
+            ImageView gameBox = itemView.findViewById(R.id.iv_gameBox_list);
+            Bitmap boxBitmap = GameTypeActivity.getBitmapFromPath(currentGame.getImagePath(), this.getContext().getResources());
+
+            if (boxBitmap != null) {
+                gameBox.setImageBitmap(boxBitmap);
+                gameBox.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            }
+
+            return itemView;
+        }
     }
 
     // Save Game type list
