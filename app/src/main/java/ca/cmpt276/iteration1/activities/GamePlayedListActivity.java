@@ -392,7 +392,8 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
 
     @Override
     public void onItemClick(int position){
-
+        Intent intent = AchievementCelebrationActivity.makeIntent(GamePlayedListActivity.this, gameTypeString, position);
+        startActivity(intent);
     }
 
     @Override
