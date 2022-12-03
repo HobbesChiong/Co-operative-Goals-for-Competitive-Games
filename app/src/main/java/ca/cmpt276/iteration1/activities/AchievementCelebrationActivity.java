@@ -1,5 +1,7 @@
 package ca.cmpt276.iteration1.activities;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -7,7 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -17,8 +19,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
@@ -40,13 +40,12 @@ public class AchievementCelebrationActivity extends AppCompatActivity {
     private int playerCount;
     private int gameScore;
     private String difficulty;
+    private String currentLevelName;
     private String nextLevelName;
     private int pointsToNextLevel;
 
-    private Spinner spnrThemes;
-    private TextView tvAchievementLevel;
-    private ImageView ivGameSelfie;
-    private ImageView ivAchievementAnimation;
+    private TextView tvGameScore;
+    private TextView tvNextLevelName;
 
     public static Intent makeIntent(Context context, String gameType, int gamePlayedIndex){
         Intent intent = new Intent(context, AchievementCelebrationActivity.class);
@@ -66,11 +65,30 @@ public class AchievementCelebrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievement_celebration);
 
+
         extractIntentExtras();
         getGameInfo();
         setGameInfo();
         setPlayAnimationButton();
         setSelectThemeSpinner();
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Game Info");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        playAnimation();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                onBackPressed();
+                return true;
+            }
+        }
+
+        return true;
     }
 
     private void getGameInfo(){
@@ -80,7 +98,9 @@ public class AchievementCelebrationActivity extends AppCompatActivity {
 
         playerCount = playedGame.getNumberOfPlayers();
         gameScore = playedGame.getTotalScore();
+
         difficulty = playedGame.getDifficulty();
+        currentLevelName = playedGame.getAchievement();
 
         // Iterate through each achievement level, use regex to grab numerical values
         for (String achievementLevel : gameType.getAchievementLevelScoreRequirements(playerCount, difficulty)){
@@ -89,7 +109,7 @@ public class AchievementCelebrationActivity extends AppCompatActivity {
                 // If the current achievementLevelScore is greater than the game's game score, it is the next level above
                 // Calculate the gap in points to the next level, and grab the name of the next achievement level's name
                 pointsToNextLevel = achievementLevelScore - gameScore;
-                nextLevelName = gameType.getAchievementLevel(achievementLevelScore, playerCount, difficulty);
+                nextLevelName = achievementLevel.replaceAll("[0-9]", "").trim();
                 break;
             }
         }
@@ -97,54 +117,54 @@ public class AchievementCelebrationActivity extends AppCompatActivity {
 
     private void setGameInfo(){
         TextView tvNumberOfPlayers = findViewById(R.id.tvNumberOfPlayers);
-        TextView tvGameScore = findViewById(R.id.tvGameScore);
         TextView tvNextLevelGap = findViewById(R.id.tvNextLevelGap);
 
-        tvAchievementLevel = findViewById(R.id.tvNextLevelName);
-        ivAchievementAnimation = findViewById(R.id.ivAchievementAnimation);
+        tvGameScore = findViewById(R.id.tvGameScore);
+        tvNextLevelName = findViewById(R.id.tvNextLevelName);
 
         tvNumberOfPlayers.setText("Number of players: " + playerCount);
-        tvGameScore.setText("Score achieved: " + gameScore);
+        tvGameScore.setText("Score achieved: " + currentLevelName + " - " + gameScore);
 
         tvNextLevelGap.setText(pointsToNextLevel + " points away from the next level!");
-        tvAchievementLevel.setText("Next level: " + nextLevelName + " - " + (gameScore + pointsToNextLevel));
+        tvNextLevelName.setText("Next level: " + nextLevelName + " - " + (gameScore + pointsToNextLevel));
     }
 
     private void setPlayAnimationButton(){
         Button btnPlayAnimation = findViewById(R.id.btnPlayAnimation);
         btnPlayAnimation.setOnClickListener(view -> {
-            // Animate the star to signify the achievement
-            ImageView starImage = findViewById(R.id.ivAchievementAnimation);
-            Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-            starImage.startAnimation(animation);
-            starImage.setVisibility(View.VISIBLE);
-
-            // Store a reference to the activity so we can end the activity after an animation finishes
-            Activity thisActivity = this;
-
-            // End the activity after the animation finished https://stackoverflow.com/questions/7606498/end-animation-event-android
-            animation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    //taken from https://stackoverflow.com/questions/37248300/how-to-finish-specific-activities-not-all-activities
-    /*                Intent intent = new Intent(thisActivity, GamePlayedListActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startActivity(intent);*/
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {}
-            });
-
-            // Play a sound
-            MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.achievement_jingle);
-            mediaPlayer.start(); // no need to call prepare(); create() does that for you
+            playAnimation();
         });
+    }
+
+    private void playAnimation(){
+        // Animate the star to signify the achievement
+        ImageView starImage = findViewById(R.id.ivAchievementAnimation);
+        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+        starImage.startAnimation(animation);
+        starImage.setVisibility(View.VISIBLE);
+
+        // Store a reference to the activity so we can end the activity after an animation finishes
+        Activity thisActivity = this;
+
+        // End the activity after the animation finished https://stackoverflow.com/questions/7606498/end-animation-event-android
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+        });
+
+        // Play a sound
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.achievement_jingle);
+        mediaPlayer.start(); // no need to call prepare(); create() does that for you
     }
 
     private void setSelectThemeSpinner(){
@@ -156,10 +176,20 @@ public class AchievementCelebrationActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnrSelectTheme.setAdapter(arrayAdapter);
+
+        // https://stackoverflow.com/questions/10634180/how-to-set-spinner-default-by-its-value-instead-of-position
+        // Set the default choice to the app's selected theme
+        spnrSelectTheme.setSelection(gameManager.getAchievementTheme());
+
         spnrSelectTheme.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                // i is the position of the selected item
+                gameManager.setGameTheme(i);
 
+                // We need to redefine current level name and next level name
+                getGameInfo();
+                setGameInfo();
             }
 
             @Override
