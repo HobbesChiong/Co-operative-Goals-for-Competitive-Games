@@ -68,5 +68,16 @@
     <string name="display_score">Score: %1$d - %2$s</string>
     <string name="statistics">Statistics</string>
     <string name="statistics_text">Statistics</string>
+    <string name="about">About</string>
+    <string name="background_image_https_www_pexels_com_photo_close_up_photo_of_monopoly_board_game_776654">background image: https://www.pexels.com/photo/close-up-photo-of-monopoly-board-game-776654/</string>
+    <string name="icon_picture_https_www_pngegg_com_en_png_zkzwq">icon picture: https://www.pngegg.com/en/png-zkzwq</string>
+    <string name="empty_box_https_www_pexels_com_photo_cardboard_box_on_table_in_room_with_plants_4464817">Empty box: https://www.pexels.com/photo/cardboard-box-on-table-in-room-with-plants-4464817/</string>
+    <string name="angus">Angus</string>
+    <string name="jonathan">Jonathan</string>
+    <string name="alex">Alex</string>
+    <string name="hobbes">Hobbes</string>
+    <string name="team_manganese">Team: Manganese</string>
+    <string name="win_sound_by_alex">Win Sound: By Alex</string>
+    <string name="resources_used">Resources Used</string>
     />
 </resources>

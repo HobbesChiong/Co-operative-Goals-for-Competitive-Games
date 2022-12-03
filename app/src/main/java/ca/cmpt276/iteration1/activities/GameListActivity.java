@@ -139,6 +139,12 @@ public class GameListActivity extends AppCompatActivity {
 
                 return true;
             }
+            case R.id.btnAbout:{
+                Intent intent = new Intent(GameListActivity.this, AboutActivity.class);
+                startActivity(intent);
+
+                return true;
+            }
 
             default: return true;
         }

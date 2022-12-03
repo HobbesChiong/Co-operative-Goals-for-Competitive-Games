@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.AboutActivity">
+
+    <ImageView
+        android:id="@+id/iv_optionBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/boardgame"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/tvCitation4"
+        android:layout_width="357dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/background_image_https_www_pexels_com_photo_close_up_photo_of_monopoly_board_game_776654"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.462"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCitation3" />
+
+    <TextView
+        android:id="@+id/tvCitation3"
+        android:layout_width="359dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/icon_picture_https_www_pngegg_com_en_png_zkzwq"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.48"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCitation2" />
+
+    <TextView
+        android:id="@+id/tvCitation2"
+        android:layout_width="358dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/empty_box_https_www_pexels_com_photo_cardboard_box_on_table_in_room_with_plants_4464817"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.452"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvCitation" />
+
+    <TextView
+        android:id="@+id/tvAngus"
+        android:layout_width="358dp"
+        android:layout_height="36dp"
+        android:text="@string/angus"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvJonathan" />
+
+    <TextView
+        android:id="@+id/tvJonathan"
+        android:layout_width="358dp"
+        android:layout_height="36dp"
+        android:text="@string/jonathan"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHobbes" />
+
+    <TextView
+        android:id="@+id/tvAlex"
+        android:layout_width="358dp"
+        android:layout_height="36dp"
+        android:text="@string/alex"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.471"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTeam" />
+
+    <TextView
+        android:id="@+id/tvHobbes"
+        android:layout_width="358dp"
+        android:layout_height="36dp"
+        android:text="@string/hobbes"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAlex" />
+
+    <TextView
+        android:id="@+id/tvAbout"
+        android:layout_width="123dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/about"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTeam"
+        android:layout_width="361dp"
+        android:layout_height="35dp"
+        android:text="@string/team_manganese"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAbout" />
+
+    <TextView
+        android:id="@+id/tvCitation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/win_sound_by_alex"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.094"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvResources" />
+
+    <TextView
+        android:id="@+id/tvResources"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/resources_used"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvAngus" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
