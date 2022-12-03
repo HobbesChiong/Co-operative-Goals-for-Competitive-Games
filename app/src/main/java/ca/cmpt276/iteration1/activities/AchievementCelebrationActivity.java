@@ -7,9 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -67,6 +70,7 @@ public class AchievementCelebrationActivity extends AppCompatActivity {
         getGameInfo();
         setGameInfo();
         setPlayAnimationButton();
+        setSelectThemeSpinner();
     }
 
     private void getGameInfo(){
@@ -95,17 +99,15 @@ public class AchievementCelebrationActivity extends AppCompatActivity {
         TextView tvNumberOfPlayers = findViewById(R.id.tvNumberOfPlayers);
         TextView tvGameScore = findViewById(R.id.tvGameScore);
         TextView tvNextLevelGap = findViewById(R.id.tvNextLevelGap);
-        String nextLevelTitle = gameType.getAchievementLevel(gameScore, playerCount, difficulty);
 
         tvAchievementLevel = findViewById(R.id.tvNextLevelName);
-        ivGameSelfie = findViewById(R.id.ivGameSelfie);
         ivAchievementAnimation = findViewById(R.id.ivAchievementAnimation);
 
         tvNumberOfPlayers.setText("Number of players: " + playerCount);
         tvGameScore.setText("Score achieved: " + gameScore);
 
         tvNextLevelGap.setText(pointsToNextLevel + " points away from the next level!");
-        tvAchievementLevel.setText("Next level: " + nextLevelTitle + " - " + (gameScore + pointsToNextLevel));
+        tvAchievementLevel.setText("Next level: " + nextLevelName + " - " + (gameScore + pointsToNextLevel));
     }
 
     private void setPlayAnimationButton(){
@@ -142,6 +144,28 @@ public class AchievementCelebrationActivity extends AppCompatActivity {
             // Play a sound
             MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.achievement_jingle);
             mediaPlayer.start(); // no need to call prepare(); create() does that for you
+        });
+    }
+
+    private void setSelectThemeSpinner(){
+        // https://www.youtube.com/watch?v=on_OrrX7Nw4
+        Spinner spnrSelectTheme = findViewById(R.id.spnrSelectTheme);
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(
+                AchievementCelebrationActivity.this,
+                R.array.theme_names,
+                android.R.layout.simple_spinner_item);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnrSelectTheme.setAdapter(arrayAdapter);
+        spnrSelectTheme.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
         });
     }
 

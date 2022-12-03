@@ -14,7 +14,7 @@
         android:text="Players:"
         android:textAlignment="center"
         android:textColor="#000000"
-        android:textStyle="bold|italic"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +27,7 @@
         android:text="Score: "
         android:textAlignment="center"
         android:textColor="#000000"
-        android:textStyle="bold|italic"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvNumberOfPlayers" />
@@ -50,6 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Points To Next Level:"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvGameScore" />
@@ -60,6 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Next Level Name"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvNextLevelGap" />
@@ -68,18 +70,10 @@
         android:id="@+id/spnrSelectTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/tvSelectTheme"
-        app:layout_constraintTop_toTopOf="@+id/tvSelectTheme" />
-
-    <ImageView
-        android:id="@+id/ivGameSelfie"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvNextLevelName"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/tvSelectTheme"
+        app:layout_constraintStart_toStartOf="@+id/tvSelectTheme"
+        app:layout_constraintTop_toBottomOf="@+id/tvSelectTheme" />
 
     <Button
         android:id="@+id/btnPlayAnimation"
@@ -96,10 +90,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="100dp"
-        android:text="Select Theme:"
+        android:text="Selected Theme:"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.39"
         app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
