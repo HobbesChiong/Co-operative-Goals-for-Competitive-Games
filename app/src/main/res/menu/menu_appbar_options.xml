@@ -3,6 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/btnAbout"
+        android:title="@string/about"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/btnOptions"
         android:title="@string/options"
         app:showAsAction="ifRoom" />
