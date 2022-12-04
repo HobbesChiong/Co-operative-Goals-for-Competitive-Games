@@ -1,31 +1,50 @@
 package ca.cmpt276.iteration1.activities;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.Manifest;
+import android.app.Dialog;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,10 +66,9 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     private final int INVALID_SCORE = -1;
     private int gamePlayedPosition;
 
-    private ArrayList<Button> difficultyButtons;
-
     private boolean editGameActivity = false;
     private boolean gameCompleted = false;
+    private boolean choiceMade = false;
 
     private GameManager gameManager;
     private String gameTypeString;
@@ -60,12 +78,15 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     private String difficulty;
     private int playerAmount;
     private int totalScore;
+    private String takePhoto;
+    private String gamePlayImagePath;
 
     private ArrayList<Integer> playerScores;
 
     private EditText etPlayerAmount;
     private RecyclerView rvPlayerScoreInputs;
     private PlayerScoreInputRecyclerViewAdapter recyclerViewAdapter;
+    private Dialog showGamePlayImageDialog;
 
     // If a context and gameType are given, we are creating a new game
     public static Intent makeIntent(Context context, String gameTypeString){
@@ -106,7 +127,14 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         rvPlayerScoreInputs = findViewById(R.id.rvPlayerScoreInputs);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(R.string.create_new_game);
+
+        if(!allPermissionGranted()){
+            ActivityCompat.requestPermissions(GamePlayActivity.this, Configuration.REQUIRED_PERMISSION, Configuration.REQUEST_CODE_PERMISSION);
+        }
         extractIntentExtras();
+        setupDifficultyButtons();
+        setUpPhotoOptionsButtons();
 
         if (editGameActivity == true){
             actionBar.setTitle(R.string.edit_game);
@@ -126,6 +154,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
     public boolean onCreateOptionsMenu(Menu menu) {
         // inflate menu
         getMenuInflater().inflate(R.menu.menu_add_type_appbar, menu);
+        menu.findItem(R.id.btnViewPhoto).setVisible(true);
         return true;
     }
 
@@ -191,6 +220,12 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
                     return false;
                 }
             }
+
+            case(R.id.btnViewPhoto): {
+                createShowGamePlayImageDialog();
+                break;
+            }
+
             case (android.R.id.home): {
                 finish();
             }
@@ -205,7 +240,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
 
         int achievementIndex = gameType.getAchievementIndex(totalScore, playerAmount, difficulty);
         LocalDateTime datePlayed = LocalDateTime.now();
-        PlayedGame currentGame = new PlayedGame(gameTypeString, playerAmount, totalScore, achievementIndex, difficulty, playerScores, datePlayed);
+        PlayedGame currentGame = new PlayedGame(gameTypeString, playerAmount, totalScore, achievementIndex, difficulty, playerScores, datePlayed, takePhoto, gamePlayImagePath);
         gameManager.addPlayedGame(currentGame);
     }
 
@@ -214,7 +249,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         playerScores = recyclerViewAdapter.getScores();
 
         int achievementIndex = gameType.getAchievementIndex(totalScore, playerAmount, difficulty);
-        playedGame.editPlayedGame(playerAmount, totalScore, achievementIndex, difficulty, playerScores);
+        playedGame.editPlayedGame(playerAmount, totalScore, achievementIndex, difficulty, playerScores, takePhoto, gamePlayImagePath);
     }
 
     private void setupDifficultyButtons(){
@@ -226,50 +261,197 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         btnDifficultyNormal.setTag("Normal");
         btnDifficultyHard.setTag("Hard");
 
-        difficultyButtons = new ArrayList<>();
+        ArrayList<Button> difficultyButtons = new ArrayList<>();
         difficultyButtons.add(btnDifficultyEasy);
         difficultyButtons.add(btnDifficultyNormal);
         difficultyButtons.add(btnDifficultyHard);
 
-        highlightSelectedDifficultyButton(difficulty);
+        highlightSelectedButton(difficulty, difficultyButtons);
 
         // Choosing player count is hidden by default as a user needs to select a difficulty first
         // If any of these buttons are pressed, enable player count input
         btnDifficultyEasy.setOnClickListener(view -> {
-            highlightSelectedDifficultyButton(btnDifficultyEasy.getTag().toString());
+            highlightSelectedButton(btnDifficultyEasy.getTag().toString(), difficultyButtons);
 
             difficulty = "Easy";
             updateScoreTextView();
         });
         btnDifficultyNormal.setOnClickListener(view -> {
-            highlightSelectedDifficultyButton(btnDifficultyNormal.getTag().toString());
+            highlightSelectedButton(btnDifficultyNormal.getTag().toString(), difficultyButtons);
 
             difficulty = "Normal";
             updateScoreTextView();
         });
         btnDifficultyHard.setOnClickListener(view -> {
-            highlightSelectedDifficultyButton(btnDifficultyHard.getTag().toString());
+            highlightSelectedButton(btnDifficultyHard.getTag().toString(), difficultyButtons);
 
             difficulty = "Hard";
             updateScoreTextView();
         });
     }
 
-    private void highlightSelectedDifficultyButton(String selectedDifficultyButtonTag){
-        for (Button difficultyButton : difficultyButtons){
-            if (difficultyButton.getTag().equals(selectedDifficultyButtonTag)){
-                difficultyButton.setBackgroundColor(Color.BLACK);
+    private void highlightSelectedButton(String selectedButtonTag, ArrayList<Button> buttons){
+        for (Button btn : buttons){
+            if (btn.getTag().equals(selectedButtonTag)){
+                btn.setBackgroundColor(Color.RED);
             }
             else {
-                difficultyButton.setBackgroundColor(getColor(R.color.purple_500));
+                btn.setBackgroundColor(getColor(R.color.purple_500));
             }
         }
+    }
+
+    //this function is to set up the yes no button that asking whether the user willing to take a photo to save for the game play
+    private void setUpPhotoOptionsButtons() {
+        Button btnYes = findViewById(R.id.btnYesToTakePhoto);
+        Button btnNo = findViewById(R.id.btnNoToTakePhoto);
+        ArrayList<Button> takePhotoButton = new ArrayList<>();
+
+        btnYes.setTag("Yes");
+        btnNo.setTag("No");
+
+        takePhotoButton.add(btnYes);
+        takePhotoButton.add(btnNo);
+
+        highlightSelectedButton(takePhoto, takePhotoButton);
+
+
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightSelectedButton("Yes", takePhotoButton);
+                takePhoto = "Yes";
+                choiceMade = true;
+                startCamera();
+                updateScoreTextView();
+            }
+        });
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                highlightSelectedButton("No", takePhotoButton);
+                takePhoto = "No";
+                choiceMade = true;
+                gamePlayImagePath = null;
+                updateScoreTextView();
+            }
+        });
+    }
+
+    private void createShowGamePlayImageDialog() {
+        showGamePlayImageDialog = new Dialog(GamePlayActivity.this);
+        showGamePlayImageDialog.setContentView(R.layout.dialog_show_game_play_image);
+        showGamePlayImageDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        showGamePlayImageDialog.show();
+
+        populateShowGamePlayImageDialog();
+    }
+
+    private void populateShowGamePlayImageDialog() {
+        //Set imageView clickable to let the user retake the photo
+        ImageView imageView = showGamePlayImageDialog.findViewById(R.id.ivGamePlayPhoto);
+        imageView.setClickable(true);
+        imageView.setImageBitmap(getBitmapFromPath(gamePlayImagePath, showGamePlayImageDialog.getContext().getResources()));
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showGamePlayImageDialog.dismiss();
+                startCamera();
+            }
+        });
+
+        //Set up close button. When the user clicked the close button, the dialog will dismiss.
+        Button closeShowGamePlayImageDialog = showGamePlayImageDialog.findViewById(R.id.btnCloseShowGamePlayImageDialog);
+        closeShowGamePlayImageDialog.setOnClickListener(view -> {
+            showGamePlayImageDialog.dismiss();
+        });
+    }
+
+    //Code from https://developer.android.com/codelabs/camerax-getting-started#1
+    //request user permission
+    public boolean allPermissionGranted(){
+        for(String permission : GamePlayActivity.Configuration.REQUIRED_PERMISSION){
+            if(ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void startCamera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityIntent.launch(cameraIntent);
+    }
+
+        ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                Intent i = result.getData();
+                Bundle extras = i.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+                createShowGamePlayImageDialog();
+
+                updateGamePhotoImageView(imageBitmap);
+
+                saveImage(imageBitmap);
+            }
+        });
+
+    private void updateGamePhotoImageView(Bitmap imageBitmap) {
+        ImageView iv = showGamePlayImageDialog.findViewById(R.id.ivGamePlayPhoto);
+        iv.setImageBitmap(imageBitmap);
+    }
+
+    //Code from https://developer.android.com/codelabs/camerax-getting-started#1
+    static class Configuration{
+        public static final int REQUEST_CODE_PERMISSION = 10;
+        public static final String[] REQUIRED_PERMISSION = new String[]{Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    }
+
+
+    private void saveImage(Bitmap imageBitmap) {
+        //Create a folder for storing images of each game play
+        File directory = new File(this.getFilesDir(), "gamePlayImage");
+        if(!directory.exists()){
+            directory.mkdirs();
+        }
+
+        //Save the image to jpeg
+        File imageFile = new File(directory, System.currentTimeMillis() + ".jpg");
+        OutputStream outputStream;
+        try{
+            //Create the output stream
+            outputStream = new FileOutputStream(imageFile);
+
+            //Compress the bitmap
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+
+            //Close the output stream
+            outputStream.flush();
+            outputStream.close();
+            gamePlayImagePath = imageFile.getAbsolutePath();
+        }
+        catch(Exception e){
+            Log.e("Exception: ", e.toString());
+            Toast.makeText(this, "Couldn't save image! Permission required.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static Bitmap getBitmapFromPath(String imagePath, Resources resources){
+        Bitmap imageBitmap = BitmapFactory.decodeFile(imagePath);
+        if(imageBitmap == null){
+            imageBitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher);
+        }
+        return imageBitmap;
     }
 
     private void setDefaultValues(){
         playerAmount = 4;
         difficulty = "Normal";
         playerScores = new ArrayList<Integer>(Collections.nCopies(playerAmount, INVALID_SCORE));
+        choiceMade = false;
         updateScoreTextView();
     }
 
@@ -284,8 +466,14 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         playerAmount = playedGame.getNumberOfPlayers();
         totalScore = playedGame.getTotalScore();
         playerScores = playedGame.getPlayerScores();
+        gamePlayImagePath = playedGame.getPicturePath();
+        takePhoto = playedGame.getTakePhotoOptions();
 
+        choiceMade = true;
         updateScoreTextView();
+
+        LinearLayout linearLayout = findViewById(R.id.LLPhotoOption);
+        linearLayout.setVisibility(View.VISIBLE);
     }
 
     private void setupPlayerCountInput(){
@@ -398,7 +586,15 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         }
 
         String achievementTitle = gameType.getAchievementLevel(totalScore, playerAmount, difficulty);
-        tvScoreWithAchievementLevel.setText(getString(R.string.display_score, totalScore, achievementTitle));
+
+        //If the user still haven't chosen whether they would take photo or not, the achievement is not going to be shown
+        tvScoreWithAchievementLevel.setText(getString(R.string.display_score_only, totalScore));
+        LinearLayout linearLayout = findViewById(R.id.LLPhotoOption);
+        linearLayout.setVisibility(View.VISIBLE);
+
+        if(choiceMade){
+            tvScoreWithAchievementLevel.setText(getString(R.string.display_score_and_achievement, totalScore, achievementTitle));
+        }
     }
 
 }

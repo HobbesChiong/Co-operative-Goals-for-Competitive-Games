@@ -65,7 +65,8 @@
     <string name="game_changes_saved">Game changes saved.</string>
     <string name="waiting_player_score_input">Awaiting player score inputs…</string>
     <string name="waiting_user_new_input">User has deleted player amount, awaiting new input.</string>
-    <string name="display_score">Score: %1$d - %2$s</string>
+    <string name="display_score_only">Score: %1$d</string>
+    <string name="display_score_and_achievement">Score: %1$d - %2$s</string>
     <string name="statistics">Statistics</string>
     <string name="statistics_text">Statistics</string>
     <string name="ac_players_placeholder">Players:</string>
@@ -79,5 +80,7 @@
     <string name="ac_score_display">Score achieved: %1$s - %2$d</string>
     <string name="ac_next_level_gap_display">%1$d points away from the next level</string>
     <string name="ac_next_level_title_display">Next level: %1$s - %2$d</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="view_photo">View Photo</string>
     />
 </resources>

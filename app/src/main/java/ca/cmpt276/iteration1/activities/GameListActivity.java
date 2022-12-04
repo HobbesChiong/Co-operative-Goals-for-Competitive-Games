@@ -6,9 +6,11 @@ import static ca.cmpt276.iteration1.activities.OptionsActivity.OPTIONS_PREFERENC
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
@@ -139,10 +141,8 @@ public class GameListActivity extends AppCompatActivity {
 
                 return true;
             }
-
             default: return true;
         }
-
 
     }
 
