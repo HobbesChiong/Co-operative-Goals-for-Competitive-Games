@@ -352,6 +352,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         ImageView imageView = showGamePlayImageDialog.findViewById(R.id.ivGamePlayPhoto);
         imageView.setClickable(true);
         imageView.setImageBitmap(getBitmapFromPath(gamePlayImagePath, showGamePlayImageDialog.getContext().getResources()));
+        Toast.makeText(this, getString(R.string.tap_to_edit_image), Toast.LENGTH_LONG).show();
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
