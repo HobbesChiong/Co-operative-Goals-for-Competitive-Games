@@ -26,7 +26,9 @@ public class PlayedGame {
     private String difficulty;
     private ArrayList<Integer> playerScores;
 
-    private LocalDateTime datePlayed;
+    private final LocalDateTime datePlayed;
+
+    private String picturePath, takePhotoOptions;
 
     public PlayedGame(String type,
                       int numberOfPlayers,
@@ -34,7 +36,9 @@ public class PlayedGame {
                       int achievementIndex,
                       String difficulty,
                       ArrayList<Integer> playerScores,
-                      LocalDateTime datePlayed) {
+                      LocalDateTime datePlayed,
+                      String takePhotoOptions,
+                      String picturePath) {
         this.type = type;
         this.numberOfPlayers = numberOfPlayers;
         this.totalScore = totalScore;
@@ -42,6 +46,8 @@ public class PlayedGame {
         this.difficulty = difficulty;
         this.playerScores = playerScores;
         this.datePlayed = datePlayed;
+        this.picturePath = picturePath;
+        this.takePhotoOptions = takePhotoOptions;
     }
 
     public String getType() {
@@ -69,12 +75,22 @@ public class PlayedGame {
         return GameType.getAchievementName(achievementIndex, gameManager.getAchievementTheme());
     }
 
-    public void editPlayedGame(int numberOfPlayers, int score, int achievementIndex, String difficulty, ArrayList<Integer> playerScores){
+    public String getPicturePath() {
+        return picturePath;
+    }
+
+    public String getTakePhotoOptions() {
+        return takePhotoOptions;
+    }
+
+    public void editPlayedGame(int numberOfPlayers, int score, int achievementIndex, String difficulty, ArrayList<Integer> playerScores, String takePhotoOptions, String picturePath){
         this.numberOfPlayers = numberOfPlayers;
         this.totalScore = score;
         this.achievementIndex = achievementIndex;
         this.difficulty = difficulty;
         this.playerScores = playerScores;
+        this.takePhotoOptions = takePhotoOptions;
+        this.picturePath = picturePath;
     }
 
     @NonNull

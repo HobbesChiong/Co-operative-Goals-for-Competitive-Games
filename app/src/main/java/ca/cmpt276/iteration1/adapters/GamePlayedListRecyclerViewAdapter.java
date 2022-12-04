@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import ca.cmpt276.iteration1.R;
+import ca.cmpt276.iteration1.activities.GamePlayActivity;
 import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
 import ca.cmpt276.iteration1.model.PlayedGame;
@@ -36,7 +38,7 @@ public class GamePlayedListRecyclerViewAdapter extends RecyclerView.Adapter<Game
     GameType gameType;
     ArrayList<PlayedGame> playedGames;
 
-    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM dd @ hh.mm a");
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMM dd @ hh.mm a");
 
     public GamePlayedListRecyclerViewAdapter(Context context, GamePlayedListRecyclerViewInterface recyclerViewInterface, String gameTypeString){
         this.gameManager = GameManager.getInstance();
@@ -47,7 +49,6 @@ public class GamePlayedListRecyclerViewAdapter extends RecyclerView.Adapter<Game
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
         TextView dScore, dNoOfPlayer, dAchievement, dDifficulty, dDatePlayed;
 
         public ViewHolder(@NonNull View itemView, GamePlayedListRecyclerViewInterface recyclerViewInterface) {
@@ -58,8 +59,18 @@ public class GamePlayedListRecyclerViewAdapter extends RecyclerView.Adapter<Game
             dDifficulty = itemView.findViewById(R.id.tvDisplayDifficulty);
             dDatePlayed = itemView.findViewById(R.id.tvDatePlayed);
 
+            itemView.setOnClickListener(view -> {
+                Log.i("GamePlayedClick", "A game has been clicked.");
+                if (recyclerViewInterface != null){
+                    int position = getAbsoluteAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION){
+                        recyclerViewInterface.onItemClick(position);
+                    }
+                }
+            });
+
             itemView.setOnLongClickListener(view -> {
-                Log.i("Tag", "something has been long clicked");
+                Log.i("GamePlayedLongClick", "A game has been long clicked.");
                 if (recyclerViewInterface != null){
                     int position = getAbsoluteAdapterPosition();
 

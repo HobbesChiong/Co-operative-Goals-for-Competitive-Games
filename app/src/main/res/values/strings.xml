@@ -65,7 +65,8 @@
     <string name="game_changes_saved">Game changes saved.</string>
     <string name="waiting_player_score_input">Awaiting player score inputs…</string>
     <string name="waiting_user_new_input">User has deleted player amount, awaiting new input.</string>
-    <string name="display_score">Score: %1$d - %2$s</string>
+    <string name="display_score_only">Score: %1$d</string>
+    <string name="display_score_and_achievement">Score: %1$d - %2$s</string>
     <string name="statistics">Statistics</string>
     <string name="statistics_text">Statistics</string>
     <string name="about">About</string>
@@ -79,5 +80,18 @@
     <string name="team_manganese">Team: Manganese</string>
     <string name="win_sound_by_alex">Win Sound: By Alex</string>
     <string name="resources_used">Resources Used</string>
+    <string name="ac_players_placeholder">Players:</string>
+    <string name="ac_score_placeholder">Score:</string>
+    <string name="ac_animation_description">plays win animation</string>
+    <string name="ac_next_level_gap_placeholder">Points To Next Level:</string>
+    <string name="ac_next_level_name_placeholder">Next Level Name</string>
+    <string name="ac_play_animation_placeholder">Play Animation</string>
+    <string name="ac_selected_theme_placeholder">Selected Theme:</string>
+    <string name="ac_players_display">Number of players: %1$d</string>
+    <string name="ac_score_display">Score achieved: %1$s - %2$d</string>
+    <string name="ac_next_level_gap_display">%1$d points away from the next level</string>
+    <string name="ac_next_level_title_display">Next level: %1$s - %2$d</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="view_photo">View Photo</string>
     />
 </resources>
