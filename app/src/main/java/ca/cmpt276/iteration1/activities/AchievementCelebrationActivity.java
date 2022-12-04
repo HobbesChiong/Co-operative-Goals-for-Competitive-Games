@@ -122,11 +122,12 @@ public class AchievementCelebrationActivity extends AppCompatActivity {
         tvGameScore = findViewById(R.id.tvGameScore);
         tvNextLevelName = findViewById(R.id.tvNextLevelName);
 
-        tvNumberOfPlayers.setText("Number of players: " + playerCount);
-        tvGameScore.setText("Score achieved: " + currentLevelName + " - " + gameScore);
+        tvNumberOfPlayers.setText(getString(R.string.ac_players_display, playerCount));
+        tvGameScore.setText(getString(R.string.ac_score_display, currentLevelName, gameScore));
 
-        tvNextLevelGap.setText(pointsToNextLevel + " points away from the next level!");
-        tvNextLevelName.setText("Next level: " + nextLevelName + " - " + (gameScore + pointsToNextLevel));
+
+        tvNextLevelGap.setText(getString(R.string.ac_next_level_gap_display, pointsToNextLevel));
+        tvNextLevelName.setText(getString(R.string.ac_next_level_title_display, nextLevelName, (gameScore + pointsToNextLevel)));
     }
 
     private void setPlayAnimationButton(){
