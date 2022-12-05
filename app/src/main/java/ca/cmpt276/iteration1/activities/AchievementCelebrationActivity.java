@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -46,6 +49,7 @@ public class AchievementCelebrationActivity extends AppCompatActivity {
 
     private TextView tvGameScore;
     private TextView tvNextLevelName;
+    private ImageView ivGameSelfie;
 
     public static Intent makeIntent(Context context, String gameType, int gamePlayedIndex){
         Intent intent = new Intent(context, AchievementCelebrationActivity.class);
@@ -121,6 +125,9 @@ public class AchievementCelebrationActivity extends AppCompatActivity {
 
         tvGameScore = findViewById(R.id.tvGameScore);
         tvNextLevelName = findViewById(R.id.tvNextLevelName);
+        ivGameSelfie = findViewById(R.id.ivGameSelfie);
+
+        ivGameSelfie.setImageBitmap(getBitmapFromPath(playedGame.getPicturePath(), AchievementCelebrationActivity.this.getResources()));
 
         tvNumberOfPlayers.setText(getString(R.string.ac_players_display, playerCount));
         tvGameScore.setText(getString(R.string.ac_score_display, currentLevelName, gameScore));
@@ -128,6 +135,14 @@ public class AchievementCelebrationActivity extends AppCompatActivity {
 
         tvNextLevelGap.setText(getString(R.string.ac_next_level_gap_display, pointsToNextLevel));
         tvNextLevelName.setText(getString(R.string.ac_next_level_title_display, nextLevelName, (gameScore + pointsToNextLevel)));
+    }
+
+    private Bitmap getBitmapFromPath(String imagePath, Resources resources){
+        Bitmap imageBitmap = BitmapFactory.decodeFile(imagePath);
+        if(imageBitmap == null){
+            imageBitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher);
+        }
+        return imageBitmap;
     }
 
     private void setPlayAnimationButton(){
@@ -151,12 +166,10 @@ public class AchievementCelebrationActivity extends AppCompatActivity {
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-
             }
 
             @Override

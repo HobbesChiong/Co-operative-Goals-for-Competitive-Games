@@ -108,5 +108,6 @@
     <string name="no">No</string>
     <string name="add_photo">Add Photo</string>
     <string name="player_x">Player X</string>
+    <string name="grant_permissions">Grant Permissions</string>
     />
 </resources>

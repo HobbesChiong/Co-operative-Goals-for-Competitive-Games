@@ -95,4 +95,5 @@ public class GameManager {
     public ArrayList<PlayedGame> getPlayedGames() {
         return playedGames;
     }
+
 }

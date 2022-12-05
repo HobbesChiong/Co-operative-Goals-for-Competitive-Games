@@ -62,6 +62,7 @@ import ca.cmpt276.iteration1.model.PlayerScoreInput;
 * */
 public class GamePlayActivity extends AppCompatActivity implements PlayerScoreInputRecyclerViewInterface {
 
+    private final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private final int GAME_PLAYED_POSITION_NON_EXISTENT = -1;
     private final int INVALID_SCORE = -1;
     private int gamePlayedPosition;
@@ -129,9 +130,6 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.create_new_game);
 
-        if(!allPermissionGranted()){
-            ActivityCompat.requestPermissions(GamePlayActivity.this, Configuration.REQUIRED_PERMISSION, Configuration.REQUEST_CODE_PERMISSION);
-        }
         extractIntentExtras();
         setupDifficultyButtons();
         setUpPhotoOptionsButtons();
@@ -352,7 +350,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         ImageView imageView = showGamePlayImageDialog.findViewById(R.id.ivGamePlayPhoto);
         imageView.setClickable(true);
         imageView.setImageBitmap(getBitmapFromPath(gamePlayImagePath, showGamePlayImageDialog.getContext().getResources()));
-        Toast.makeText(this, getString(R.string.tap_to_edit_image), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.tap_to_edit_image), Toast.LENGTH_SHORT).show();
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -368,49 +366,38 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         });
     }
 
-    //Code from https://developer.android.com/codelabs/camerax-getting-started#1
-    //request user permission
-    public boolean allPermissionGranted(){
-        for(String permission : GamePlayActivity.Configuration.REQUIRED_PERMISSION){
-            if(ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED){
-                return false;
-            }
-        }
-        return true;
-    }
-
     private void startCamera() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityIntent.launch(cameraIntent);
+        if (checkStorageAndCameraPermissions() == true){
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityIntent.launch(cameraIntent);
+        }
+        else {
+            Toast.makeText(GamePlayActivity.this,
+                    "You have denied permissions. Please enable in options to take a picture.",
+                    Toast.LENGTH_LONG)
+                    .show();
+        }
     }
 
-        ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                Intent i = result.getData();
-                Bundle extras = i.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
+    ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            Intent i = result.getData();
+            Bundle extras = i.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
 
-                createShowGamePlayImageDialog();
+            createShowGamePlayImageDialog();
 
-                updateGamePhotoImageView(imageBitmap);
+            updateGamePhotoImageView(imageBitmap);
 
-                saveImage(imageBitmap);
-            }
-        });
+            saveImage(imageBitmap);
+        }
+    });
 
     private void updateGamePhotoImageView(Bitmap imageBitmap) {
         ImageView iv = showGamePlayImageDialog.findViewById(R.id.ivGamePlayPhoto);
         iv.setImageBitmap(imageBitmap);
     }
-
-    //Code from https://developer.android.com/codelabs/camerax-getting-started#1
-    static class Configuration{
-        public static final int REQUEST_CODE_PERMISSION = 10;
-        public static final String[] REQUIRED_PERMISSION = new String[]{Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE};
-    }
-
 
     private void saveImage(Bitmap imageBitmap) {
         //Create a folder for storing images of each game play
@@ -440,7 +427,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         }
     }
 
-    public static Bitmap getBitmapFromPath(String imagePath, Resources resources){
+    public Bitmap getBitmapFromPath(String imagePath, Resources resources){
         Bitmap imageBitmap = BitmapFactory.decodeFile(imagePath);
         if(imageBitmap == null){
             imageBitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher);
@@ -587,15 +574,33 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         }
 
         String achievementTitle = gameType.getAchievementLevel(totalScore, playerAmount, difficulty);
-
-        //If the user still haven't chosen whether they would take photo or not, the achievement is not going to be shown
         tvScoreWithAchievementLevel.setText(getString(R.string.display_score_only, totalScore));
-        LinearLayout linearLayout = findViewById(R.id.LLPhotoOption);
-        linearLayout.setVisibility(View.VISIBLE);
 
-        if(choiceMade){
+        // If the user has not denied permissions
+        if (checkStorageAndCameraPermissions() == true){
+            //If the user still haven't chosen whether they would take photo or not, the achievement is not going to be shown
+            LinearLayout linearLayout = findViewById(R.id.LLPhotoOption);
+            linearLayout.setVisibility(View.VISIBLE);
+
+            if(choiceMade){
+                tvScoreWithAchievementLevel.setText(getString(R.string.display_score_and_achievement, totalScore, achievementTitle));
+            }
+        }
+        else {
             tvScoreWithAchievementLevel.setText(getString(R.string.display_score_and_achievement, totalScore, achievementTitle));
         }
+
+    }
+
+    //Code from https://developer.android.com/codelabs/camerax-getting-started#1
+    private boolean checkStorageAndCameraPermissions(){
+        // If either camera permissions or storage permissions are missing, request permissions again
+        for(String permission : REQUIRED_PERMISSIONS){
+            if(ContextCompat.checkSelfPermission(GamePlayActivity.this, permission) != PackageManager.PERMISSION_GRANTED){
+                return false;
+            }
+        }
+        return true;
     }
 
 }
