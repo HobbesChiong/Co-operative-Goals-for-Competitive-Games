@@ -129,7 +129,7 @@ public class GameTypeActivity extends AppCompatActivity {
                 // Otherwise, the user cannot take photos.
                 else {
                     Toast.makeText(GameTypeActivity.this,
-                            "You have denied permissions. Please enable in options to take a picture.",
+                            getString(R.string.user_denied_permissions),
                             Toast.LENGTH_SHORT)
                             .show();
                 }

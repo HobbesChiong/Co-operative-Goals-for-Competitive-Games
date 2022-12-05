@@ -109,5 +109,6 @@
     <string name="add_photo">Add Photo</string>
     <string name="player_x">Player X</string>
     <string name="grant_permissions">Grant Permissions</string>
+    <string name="user_denied_permissions">You have denied permissions. Please enable in options to take a picture.</string>
     />
 </resources>

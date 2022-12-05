@@ -373,7 +373,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         }
         else {
             Toast.makeText(GamePlayActivity.this,
-                    "You have denied permissions. Please enable in options to take a picture.",
+                            getString(R.string.user_denied_permissions),
                     Toast.LENGTH_LONG)
                     .show();
         }
