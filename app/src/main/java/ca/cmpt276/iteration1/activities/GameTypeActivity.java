@@ -50,6 +50,9 @@ public class GameTypeActivity extends AppCompatActivity {
     public static final String EDIT_GAME_TYPE = "EditGameType";
     private MenuInflater menuInflater;
 
+    private final int REQUEST_PERMISSIONS_CODE = 10;
+    private final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+
     private boolean editGameActivity;
     private String gameTypeString;
     private String gamePicturePath;
@@ -117,11 +120,33 @@ public class GameTypeActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Launch the camera and take a picture
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityIntent.launch(cameraIntent);
+                // If user has not denied permission request, permissions have been granted
+                if (checkStorageAndCameraPermissions() == true){
+                    // Launch the camera and take a picture
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityIntent.launch(cameraIntent);
+                }
+                // Otherwise, the user cannot take photos.
+                else {
+                    Toast.makeText(GameTypeActivity.this,
+                            getString(R.string.user_denied_permissions),
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
             }
         });
+
+    }
+
+    //Code from https://developer.android.com/codelabs/camerax-getting-started#1
+    private boolean checkStorageAndCameraPermissions(){
+        // If either camera permissions or storage permissions are missing, request permissions again
+        for(String permission : REQUIRED_PERMISSIONS){
+            if(ContextCompat.checkSelfPermission(GameTypeActivity.this, permission) != PackageManager.PERMISSION_GRANTED){
+                return false;
+            }
+        }
+        return true;
     }
 
     private void updateGameImageView(Bitmap imageBitmap) {
@@ -144,14 +169,6 @@ public class GameTypeActivity extends AppCompatActivity {
                     updateGameImageView(imageBitmap);
 
                     // Save the bitmap to storage (https://www.youtube.com/watch?v=oLcxTunwaFk)
-                    // Check permissions
-                    if (!checkPermissions()) {
-                        ActivityCompat.requestPermissions(GameTypeActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},100);
-                    }
-
-                    if (!checkPermissions()) {
-                        return;
-                    }
 
                     // Create a folder for storing images of board games
                     File directory = new File(getFilesDir(), "BoardGameImages");
@@ -179,10 +196,6 @@ public class GameTypeActivity extends AppCompatActivity {
                     }
                 }
             });
-
-    private boolean checkPermissions() {
-        return (ContextCompat.checkSelfPermission(GameTypeActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -282,7 +295,7 @@ public class GameTypeActivity extends AppCompatActivity {
     Returns the bitmap found at a path. If the path is invalid, returns
     a default bitmap.
      */
-    public static Bitmap getBitmapFromPath(String imagePath, Resources resources) {
+    private Bitmap getBitmapFromPath(String imagePath, Resources resources) {
         Bitmap imageBitmap = BitmapFactory.decodeFile(imagePath);
 
         if (imageBitmap == null) {

@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import ca.cmpt276.iteration1.activities.GameListActivity;
+import ca.cmpt276.iteration1.activities.GameTypeActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = new Intent(MainActivity.this, GameListActivity.class);
+
         startActivity(intent);
     }
+
 }

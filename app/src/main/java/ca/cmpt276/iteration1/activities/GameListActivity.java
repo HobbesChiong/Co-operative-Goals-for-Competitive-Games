@@ -6,12 +6,17 @@ import static ca.cmpt276.iteration1.activities.OptionsActivity.OPTIONS_PREFERENC
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,7 +45,10 @@ import ca.cmpt276.iteration1.model.GameType;
  */
 public class GameListActivity extends AppCompatActivity {
 
-    GameManager gm;
+    private GameManager gm;
+
+    private final int REQUEST_PERMISSIONS_CODE = 10;
+    private final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +86,26 @@ public class GameListActivity extends AppCompatActivity {
         });
 
         loadAppSettings();
+
+        grantStorageAndCameraPermissions();
+    }
+
+    private void grantStorageAndCameraPermissions(){
+        // Check if permissions are granted first, then request if not granted
+        if (checkStorageAndCameraPermissions() == false){
+            ActivityCompat.requestPermissions(GameListActivity.this, REQUIRED_PERMISSIONS, REQUEST_PERMISSIONS_CODE);
+        }
+    }
+
+    //Code from https://developer.android.com/codelabs/camerax-getting-started#1
+    private boolean checkStorageAndCameraPermissions(){
+        // If either camera permissions or storage permissions are missing, request permissions again
+        for(String permission : REQUIRED_PERMISSIONS){
+            if(ContextCompat.checkSelfPermission(GameListActivity.this, permission) != PackageManager.PERMISSION_GRANTED){
+                return false;
+            }
+        }
+        return true;
     }
 
     private void loadAppSettings() {
@@ -186,7 +214,7 @@ public class GameListActivity extends AppCompatActivity {
 
             // Set the photo
             ImageView gameBox = itemView.findViewById(R.id.iv_gameBox_list);
-            Bitmap boxBitmap = GameTypeActivity.getBitmapFromPath(currentGame.getImagePath(), this.getContext().getResources());
+            Bitmap boxBitmap = getBitmapFromPath(currentGame.getImagePath(), this.getContext().getResources());
 
             if (boxBitmap != null) {
                 gameBox.setImageBitmap(boxBitmap);
@@ -227,5 +255,13 @@ public class GameListActivity extends AppCompatActivity {
         gm.loadGameTypeList(gson.fromJson(json, type));
     }
 
+    private Bitmap getBitmapFromPath(String imagePath, Resources resources) {
+        Bitmap imageBitmap = BitmapFactory.decodeFile(imagePath);
 
+        if (imageBitmap == null) {
+            imageBitmap = BitmapFactory.decodeResource(resources, R.mipmap.nogamebox);
+        }
+
+        return imageBitmap;
+    }
 }
