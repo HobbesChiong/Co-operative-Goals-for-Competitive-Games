@@ -436,7 +436,7 @@ public class GamePlayActivity extends AppCompatActivity implements PlayerScoreIn
         }
         catch(Exception e){
             Log.e("Exception: ", e.toString());
-            Toast.makeText(this, "Couldn't save image! Permission required.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.permission_required, Toast.LENGTH_SHORT).show();
         }
     }
 

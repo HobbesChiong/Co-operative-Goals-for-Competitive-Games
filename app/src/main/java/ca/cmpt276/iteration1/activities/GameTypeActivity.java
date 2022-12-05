@@ -175,7 +175,7 @@ public class GameTypeActivity extends AppCompatActivity {
                         gamePicturePath = imageFile.getAbsolutePath();
                     } catch (Exception e) {
                         // Show a (un)helpful toast if any errors occurred along the way
-                        Toast.makeText(GameTypeActivity.this, "Couldn't save image! Did you grant the appropriate permissions?", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GameTypeActivity.this, R.string.image_permission_required, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -231,7 +231,7 @@ public class GameTypeActivity extends AppCompatActivity {
                         finish();
                     }
                     catch (Exception e) {
-                        Toast.makeText(GameTypeActivity.this, "Invalid configuration.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GameTypeActivity.this, R.string.invalidConfig, Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;

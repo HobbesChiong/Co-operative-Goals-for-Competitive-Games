@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:text="Player X"
+                android:text="@string/player_x"
                 android:textAlignment="center"
                 android:textSize="16sp"
                 android:textStyle="bold|italic"

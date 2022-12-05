@@ -73,7 +73,7 @@ public class AchievementCelebrationActivity extends AppCompatActivity {
         setSelectThemeSpinner();
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Game Info");
+        actionBar.setTitle(R.string.game_info);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         playAnimation();

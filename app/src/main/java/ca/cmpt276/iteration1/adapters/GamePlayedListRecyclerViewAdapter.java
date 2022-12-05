@@ -97,7 +97,7 @@ public class GamePlayedListRecyclerViewAdapter extends RecyclerView.Adapter<Game
         holder.dNoOfPlayer.setText(String.valueOf(playedGames.get(position).getNumberOfPlayers()));
         holder.dAchievement.setText(playedGames.get(position).getAchievement());
         holder.dDifficulty.setText(playedGames.get(position).getDifficulty());
-        holder.dDatePlayed.setText("Date played: " + playedGames.get(position).getDatePlayed().format(dateTimeFormatter));
+        holder.dDatePlayed.setText(context.getString(R.string.display_game_play_date, playedGames.get(position).getDatePlayed().format(dateTimeFormatter)));
     }
 
     @Override

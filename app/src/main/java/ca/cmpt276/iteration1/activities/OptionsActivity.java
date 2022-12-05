@@ -30,7 +30,7 @@ public class OptionsActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        setTitle("Options");
+        setTitle(R.string.options);
 
         createRadioButtons();
     }

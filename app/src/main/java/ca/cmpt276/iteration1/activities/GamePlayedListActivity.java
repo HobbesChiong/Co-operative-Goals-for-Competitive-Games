@@ -262,21 +262,21 @@ public class GamePlayedListActivity extends AppCompatActivity implements GamePla
 
             dialogSelectedDifficulty = "Easy";
             setAchievementLevelsText();
-            Toast.makeText(GamePlayedListActivity.this, "Selected \"Easy\" difficulty multiplier.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(GamePlayedListActivity.this, R.string.selected_easy, Toast.LENGTH_SHORT).show();
         });
         btnDialogDifficultyNormal.setOnClickListener(view -> {
             highlightSelectedDifficultyButton(btnDialogDifficultyNormal.getId());
 
             dialogSelectedDifficulty = "Normal";
             setAchievementLevelsText();
-            Toast.makeText(GamePlayedListActivity.this, "Selected \"Normal\" difficulty multiplier.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(GamePlayedListActivity.this, R.string.selected_normal, Toast.LENGTH_SHORT).show();
         });
         btnDialogDifficultyHard.setOnClickListener(view -> {
             highlightSelectedDifficultyButton(btnDialogDifficultyHard.getId());
 
             dialogSelectedDifficulty = "Hard";
             setAchievementLevelsText();
-            Toast.makeText(GamePlayedListActivity.this, "Selected \"Hard\" difficulty multiplier.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(GamePlayedListActivity.this, R.string.selected_hard, Toast.LENGTH_SHORT).show();
         });
 
         achievementLevelPlayerCount = achievementLevelsDialog.findViewById(R.id.etAchievementLevelPlayerCount);
