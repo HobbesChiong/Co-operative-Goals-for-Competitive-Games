@@ -93,7 +93,7 @@ public class PlayerScoreInputRecyclerViewAdapter extends RecyclerView.Adapter<Pl
     public void onBindViewHolder(@NonNull PlayerScoreInputRecyclerViewAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         // Assigning values ot the views we created in the recyclerview card layout file
         // based on the position of the recycler view
-        holder.tvPlayerNumber.setText("Player " + (position + 1));
+        holder.tvPlayerNumber.setText(context.getString(R.string.player_pos, (position + 1)));
 
         // As we are creating new cards on the spot, we need to assign them IDs that will stay persistent throughout the activity
         int id = createCustomId(position);

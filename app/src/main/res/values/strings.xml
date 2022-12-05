@@ -40,6 +40,7 @@
     <string name="configuration_saved">configuration saved.</string>
     <string name="deleting">\"Deleting \"</string>
     <string name="options">Options</string>/>
+    <string name="display_game_play_date">Date played: %1$s</string>
 
     <string-array name="theme_names">
         <item>Animals</item>
@@ -69,6 +70,8 @@
     <string name="display_score_and_achievement">Score: %1$d - %2$s</string>
     <string name="statistics">Statistics</string>
     <string name="statistics_text">Statistics</string>
+    <string name="image_permission_required">Couldn\'t save image! Did you grant the appropriate permissions?</string>
+    <string name="permission_required">Couldn\'t save image! Permission required.</string>
     <string name="about">About</string>
     <string name="background_image_https_www_pexels_com_photo_close_up_photo_of_monopoly_board_game_776654">background image: https://www.pexels.com/photo/close-up-photo-of-monopoly-board-game-776654/</string>
     <string name="icon_picture_https_www_pngegg_com_en_png_zkzwq">icon picture: https://www.pngegg.com/en/png-zkzwq</string>
@@ -80,8 +83,10 @@
     <string name="team_manganese">Team: Manganese</string>
     <string name="win_sound_by_alex">Win Sound: By Alex</string>
     <string name="resources_used">Resources Used</string>
+    <string name="game_info">Game Info</string>
     <string name="ac_players_placeholder">Players:</string>
     <string name="ac_score_placeholder">Score:</string>
+    <string name="player_pos">"\player "\ %1$d</string>
     <string name="ac_animation_description">plays win animation</string>
     <string name="ac_next_level_gap_placeholder">Points To Next Level:</string>
     <string name="ac_next_level_name_placeholder">Next Level Name</string>
@@ -94,5 +99,14 @@
     <string name="take_photo">Take Photo</string>
     <string name="view_photo">View Photo</string>
     <string name="tap_to_edit_image">Tap the image to retake it</string>
+    <string name="invalidConfig">Invalid configuration.</string>
+    <string name="selected_easy">Selected \"Easy\" difficulty multiplier.</string>
+    <string name="selected_normal">Selected \"Normal\" difficulty multiplier.</string>
+    <string name="selected_hard">Selected \"Hard\" difficulty multiplier.</string>
+    <string name="ask_for_taking_photo">Do you want to take a photo and save for the game record?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="player_x">Player X</string>
     />
 </resources>

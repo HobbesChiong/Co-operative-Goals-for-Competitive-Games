@@ -141,7 +141,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_weight="1"
                 android:background="#48FFFFFF"
-                android:text="Do you want to take a photo and save for the game record?"
+                android:text="@string/ask_for_taking_photo"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#000000"
@@ -165,7 +165,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="Yes" />
+                android:text="@string/yes" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="109dp"
@@ -179,7 +179,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="72dp"
                 android:layout_marginBottom="8dp"
-                android:text="No" />
+                android:text="@string/no" />
 
         </LinearLayout>
 
