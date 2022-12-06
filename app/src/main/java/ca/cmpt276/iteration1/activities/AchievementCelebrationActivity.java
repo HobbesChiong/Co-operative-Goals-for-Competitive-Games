@@ -23,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import ca.cmpt276.iteration1.R;
 import ca.cmpt276.iteration1.model.GameManager;
 import ca.cmpt276.iteration1.model.GameType;
@@ -106,17 +108,29 @@ public class AchievementCelebrationActivity extends AppCompatActivity {
         difficulty = playedGame.getDifficulty();
         currentLevelName = playedGame.getAchievement();
 
+        ArrayList<String> achievementLevelScoreRequirements = gameType.getAchievementLevelScoreRequirements(playerCount, difficulty);
+        int nextLevelScore = 0;
         // Iterate through each achievement level, use regex to grab numerical values
-        for (String achievementLevel : gameType.getAchievementLevelScoreRequirements(playerCount, difficulty)){
-            int achievementLevelScore = Integer.parseInt(achievementLevel.replaceAll("[^0-9]", ""));
-            if (achievementLevelScore > gameScore){
-                // If the current achievementLevelScore is greater than the game's game score, it is the next level above
-                // Calculate the gap in points to the next level, and grab the name of the next achievement level's name
-                pointsToNextLevel = achievementLevelScore - gameScore;
-                nextLevelName = achievementLevel.replaceAll("[0-9]", "").trim();
+        for (String achievementLevelScore : achievementLevelScoreRequirements){
+            // With the numerical value, if it is greater than the current game score, it is the score of the next level
+            int achievementScore = Integer.parseInt(achievementLevelScore.replaceAll("[^0-9]", ""));
+            if (achievementScore > gameScore){
+                nextLevelScore = achievementScore;
                 break;
             }
         }
+
+        // If nextLevelScore == 0, gameScore is on the dot of max level
+        if (nextLevelScore != 0){
+            pointsToNextLevel = nextLevelScore - gameScore;
+            nextLevelName = gameType.getAchievementLevel(nextLevelScore, playerCount, difficulty);
+        }
+        else {
+            pointsToNextLevel = 0;
+            // + 1 to get max level name (as we are on the dot of it, but max level must be greater than
+            nextLevelName = gameType.getAchievementLevel(gameScore + 1, playerCount, difficulty);
+        }
+
     }
 
     private void setGameInfo(){
