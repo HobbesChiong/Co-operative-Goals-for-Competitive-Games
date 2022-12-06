@@ -103,7 +103,7 @@ public class GameType {
      *
      * Ex: x = 10, [0,100] -> [0,10] = 1
      */
-    private int map(int val, float oldMinimum, float oldMaximum, int newMinimum, int newMaximum) {
+    private int map(float val, float oldMinimum, float oldMaximum, int newMinimum, int newMaximum) {
         // Math from https://math.stackexchange.com/questions/914823/shift-numbers-into-a-different-range
         float valueScale = (newMaximum - newMinimum)/(oldMaximum - oldMinimum);
         float endpointShift = val - oldMinimum;
@@ -118,7 +118,7 @@ public class GameType {
      * @param playerNumber Number of players in a game
      * @return 0 - max number of achievements, whichever one was earned by the player
      */
-    public int getAchievementIndex(int score, int playerNumber, String difficulty) {
+    public int getAchievementIndex(float score, int playerNumber, String difficulty) {
         int achievementTheme = GameManager.getInstance().getAchievementTheme();
         float scaling = getDifficultyMultiplier(difficulty);
 
